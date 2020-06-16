@@ -22,7 +22,12 @@ export class AppComponent {
   prepareGrid() {
     this.columnDefinitions = [
 
-      { id: 'title', name: 'Title', field: 'title', sortable: true, editor: this.SelectCellEditor,filterable:true },
+      { id: 'title', name: 'Title', field: 'title', sortable: true, editor:{collection:["abc1","abc2","abc3"],model: Editors.multipleSelect, 
+      elementOptions: {
+        // add any multiple-select.js options (from original or custom version)
+        autoAdjustDropPosition: false, // by default set to True, but you can disable it
+        position: 'top'
+      }},filterable:true },
       { id: 'duration', name: 'Duration (days)', field: 'duration', sortable: true, editor: { model: Editors.integer } ,filterable:true},
       { id: '%', name: '% Complete', field: 'percentComplete', sortable: true, editor: { model: Editors.integer },filterable:true },
       { id: 'start', name: 'Start', field: 'start', editor: { model: Editors.date },filterable:true },
@@ -50,7 +55,8 @@ export class AppComponent {
 
       this.dataset[i] = {
         id: i + 1, // again VERY IMPORTANT to fill the "id" with unique values
-        title: 'Task ' + (i + 1),
+       // title: 'Task ' + (i + 1),
+       title:["abc1","abc2","abc3"],
         duration: Math.round(Math.random() * 100) + '',
         percentComplete: randomPercent,
         start: `${randomMonth}/${randomDay}/${randomYear}`,
