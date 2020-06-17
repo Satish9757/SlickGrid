@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Column, GridOption, AngularGridInstance, Editors } from 'angular-slickgrid';
+import { Column, GridOption, AngularGridInstance, Editors ,Grouping} from 'angular-slickgrid';
 
 @Component({
   selector: 'app-slick-grid',
@@ -7,7 +7,7 @@ import { Column, GridOption, AngularGridInstance, Editors } from 'angular-slickg
   styleUrls: ['./slick-grid.component.scss']
 })
 export class SlickGridComponent implements OnInit {
-
+  dataView :any;
   @Input() columnDefinitions: Column[] = [];
   @Input() gridOptions: GridOption = {};
   @Input() dataset: any[] = [];
@@ -58,5 +58,25 @@ export class SlickGridComponent implements OnInit {
     debugger;
     this.dataset = data;
   }
+
+  // sumTotalsFormatter(totals, columnDef) {
+  //   var val = totals.sum && totals.sum[columnDef.field];
+  //   if (val != null) {
+  //     return "total: " + ((Math.round(parseFloat(val)*100)/100));
+  //   }
+  //   return "";
+  // }
+
+  // groupByDuration() {
+  //   this.dataView.setGrouping({
+  //     getter: "duration",
+  //     formatter: function (g) {
+  //       return "Duration:  " + g.value + "  <span style='color:green'>(" + g.count + " items)</span>";
+  //     },
+ 
+  //     aggregateCollapsed: false,
+  //     lazyTotalsCalculation: true
+  //   });
+  // }
 
 }
