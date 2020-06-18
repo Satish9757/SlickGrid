@@ -1,0 +1,117 @@
+.header {
+    padding: 0 10px;
+    background-color: #212121;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #5b5b5b;
+    height: 60px;
+
+    .mat-raised-button {
+        background-color: #f2a61e;
+        color: #000000;
+        height: 27px;
+        line-height: 27px;
+        font-size: 12px;
+    }
+}
+
+// -----------Slick Grid Custom Elements-------------
+
+::ng-deep {
+    .title,
+    .fa-random,
+    .fa-bars {
+        color: #f2a61e;
+    }
+    .close {
+        background: transparent !important;
+        color: #f2a61e;
+    }
+
+    .close:hover {
+        color: #f2a61e;
+    }
+    .slick-gridmenu,
+    .slickgrid-container .slick-pane-header {
+        background-color: #212121;
+    }
+    .slick-header-menuitem:hover,
+    .slick-gridmenu-item:hover {
+        background-color: #424242;
+        border: 1px solid #424242;
+    }
+
+    .slick-header-menuicon {
+        color: #f2a61e;
+    }
+    .slick-header-menucontent,
+    .slick-gridmenu-content,
+    .slick-gridmenu-list li label {
+        color: #ffeecf;
+    }
+
+    .slick-header-menu {
+        background-color: #212121;
+    }
+
+    .slickgrid-container .slick-header-columns .slick-header-column .slick-sort-indicator {
+        color: #f2a61e;
+    }
+
+    .slickgrid-container .slick-header-column-active {
+        background-color: #212121 !important;
+    }
+
+    .slickgrid-container .grid-canvas .slick-cell {
+        border-top: unset !important;
+        border-bottom: unset !important;
+        border-right: 1px solid #5e5e5e !important;
+    }
+
+    .slickgrid-container .grid-canvas .slick-row:hover {
+        background-color: #7c7c7c !important;
+    }
+
+    .slickgrid-container .grid-canvas .slick-row.odd {
+        background-color: #303030;
+        font-size: 12px !important;
+        border-bottom: 0px !important;
+
+        .slick-cell {
+            color: #9b9b9b;
+        }
+    }
+
+    .slickgrid-container .grid-canvas .slick-row.even {
+        background-color: #424242;
+        color: #ffffff !important;
+        font-size: 12px;
+        border-bottom: 0px !important;
+
+        .slick-cell {
+            color: #9b9b9b;
+        }
+    }
+
+    .slickgrid-container .slick-headerrow .slick-headerrow-columns .slick-headerrow-column {
+        background-color: #212121;
+        border-right: 1px solid #5e5e5e !important;
+    }
+
+    .slickgrid-container .slick-header-columns .slick-header-column.ui-state-default {
+        background-color: #212121;
+        color: #9b9b9b;
+        border-right: 1px solid #5e5e5e !important;
+    }
+
+    .slickgrid-container .slick-headerrow .slick-headerrow-columns .slick-headerrow-column input {
+        background-color: #424242;
+        border: unset;
+    }
+
+    .slickgrid-container .slick-header-columns .slick-column-name {
+        color: #f2a61e;
+    }
+}

@@ -1,10 +1,8 @@
-<div class="container">
-  <app-slick-grid 
-  [columnDefinitions]="columnDefinitions"
-   [gridOptions]="gridOptions" 
-   [dataset]="dataset"
-   (deleteData)="deleteData($event)"
-   [isSearchEnabled]="isSearch"
-   [isAddNewRow]="isAddNewRoq">
-  </app-slick-grid>
+<div class="main">
+  <mat-toolbar>AECInspireGrid Demo</mat-toolbar>
+  <div class="slick-container">
+    <app-slick-grid [columnDefinitions]="columnDefinitions" [gridOptions]="gridOptions" [dataset]="dataset"
+      (deleteData)="deleteData($event)" [isSearchEnabled]="isSearch" [isAddNewRow]="isAddNewRoq">
+    </app-slick-grid>
+  </div>
 </div>
