@@ -1,9 +1,10 @@
-<button *ngIf="isAddNewRow" (click)="AddNewRow()">Add new row</button>
-<app-search *ngIf="isSearchEnabled" (outPutDataSource)="filterData($event)"   [inputDataSource]="dataSource"></app-search>
-<angular-slickgrid gridId="grid1"
-            [columnDefinitions]="columnDefinitions"
-            [gridOptions]="gridOptions"
-            [dataset]="dataset"
-            (sgOnClick)="onCellClicked($event.detail.eventData, $event.detail.args)"
-            (onAngularGridCreated)="angularGridReady($event)" >
-  </angular-slickgrid>
+<div class="header">
+    <button mat-raised-button color="accent" *ngIf="isAddNewRow" (click)="AddNewRow()">Add new row</button>
+    <app-search *ngIf="isSearchEnabled" (outPutDataSource)="filterData($event)" [inputDataSource]="dataSource">
+    </app-search>
+</div>
+
+<angular-slickgrid gridId="grid1" [columnDefinitions]="columnDefinitions" [gridOptions]="gridOptions"
+    [dataset]="dataset" (sgOnClick)="onCellClicked($event.detail.eventData, $event.detail.args)"
+    (onAngularGridCreated)="angularGridReady($event)">
+</angular-slickgrid>
