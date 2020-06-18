@@ -173,7 +173,16 @@ export class AppComponent {
           ],
           collapsed: false
         }
+      },
+      {
+        id: 'Status', name: 'Delete', field: 'Delete',
+        width: 10, minWidth: 20, maxWidth: 100,
+        cssClass: 'cell-effort-driven',
+        sortable: true,
+        formatter: Formatters.deleteIcon,
+       
       }
+
     ];
 
     this.gridOptions = {
@@ -229,7 +238,7 @@ export class AppComponent {
     }
   }
   deleteData(event) {
-    alert(JSON.stringify(event))
+    //alert(JSON.stringify(event))
   }
   SelectCellEditor(){
 
