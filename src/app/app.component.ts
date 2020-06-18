@@ -16,7 +16,7 @@ import {
   Sorters,
   Editors
 } from 'angular-slickgrid';
-import { LongTextEditor } from 'angular-slickgrid/app/modules/angular-slickgrid/editors/longTextEditor';
+
 
 @Component({
   selector: 'app-root',
@@ -28,14 +28,16 @@ export class AppComponent {
   columnDefinitions: Column[] = [];
   gridOptions: GridOption = {};
   dataset: any[] = [];
-  isSearch:boolean=true;
-  isAddNewRoq:boolean=true;
+  isSearch: boolean = true;
+  isAddNewRoq: boolean = true;
   durationOrderByCount = false;
   selectedGroupingFields: Array<string | GroupingGetterFunction> = ['', '', ''];
-  draggableGroupingPlugin:any;
+  draggableGroupingPlugin: any;
+  material;
   gridObj: any;
   constructor() {
     this.prepareGrid();
+
   }
   prepareGrid() {
     this.columnDefinitions = [
@@ -79,7 +81,7 @@ export class AppComponent {
       {
         id: 'percentComplete', name: '% Complete', field: 'percentComplete',
         minWidth: 70, width: 90,
-        formatter: Formatters.percentCompleteBar,
+        formatter: this.customRow,
         type: FieldType.number,
         filterable: true,
         filter: { model: Filters.compoundSlider },
@@ -185,6 +187,7 @@ export class AppComponent {
 
     ];
 
+
     this.gridOptions = {
       autoResize: {
         containerId: 'demo-container',
@@ -227,8 +230,8 @@ export class AppComponent {
 
       this.dataset[i] = {
         id: i + 1, // again VERY IMPORTANT to fill the "id" with unique values
-       title: 'Task ' + (i + 1),
-      //  title:["abc1","abc2","abc3"],
+        title: 'Task ' + (i + 1),
+        //  title:["abc1","abc2","abc3"],
         duration: Math.round(Math.random() * 100) + '',
         percentComplete: randomPercent,
         start: `${randomMonth}/${randomDay}/${randomYear}`,
@@ -240,8 +243,20 @@ export class AppComponent {
   deleteData(event) {
     //alert(JSON.stringify(event))
   }
-  SelectCellEditor(){
+  SelectCellEditor() {
 
+  }
+  customRow(event,rw,st,rt) {
+    debugger;
+    let str = "";
+    if (event % 2 == 0) {
+      str = '<img src="./assets/img/cross.png" height=20 width=20>';
+    }
+    else {
+      
+      str = '<img src="./assets/img/tick.png" height=20 width=20>';
+    }
+    return str;
   }
 
   renderDifferentColspan(item: any) {
