@@ -12,6 +12,7 @@ import {MatSliderModule} from '@angular/material/slider';
 import {MatButtonModule} from '@angular/material/button';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatInputModule} from '@angular/material/input';
+import {MatIconModule} from '@angular/material/icon'
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import {MatInputModule} from '@angular/material/input';
     AngularSlickgridModule.forRoot(),
     BrowserAnimationsModule,
     MatSliderModule,
+    MatIconModule,
     MatButtonModule,MatToolbarModule,MatInputModule
   ],
   providers: [],
