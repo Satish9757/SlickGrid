@@ -1,10 +1,13 @@
 <div class="header">
+    <button (click)="groupByFieldName('duration',0)">group by duration</button>
     <button mat-raised-button color="accent" *ngIf="isAddNewRow" (click)="AddNewRow()">Add new row</button>
-    <app-search *ngIf="isSearchEnabled" (outPutDataSource)="filterData($event)" [inputDataSource]="dataSource">
-    </app-search>
+    <app-search *ngIf="isSearchEnabled" (outPutDataSource)="filterData($event)"   [inputDataSource]="dataSource"></app-search>
 </div>
 
-<angular-slickgrid gridId="grid1" [columnDefinitions]="columnDefinitions" [gridOptions]="gridOptions"
-    [dataset]="dataset" (sgOnClick)="onCellClicked($event.detail.eventData, $event.detail.args)"
-    (onAngularGridCreated)="angularGridReady($event)">
-</angular-slickgrid>
+<angular-slickgrid gridId="grid1"
+            [columnDefinitions]="columnDefinitions"
+            [gridOptions]="gridOptionLocal"
+            [dataset]="dataset"
+            (sgOnClick)="onCellClicked($event.detail.eventData, $event.detail.args)"
+            (onAngularGridCreated)="angularGridReady($event)" >
+  </angular-slickgrid>

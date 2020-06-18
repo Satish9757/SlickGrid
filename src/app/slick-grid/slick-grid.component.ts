@@ -1,5 +1,20 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Column, GridOption, AngularGridInstance, Editors } from 'angular-slickgrid';
+import {
+  AngularGridInstance,
+  Aggregators,
+  Column,
+  DelimiterType,
+  FieldType,
+  FileType,
+  Filters,
+  Formatters,
+  GridOption,
+  Grouping,
+  GroupingGetterFunction,
+  GroupTotalFormatters,
+  SortDirectionNumber,
+  Sorters,
+ } from 'angular-slickgrid';
 
 @Component({
   selector: 'app-slick-grid',
@@ -16,14 +31,41 @@ export class SlickGridComponent implements OnInit {
   @Input() isAddNewRow:boolean;
   angularGrid: AngularGridInstance;
   dataSource = [];
+  gridObj;
+  dataviewObj; 
+  gridOptionLocal:GridOption={};
+  draggableGroupingPlugin:any;
+  selectedGroupingFields: Array<string | GroupingGetterFunction> = ['', '', ''];
   constructor() { }
 
   ngOnInit(): void {
-
+this.gridOptionLocal=this.gridOptions;
+debugger;
   }
   angularGridReady(_angularGrid: AngularGridInstance) {
+    const obj1={
+      onCommand: (e, args) => {
+        if (args.command === 'toggle-preheader') {
+          // in addition to the grid menu pre-header toggling (internally), we will also clear grouping
+          this.clearGrouping();
+        }
+      },
+    }
+    const obj2={
+        dropPlaceHolderText: 'Drop a column header here to group by the column',
+        // groupIconCssClass: 'fa fa-outdent',
+        deleteIconCssClass: 'fa fa-times',
+        onGroupChanged: (e, args) => this.onGroupChanged(args),
+        onExtensionRegistered: (extension) => this.draggableGroupingPlugin = extension,
+      
+    }
+    this.gridOptionLocal["gridMenu"]=obj1;
+    this.gridOptionLocal["draggableGrouping"]=obj2;
     this.angularGrid = _angularGrid;
     this.dataSource = this.angularGrid.dataView.getItems();
+    this.gridObj = _angularGrid.slickGrid;
+    this.dataviewObj = _angularGrid.dataView;
+  
   }
   onCellClicked(e, args) {
     debugger;
@@ -33,7 +75,8 @@ export class SlickGridComponent implements OnInit {
       //call delete function
       this.deleteRow(metadata.dataContext);
     }
-    metadata.grid.editActiveCell();
+    this.angularGrid.gridService.highlightRow(args.row, 1500);
+
   }
 
   AddNewRow() {
@@ -58,5 +101,42 @@ export class SlickGridComponent implements OnInit {
     debugger;
     this.dataset = data;
   }
+  
+  clearGrouping(){
 
+  }
+
+  onGroupChanged(change: { caller?: string; groupColumns: Grouping[] }) {
+    // the "caller" property might not be in the SlickGrid core lib yet, reference PR https://github.com/6pac/SlickGrid/pull/303
+    const caller = change && change.caller || [];
+    const groups = change && change.groupColumns || [];
+
+    if (Array.isArray(this.selectedGroupingFields) && Array.isArray(groups) && groups.length > 0) {
+      // update all Group By select dropdown
+      this.selectedGroupingFields.forEach((g, i) => this.selectedGroupingFields[i] = groups[i] && groups[i].getter || '');
+    } else if (groups.length === 0 && caller === 'remove-group') {
+      this.clearGroupingSelects();
+    }
+  }
+
+  clearGroupingSelects() {
+    this.selectedGroupingFields.forEach((g, i) => this.selectedGroupingFields[i] = '');
+  }
+
+  groupByFieldName(fieldName, index) {
+    debugger;
+    this.clearGrouping();
+    if (this.draggableGroupingPlugin && this.draggableGroupingPlugin.setDroppedGroups) {
+      // get the field names from Group By select(s) dropdown, but filter out any empty fields
+      const groupedFields = this.selectedGroupingFields.filter((g) => g !== '');
+
+      this.showPreHeader();
+      this.draggableGroupingPlugin.setDroppedGroups(groupedFields);
+     // this.gridObj.invalidate(); // invalidate all rows and re-render
+    }
+  }
+
+  showPreHeader() {
+    this.gridObj.setPreHeaderPanelVisibility(true);
+  }
 }
