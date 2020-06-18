@@ -1,8 +1,9 @@
+<button (click)="groupByFieldName('duration',0)">group by duration</button>
 <button *ngIf="isAddNewRow" (click)="AddNewRow()">Add new row</button>
 <app-search *ngIf="isSearchEnabled" (outPutDataSource)="filterData($event)"   [inputDataSource]="dataSource"></app-search>
 <angular-slickgrid gridId="grid1"
             [columnDefinitions]="columnDefinitions"
-            [gridOptions]="gridOptions"
+            [gridOptions]="gridOptionLocal"
             [dataset]="dataset"
             (sgOnClick)="onCellClicked($event.detail.eventData, $event.detail.args)"
             (onAngularGridCreated)="angularGridReady($event)" >
