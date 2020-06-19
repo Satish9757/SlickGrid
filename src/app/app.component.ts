@@ -14,7 +14,8 @@ import {
   GroupTotalFormatters,
   SortDirectionNumber,
   Sorters,
-  Editors
+  Editors,
+  Formatter
 } from 'angular-slickgrid';
 
 
@@ -81,7 +82,7 @@ export class AppComponent {
       {
         id: 'percentComplete', name: '% Complete', field: 'percentComplete',
         minWidth: 70, width: 90,
-        formatter: this.customRow,
+        formatter: myCustomCheckmarkFormatter,
         type: FieldType.number,
         filterable: true,
         filter: { model: Filters.compoundSlider },
@@ -241,23 +242,12 @@ export class AppComponent {
     }
   }
   deleteData(event) {
-    //alert(JSON.stringify(event))
+    alert(JSON.stringify(event))
   }
   SelectCellEditor() {
 
   }
-  customRow(event,rw,st,rt) {
-    debugger;
-    let str = "";
-    if (event % 2 == 0) {
-      str = '<img src="./assets/img/cross.png" height=20 width=20>';
-    }
-    else {
-      
-      str = '<img src="./assets/img/tick.png" height=20 width=20>';
-    }
-    return str;
-  }
+ 
 
   renderDifferentColspan(item: any) {
     if (item) {
@@ -298,3 +288,15 @@ export class AppComponent {
     this.selectedGroupingFields.forEach((g, i) => this.selectedGroupingFields[i] = '');
   }
 }
+const myCustomCheckmarkFormatter: Formatter = (row, cell, value, columnDef, dataContext) => {
+  debugger;
+  let cellIcon;
+  if(dataContext.duration>=50){
+    cellIcon='<i style="color:green" class="fa fa-check" aria-hidden="true"></i>';
+  }
+  else{
+    cellIcon='<i style="color:red" class="fa fa-times" aria-hidden="true"></i>'
+  }
+  // you can return a string of a object (of type FormatterResultObject), the 2 types are shown below
+  return cellIcon;
+};
