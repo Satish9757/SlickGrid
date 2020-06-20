@@ -108,6 +108,7 @@ this.gridOptionLocal=this.gridOptions;
   }
 
   onGroupChanged(change: { caller?: string; groupColumns: Grouping[] }) {
+    debugger;
     // the "caller" property might not be in the SlickGrid core lib yet, reference PR https://github.com/6pac/SlickGrid/pull/303
     const caller = change && change.caller || [];
     const groups = change && change.groupColumns || [];
@@ -125,6 +126,7 @@ this.gridOptionLocal=this.gridOptions;
   }
 
   groupByFieldName(fieldName) {
+    debugger;
     this.clearGrouping();
     if (this.draggableGroupingPlugin && this.draggableGroupingPlugin.setDroppedGroups) {
       // get the field names from Group By select(s) dropdown, but filter out any empty fields

@@ -58,7 +58,7 @@ export class MaterialValidationComponent implements OnInit {
 
     this.columnDefinitions = [
       {
-        id: 'ModelMaterial', name: 'LEVEL / AREA', field: 'ModelMaterial',
+        id: 'LevelArea', name: 'LEVEL / AREA', field: 'LevelArea',
         width: 70, minWidth: 50,
         cssClass: 'cell-title', 
         formatter: myCustomCheckmarkFormatter, 
@@ -98,15 +98,18 @@ export class MaterialValidationComponent implements OnInit {
         }
       },
       {
-        id: 'Category', name: 'COMPONENT', field: 'Category',
+        id: 'Category', name: 'Component', field: 'Category',
         minWidth: 70, width: 90,
-        type: FieldType.number,
+        //type: FieldType.string,
         filterable: true,
         sortable: true,
-        groupTotalsFormatter: GroupTotalFormatters.avgTotalsPercentage,
+        filter: { model: Filters.inputText },
+        type: FieldType.string,
+        groupTotalsFormatter: GroupTotalFormatters.sumTotals,
         grouping: {
-          getter: 'percentComplete',
-          formatter: (g) => `% Complete:  ${g.value}  <span style="color:green">(${g.count} items)</span>`,
+          
+          getter: 'Category',
+          formatter: (g) => `COMPONENT:  ${g.value}  <span style="color:green">(${g.count} items)</span>`,
           aggregators: [
             new Aggregators.Sum('cost')
           ],
@@ -169,15 +172,7 @@ export class MaterialValidationComponent implements OnInit {
           aggregateCollapsed: true,
           collapsed: true
         }
-      },
-     
-      // {
-      //   id: 'Status', name: 'Delete', field: 'Delete',
-      //   width: 10, minWidth: 20, maxWidth: 100,
-      //   cssClass: 'cell-effort-driven',
-      //   sortable: true,
-      //   formatter: Formatters.deleteIcon,       
-      // }
+      }
   
     ];
 
@@ -219,35 +214,6 @@ export class MaterialValidationComponent implements OnInit {
       }
     };
 
-
-    // const ELEMENT_DATA1: any[] = [
-    //   {id:1,ModelMaterial: '', 
-    //   ct: '',
-    //   CtDistance:0,
-    //    Category: 'Conduit', 
-    //    Model: '-',
-    //    INSPIRErec:'',
-    //    bomvalue:'',
-    //    InspireRecommendation:["EMT","ENT","FMC","IMC","LFMC"],
-    //    ScopeboxMaterial:'PVC',UpdatedMaterial:'PVC'},
-
-    //   {id:2,ModelMaterial: '-', ct: 'PVC',CtDistance:0, Category: 'Conduitfit', Model: '-',INSPIRErec:'',bomvalue:'',
-    //   InspireRecommendation:["EMT","ENT","FMC","IMC","LFMC"],
-    //   ScopeboxMaterial:'PVC',UpdatedMaterial:'PVC'},
-    //   {id:3,ModelMaterial: '-', ct: '-',CtDistance:0,  Category: 'Conduitfiting', Model: '-',INSPIRErec:'',bomvalue:'',
-    //   InspireRecommendation:["EMT","ENT","FMC","IMC","LFMC"],
-    //   ScopeboxMaterial:'PVC',UpdatedMaterial:'PVC'},
-    //   {id:4,ModelMaterial: '-', ct: '-',CtDistance:1,  Category: 'Conduit', Model: '-',INSPIRErec:'',bomvalue:'',
-    //   InspireRecommendation:["EMT","ENT","FMC","IMC","LFMC"],
-    //   ScopeboxMaterial:'PVC',UpdatedMaterial:'PVC'},
-    //   {id:5,ModelMaterial: 'PVC', ct: '-' ,CtDistance:1, Category: 'Conduitfit', Model: '-',INSPIRErec:'',bomvalue:'',
-    //   InspireRecommendation:["EMT","ENT","FMC","IMC","LFMC"],
-    //   ScopeboxMaterial:'PVC',UpdatedMaterial:'PVC'},    
-    // ];
-    // debugger;
-    //  //const ELEMENT_DATA1: any[]=this.ELEMENT_DATA;
-    //   this.dataset=ELEMENT_DATA1;
-
   }
 
   deleteData(event) {
@@ -257,22 +223,8 @@ export class MaterialValidationComponent implements OnInit {
 
   }
 
-
-
-  renderDifferentColspan(item: any) {
-    if (item) {
-      return {
-        columns: {
-          duration: {
-            colspan: 3 // "duration" will span over 3 columns
-          }
-        }
-      };
-    }
-  }
-
   onGroupChanged(change: { caller?: string; groupColumns: Grouping[] }) {
-    debugger;
+    
     // the "caller" property might not be in the SlickGrid core lib yet, reference PR https://github.com/6pac/SlickGrid/pull/303
      const caller = change && change.caller || [];
     const groups = change && change.groupColumns || [];
@@ -286,7 +238,7 @@ export class MaterialValidationComponent implements OnInit {
   }
 
   clearGrouping() {
-    debugger;
+    
     if (this.draggableGroupingPlugin && this.draggableGroupingPlugin.setDroppedGroups) {
       this.draggableGroupingPlugin.clearDroppedGroups();
     }
@@ -294,15 +246,15 @@ export class MaterialValidationComponent implements OnInit {
   }
 
   clearGroupingSelects() {
-    debugger;
+    
     this.selectedGroupingFields.forEach((g, i) => this.selectedGroupingFields[i] = '');
   }
 
   ngOnInit(): void {
-    debugger;
+    
     this.prepareGrid();
     this._httpClient.get("assets/sourceData.json").subscribe((dt: any[]) => {
-      debugger;
+      
       dt.forEach(element => {
         this.ELEMENT_DATA.push({
           id: element.ObjectId,
@@ -320,17 +272,15 @@ export class MaterialValidationComponent implements OnInit {
       });
      this.dataset=this.ELEMENT_DATA;
 
-      debugger;
+      
       //this.prepareGrid();
     })
   }
 
- 
-
 }
 
 const myCustomCheckmarkFormatter: Formatter = (row, cell, value, columnDef, dataContext) => {
-  // debugger;
+  // 
    let cellIcon;
   if (dataContext.ModelMaterial && dataContext.ModelMaterial.toLowerCase().search(dataContext.ScopeboxMaterial.split(' ')[0].toLowerCase()) > -1) {
     cellIcon = '<i style="color:green" class="fa fa-check" aria-hidden="true"></i>';
@@ -343,7 +293,7 @@ const myCustomCheckmarkFormatter: Formatter = (row, cell, value, columnDef, data
 };
 
 const myCustomCTData: Formatter = (row, cell, value, columnDef, dataContext) => {
-  debugger;
+  
   let cellIcon;
   if (dataContext.InspireRecommendation.filter(m => dataContext.ModelMaterial.toLowerCase().search(m.toLowerCase()) > -1).length > 0) {
     cellIcon = '<i style="color:green" class="fa fa-check" aria-hidden="true"></i>';
@@ -357,7 +307,7 @@ const myCustomCTData: Formatter = (row, cell, value, columnDef, dataContext) => 
 
 //----------- Inspire Data----------//
 const myCustomInsprieData: Formatter = (row, cell, value, columnDef, dataContext) => {
-  debugger;
+  
   let cellIcon;
   if (dataContext.ScopeboxMaterial === 'PVC') {
     cellIcon = 'PVC40';
@@ -366,11 +316,11 @@ const myCustomInsprieData: Formatter = (row, cell, value, columnDef, dataContext
     cellIcon = dataContext.ScopeboxMaterial;
   }
   return cellIcon;
-};
+}
 
 //----------- Inspire Data----------//
 const myCustomBOMValue: Formatter = (row, cell, value, columnDef, dataContext) => {
-  debugger;
+  
   let cellIcon;
   if (dataContext.UpdatedMaterial === 'PVC') {
     cellIcon = 'PVC40';
