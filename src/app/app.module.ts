@@ -12,13 +12,17 @@ import {MatSliderModule} from '@angular/material/slider';
 import {MatButtonModule} from '@angular/material/button';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatInputModule} from '@angular/material/input';
-import {MatIconModule} from '@angular/material/icon'
+import {MatIconModule} from '@angular/material/icon';
+import { MaterialValidationComponent } from './quantities-module/material-validation/material-validation.component';
+import { PropertyMappingComponent } from './property-mapping-module/property-mapping/property-mapping.component'
 
 @NgModule({
   declarations: [
     AppComponent,
     SlickGridComponent,
-    SearchComponent
+    SearchComponent,
+    MaterialValidationComponent,
+    PropertyMappingComponent
   ],
   imports: [
     BrowserModule,

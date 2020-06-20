@@ -224,8 +224,7 @@ this.optionData=[
         width: 10, minWidth: 20, maxWidth: 100,
         cssClass: 'cell-effort-driven',
         sortable: true,
-        formatter: Formatters.deleteIcon,
-       
+        formatter: Formatters.deleteIcon,       
       }
 
     ];
@@ -295,7 +294,19 @@ this.optionData=[
   SelectCellEditor() {
 
   }
- 
+  customRow(event,rw,st,rt) {
+    debugger;
+    
+    let str = "";
+    if (event % 2 == 0) {
+      str = '<img src="./assets/img/cross.png" height=20 width=20>';
+    }
+    else {
+      
+      str = '<img src="./assets/img/tick.png" height=20 width=20>';
+    }
+    return str;
+  }
 
   renderDifferentColspan(item: any) {
     if (item) {
