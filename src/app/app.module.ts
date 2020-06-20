@@ -16,6 +16,7 @@ import {MatIconModule} from '@angular/material/icon';
 import { MaterialValidationComponent } from './quantities-module/material-validation/material-validation.component';
 import { PropertyMappingComponent } from './property-mapping-module/property-mapping/property-mapping.component';
 import { RoleaccessComponent } from './roleaccess/roleaccess.component'
+import {HttpClientModule} from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { RoleaccessComponent } from './roleaccess/roleaccess.component'
     BrowserAnimationsModule,
     MatSliderModule,
     MatIconModule,
+    HttpClientModule,
     MatButtonModule,MatToolbarModule,MatInputModule
   ],
   providers: [],

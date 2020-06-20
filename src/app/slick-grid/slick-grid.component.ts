@@ -103,6 +103,10 @@ this.gridOptionLocal=this.gridOptions;
 
   }
 
+ public renderGrid(){
+    this.angularGrid.gridService.renderGrid();
+  }
+
   onGroupChanged(change: { caller?: string; groupColumns: Grouping[] }) {
     // the "caller" property might not be in the SlickGrid core lib yet, reference PR https://github.com/6pac/SlickGrid/pull/303
     const caller = change && change.caller || [];
