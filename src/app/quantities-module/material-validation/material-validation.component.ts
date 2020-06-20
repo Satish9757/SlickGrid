@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import {
   AngularGridInstance,
   Aggregators,
@@ -19,6 +19,7 @@ import {
 } from 'angular-slickgrid';
 
 import { HttpClient } from '@angular/common/http';
+import { SlickGridComponent } from 'src/app/slick-grid/slick-grid.component';
 export interface PeriodicElement {
   id: number;
   ModelMaterial: string;
@@ -50,6 +51,7 @@ export class MaterialValidationComponent implements OnInit {
   material;
   gridObj: any;
   ELEMENT_DATA: any[]=[];
+  @ViewChild('SlickGridComponent') slickGridComponent:SlickGridComponent;
   constructor(private _httpClient: HttpClient) {
 
   }
@@ -194,13 +196,14 @@ export class MaterialValidationComponent implements OnInit {
       enableFiltering: true,
       enableSorting: true,
       enableColumnReorder: true,
-      enablePagination: true,
-      pagination: {
-        pageSizes: [5, 10, 15, 20, 25, 30, 40, 50, 75, 100],
-        pageSize: 5
-      },
+
       exportOptions: {
         sanitizeDataExport: true
+      },
+      enablePagination: true,
+      pagination: {
+        pageSizes: [10,50,100],
+        pageSize: 10
       },
       gridMenu: {
         onCommand: (e, args) => {
@@ -290,7 +293,7 @@ export class MaterialValidationComponent implements OnInit {
         })
       });
       this.dataset=this.ELEMENT_DATA;
-
+//this.slickGridComponent.renderGrid();
       debugger;
       this.prepareGrid();
     })
