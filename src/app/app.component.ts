@@ -181,8 +181,7 @@ export class AppComponent {
         width: 10, minWidth: 20, maxWidth: 100,
         cssClass: 'cell-effort-driven',
         sortable: true,
-        formatter: Formatters.deleteIcon,
-       
+        formatter: Formatters.deleteIcon,       
       }
 
     ];
@@ -241,13 +240,14 @@ export class AppComponent {
     }
   }
   deleteData(event) {
-    //alert(JSON.stringify(event))
+    alert(JSON.stringify(event))
   }
   SelectCellEditor() {
 
   }
   customRow(event,rw,st,rt) {
     debugger;
+    
     let str = "";
     if (event % 2 == 0) {
       str = '<img src="./assets/img/cross.png" height=20 width=20>';
