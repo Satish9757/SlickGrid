@@ -22,11 +22,14 @@ export interface PeriodicElement {
   id:number;
   ModelMaterial: string;
   ct: string;
-  COMPONENT: string;
+  Category: string;
   Model: string;
   INSPIRErec:string;
   bomvalue:string;
   CtDistance:number;
+  InspireRecommendation:string[];
+  ScopeboxMaterial:string;
+  UpdatedMaterial:string;
 }
 @Component({
   selector: 'app-material-validation',
@@ -73,7 +76,7 @@ prepareGrid() {
       id: 'ct', name: 'CT / OT', field: 'ct',
       width: 70,
       sortable: true,
-      formatter: this.customRow,
+      formatter: myCustomCTData,
       filterable: true,
       //filter: { model: Filters.slider, operator: '>=' },
       type: FieldType.number,
@@ -92,7 +95,7 @@ prepareGrid() {
       }
     },
     {
-      id: 'COMPONENT', name: 'COMPONENT', field: 'COMPONENT',
+      id: 'Category', name: 'COMPONENT', field: 'Category',
       minWidth: 70, width: 90,
       type: FieldType.number,
       filterable: true,
@@ -110,7 +113,7 @@ prepareGrid() {
       params: { groupFormatterPrefix: '<i>Avg</i>: ' }
     },
     {
-      id: 'Model', name: 'MODEL VALUE', field: 'Model', minWidth: 60,
+      id: 'ModelMaterial', name: 'MODEL VALUE', field: 'ModelMaterial', minWidth: 60,
       sortable: true,
       filterable: true,
       type: FieldType.dateUtc,
@@ -131,7 +134,7 @@ prepareGrid() {
       minWidth: 60,
       sortable: true,
       filterable: true,
-      formatter: Formatters.dateIso,
+      formatter: myCustomInsprieData,
       type: FieldType.dateUtc,
       outputType: FieldType.dateIso,
       exportWithFormatter: true,
@@ -150,6 +153,7 @@ prepareGrid() {
       width: 90,
       sortable: true,
       filterable: true,
+      formatter:  myCustomBOMValue,
       filter: { model: Filters.inputText },
       groupTotalsFormatter: GroupTotalFormatters.sumTotalsDollar,
       type: FieldType.number,
@@ -212,25 +216,26 @@ const ELEMENT_DATA: PeriodicElement[] = [
   {id:1,ModelMaterial: '', 
   ct: '',
   CtDistance:0,
-   COMPONENT: 'Conduit', 
+   Category: 'Conduit', 
    Model: '-',
    INSPIRErec:'',
-   bomvalue:''},
-  {id:2,ModelMaterial: '-', ct: 'PVC',CtDistance:0, COMPONENT: 'Conduitfit', Model: '-',INSPIRErec:'',bomvalue:''},
-  {id:3,ModelMaterial: '-', ct: '-',CtDistance:0,  COMPONENT: 'Conduitfiting', Model: '-',INSPIRErec:'',bomvalue:''},
-  {id:4,ModelMaterial: '-', ct: '-',CtDistance:1,  COMPONENT: 'Conduit', Model: '-',INSPIRErec:'',bomvalue:''},
-  {id:5,ModelMaterial: 'PVC', ct: '-' ,CtDistance:1, COMPONENT: 'Conduitfit', Model: '-',INSPIRErec:'',bomvalue:''},
-  {id:6,ModelMaterial: '', ct: '', CtDistance:1,COMPONENT: 'Conduitfiting', Model: '-',INSPIRErec:'',bomvalue:''},
-  {id:7,ModelMaterial: '', ct: '',CtDistance:0, COMPONENT: 'Conduit', Model: '-',INSPIRErec:'',bomvalue:''},
-  {id:8,ModelMaterial: '', ct: '',CtDistance:1, COMPONENT: 'Conduitfiting', Model: '-',INSPIRErec:'',bomvalue:''},
-  {id:9,ModelMaterial: '', ct: '',CtDistance:0, COMPONENT: 'Conduitfiting', Model: '-',INSPIRErec:'',bomvalue:''},
-  {id:10,ModelMaterial: '', ct: '',CtDistance:1, COMPONENT: 'Conduit', Model: '-',INSPIRErec:'',bomvalue:''},
-  {id:11,ModelMaterial: '', ct: '',CtDistance:1, COMPONENT: 'Conduitfiting', Model: '-',INSPIRErec:'',bomvalue:''},
-  {id:12,ModelMaterial: '', ct: '',CtDistance:0, COMPONENT: 'Conduit', Model: '-',INSPIRErec:'',bomvalue:''},
-  {id:13,ModelMaterial: '', ct: '',CtDistance:1, COMPONENT: 'Conduitfiting', Model: '-',INSPIRErec:'',bomvalue:''},
-  {id:14,ModelMaterial: '', ct: '',CtDistance:0, COMPONENT: 'Conduit', Model: '-',INSPIRErec:'',bomvalue:''}, 
-];
+   bomvalue:'',
+   InspireRecommendation:["EMT","ENT","FMC","IMC","LFMC"],
+   ScopeboxMaterial:'PVC',UpdatedMaterial:'PVC'},
 
+  {id:2,ModelMaterial: '-', ct: 'PVC',CtDistance:0, Category: 'Conduitfit', Model: '-',INSPIRErec:'',bomvalue:'',
+  InspireRecommendation:["EMT","ENT","FMC","IMC","LFMC"],
+  ScopeboxMaterial:'PVC',UpdatedMaterial:'PVC'},
+  {id:3,ModelMaterial: '-', ct: '-',CtDistance:0,  Category: 'Conduitfiting', Model: '-',INSPIRErec:'',bomvalue:'',
+  InspireRecommendation:["EMT","ENT","FMC","IMC","LFMC"],
+  ScopeboxMaterial:'PVC',UpdatedMaterial:'PVC'},
+  {id:4,ModelMaterial: '-', ct: '-',CtDistance:1,  Category: 'Conduit', Model: '-',INSPIRErec:'',bomvalue:'',
+  InspireRecommendation:["EMT","ENT","FMC","IMC","LFMC"],
+  ScopeboxMaterial:'PVC',UpdatedMaterial:'PVC'},
+  {id:5,ModelMaterial: 'PVC', ct: '-' ,CtDistance:1, Category: 'Conduitfit', Model: '-',INSPIRErec:'',bomvalue:'',
+  InspireRecommendation:["EMT","ENT","FMC","IMC","LFMC"],
+  ScopeboxMaterial:'PVC',UpdatedMaterial:'PVC'},    
+];
   this.dataset = ELEMENT_DATA;  
   
 }
@@ -300,13 +305,52 @@ clearGroupingSelects() {
 const myCustomCheckmarkFormatter: Formatter = (row, cell, value, columnDef, dataContext) => {
   debugger;
   let cellIcon;
-  if( dataContext.ModelMaterial.toLowerCase().search(dataContext.ct.split(' ')[0].toLowerCase()) > -1){
+  if( dataContext.ModelMaterial.toLowerCase().search(dataContext.ScopeboxMaterial.split(' ')[0].toLowerCase()) > -1){
     cellIcon='<i style="color:green" class="fa fa-check" aria-hidden="true"></i>';
   }
   else{
     cellIcon='<i style="color:red" class="fa fa-times" aria-hidden="true"></i>'
   }
   // you can return a string of a object (of type FormatterResultObject), the 2 types are shown below
+  return cellIcon;
+};
+
+const myCustomCTData: Formatter = (row, cell, value, columnDef, dataContext) => {
+  debugger;
+  let cellIcon; 
+  if( dataContext.InspireRecommendation.filter(m => dataContext.ModelMaterial.toLowerCase().search(m.toLowerCase()) > -1).length > 0 ){
+    cellIcon='<i style="color:green" class="fa fa-check" aria-hidden="true"></i>';
+  }
+  else{
+    cellIcon='<i style="color:red" class="fa fa-times" aria-hidden="true"></i>'
+  }
+  // you can return a string of a object (of type FormatterResultObject), the 2 types are shown below
+  return cellIcon;
+};
+
+//----------- Inspire Data----------//
+const myCustomInsprieData:Formatter = (row, cell, value, columnDef, dataContext) => {
+  debugger;
+  let cellIcon; 
+  if( dataContext.ScopeboxMaterial === 'PVC' ){
+    cellIcon='PVC40';
+  }
+  else{
+    cellIcon= dataContext.ScopeboxMaterial;
+  }
+  return cellIcon;
+};
+
+//----------- Inspire Data----------//
+const myCustomBOMValue:Formatter = (row, cell, value, columnDef, dataContext) => {
+  debugger;
+  let cellIcon; 
+  if( dataContext.UpdatedMaterial === 'PVC' ){
+    cellIcon='PVC40';
+  }
+  else{
+    cellIcon= dataContext.UpdatedMaterial;
+  }
   return cellIcon;
 };
 
