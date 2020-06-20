@@ -272,9 +272,12 @@ export class MaterialValidationComponent implements OnInit {
     debugger;
     this.selectedGroupingFields.forEach((g, i) => this.selectedGroupingFields[i] = '');
   }
-
+  ngAfterViewInit(): void{
+    this.slickGridComponent.renderGrid();
+  }
   ngOnInit(): void {
     debugger;
+    this.prepareGrid();
     this._httpClient.get("assets/sourceData.json").subscribe((dt: any[]) => {
       debugger;
       dt.forEach(element => {
@@ -295,7 +298,7 @@ export class MaterialValidationComponent implements OnInit {
       this.dataset=this.ELEMENT_DATA;
 //this.slickGridComponent.renderGrid();
       debugger;
-      this.prepareGrid();
+     
     })
   }
 }
