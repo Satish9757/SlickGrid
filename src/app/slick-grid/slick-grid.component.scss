@@ -20,6 +20,73 @@
 // -----------Slick Grid Custom Elements-------------
 
 ::ng-deep {
+    .page-count{
+        margin-left: 5px !important;
+    }
+    .slick-pagination .slick-pagination-settings {
+        margin-top: 5px;
+    }
+
+    .slick-pagination .slick-pagination-nav .pagination .page-link{
+        font-size: 18px;
+    }
+
+    .slick-pagination .slick-pagination-nav{
+        display: flex;
+        flex-basis: inherit;
+        align-content: center;
+    }
+
+    .slick-pagination .slick-pagination-nav .slick-page-number{
+        margin: 0;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        margin-top: 5px;
+    }
+
+    .slick-pagination .slick-pagination-nav .pagination .page-item a[class*="icon-seek-"]:hover {
+        background-color: #303030;
+    }
+
+    .slick-pagination .slick-pagination-nav .slick-page-number input,
+    .slick-pagination .slick-pagination-settings select {
+        background-color: #212121;
+        border: unset;
+        border-bottom: 1px solid #808080;
+        border-radius: 0;
+        color: #808080;
+        height: 26px;
+        margin: 0 5px;
+    }
+    .slick-pagination .slick-pagination-nav .pagination .page-item.disabled a[class*="icon-seek-"] {
+        color: #808080;
+        background-color: #212121;
+        border-color: #212121;
+    }
+    .slick-pagination .slick-pagination-nav .pagination .page-item a[class*="icon-seek-"] {
+        color: #f2a61e;
+        background-color: #212121;
+        border-color: #212121;
+    }
+
+    .slickgrid-container {
+        border-bottom: 0;
+    }
+    .slick-pagination {
+        padding: 0 10px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #212121;
+        height: 50px;
+    }
+    .slickgrid-container .grid-canvas,
+    .slickgrid-container .slick-viewport {
+        background-color: #424242;
+    }
+
     .title,
     .fa-random,
     .fa-bars {
@@ -38,7 +105,8 @@
         background-color: #212121;
     }
     .slick-header-menuitem:hover,
-    .slick-gridmenu-item:hover {
+    .slick-gridmenu-item:hover,
+    .slick-gridmenu-list li:hover {
         background-color: #424242;
         border: 1px solid #424242;
     }
@@ -50,6 +118,7 @@
     .slick-gridmenu-content,
     .slick-gridmenu-list li label {
         color: #ffeecf;
+        font-size: 12px;
     }
 
     .slick-header-menu {
@@ -113,5 +182,26 @@
 
     .slickgrid-container .slick-header-columns .slick-column-name {
         color: #f2a61e;
+    }
+
+    .slick-preheader-panel .ui-droppable, .slick-preheader-panel .ui-droppable-hover {
+        border: 1px solid #424242 !important;
+        width: calc(100% - 25px) !important;
+        margin: 0 10px;
+        border-radius: 4px;
+        background-color: #424242;
+    }
+
+    // .slick-container{
+    //     padding: 10px;
+    // }
+
+    .slickgrid-container .slick-header-columns,
+    .slickgrid-container .slick-headerrow{
+        background-color: #212121;
+    }
+
+    .slick-preheader-panel .ui-droppable{
+        height: 40px;
     }
 }

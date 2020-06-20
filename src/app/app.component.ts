@@ -19,13 +19,13 @@ import {
   OperatorType
 } from 'angular-slickgrid';
 
-
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
+  
   title = 'SlickGridPOC';
   columnDefinitions: Column[] = [];
   gridOptions: GridOption = {};
@@ -250,6 +250,11 @@ this.optionData=[
       exportOptions: {
         sanitizeDataExport: true
       },
+      enablePagination: true,
+      pagination: {
+        pageSizes: [5, 10, 15, 20, 25, 30, 40, 50, 75, 100],
+        pageSize: 5
+      },
       gridMenu: {
         onCommand: (e, args) => {
           if (args.command === 'toggle-preheader') {
@@ -335,7 +340,6 @@ this.optionData=[
   }
 
   clearGrouping() {
-    debugger;
     if (this.draggableGroupingPlugin && this.draggableGroupingPlugin.setDroppedGroups) {
       this.draggableGroupingPlugin.clearDroppedGroups();
     }
@@ -343,13 +347,11 @@ this.optionData=[
   }
 
   clearGroupingSelects() {
-    debugger;
     this.selectedGroupingFields.forEach((g, i) => this.selectedGroupingFields[i] = '');
   }
   
 }
 const myCustomCheckmarkFormatter: Formatter = (row, cell, value, columnDef, dataContext) => {
-  debugger;
   let cellIcon;
   if(dataContext.duration>=50){
     cellIcon='<i style="color:green" class="fa fa-check" aria-hidden="true"></i>';

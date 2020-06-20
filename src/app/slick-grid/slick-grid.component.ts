@@ -40,7 +40,6 @@ export class SlickGridComponent implements OnInit {
 
   ngOnInit(): void {
 this.gridOptionLocal=this.gridOptions;
-debugger;
   }
   angularGridReady(_angularGrid: AngularGridInstance) {
     const obj1={
@@ -68,7 +67,6 @@ debugger;
   
   }
   onCellClicked(e, args) {
-    debugger;
     //this.angularGrid = ins;
     const metadata = this.angularGrid.gridService.getColumnFromEventArguments(args);
     if (metadata.columnDef.field === "Delete") {
@@ -98,7 +96,6 @@ debugger;
   }
 
   filterData(data) {
-    debugger;
     this.dataset = data;
   }
   
@@ -124,7 +121,6 @@ debugger;
   }
 
   groupByFieldName(fieldName, index) {
-    debugger;
     this.clearGrouping();
     if (this.draggableGroupingPlugin && this.draggableGroupingPlugin.setDroppedGroups) {
       // get the field names from Group By select(s) dropdown, but filter out any empty fields
