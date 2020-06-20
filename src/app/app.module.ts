@@ -14,7 +14,8 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatInputModule} from '@angular/material/input';
 import {MatIconModule} from '@angular/material/icon';
 import { MaterialValidationComponent } from './quantities-module/material-validation/material-validation.component';
-import { PropertyMappingComponent } from './property-mapping-module/property-mapping/property-mapping.component'
+import { PropertyMappingComponent } from './property-mapping-module/property-mapping/property-mapping.component';
+import { RoleaccessComponent } from './roleaccess/roleaccess.component'
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { PropertyMappingComponent } from './property-mapping-module/property-map
     SlickGridComponent,
     SearchComponent,
     MaterialValidationComponent,
-    PropertyMappingComponent
+    PropertyMappingComponent,
+    RoleaccessComponent
   ],
   imports: [
     BrowserModule,
