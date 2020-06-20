@@ -3,6 +3,9 @@
 }
 
 mat-toolbar{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
     background-color: #303030;
     color: #f2a61e;
 }
@@ -10,3 +13,13 @@ mat-toolbar{
 // .slick-container{
 //     width: 60%;
 // }
+
+.btn{
+    margin: 10px;
+    font-size: 12px;
+    height: 26px;
+    line-height: 14px;
+    background-color: #f2a61e;
+    color: #000000;
+    border: unset;
+}

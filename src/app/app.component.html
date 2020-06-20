@@ -1,10 +1,13 @@
 <div class="main">
-  <mat-toolbar>AECInspireGrid Demo</mat-toolbar>
+  <mat-toolbar><span>AECInspireGrid Demo</span>
+    <div>
+      <a href="material" class="btn btn-primary">Material Grid</a>
+      <a href="property" class="btn btn-primary">Property Grid</a>
+      <a href="roleaccess" class="btn btn-primary">Roleaccess Grid</a>
+    </div>
+  </mat-toolbar>
   <div class="slick-container">
-    <a href="material" class="btn btn-primary">Material Grid</a>
-    <a href="property" class="btn btn-primary">Property Grid</a>
-    <a href="roleaccess" class="btn btn-primary">Roleaccess Grid</a>
-  <br>
+   
    <div>
     <router-outlet></router-outlet>
    </div>

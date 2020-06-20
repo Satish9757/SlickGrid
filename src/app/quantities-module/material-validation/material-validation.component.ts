@@ -187,6 +187,11 @@ prepareGrid() {
     enableFiltering: true,
     enableSorting: true,
     enableColumnReorder: true,
+    enablePagination: true,
+    pagination: {
+      pageSizes: [5, 10, 15, 20, 25, 30, 40, 50, 75, 100],
+      pageSize: 5
+    },
     exportOptions: {
       sanitizeDataExport: true
     },
