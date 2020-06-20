@@ -124,12 +124,12 @@ this.gridOptionLocal=this.gridOptions;
     this.selectedGroupingFields.forEach((g, i) => this.selectedGroupingFields[i] = '');
   }
 
-  groupByFieldName(fieldName, index) {
+  groupByFieldName(fieldName) {
     this.clearGrouping();
     if (this.draggableGroupingPlugin && this.draggableGroupingPlugin.setDroppedGroups) {
       // get the field names from Group By select(s) dropdown, but filter out any empty fields
-      const groupedFields = this.selectedGroupingFields.filter((g) => g !== '');
-
+      const groupedFields=[];// = this.selectedGroupingFields.filter((g) => g !== '');
+      groupedFields.push(fieldName);
       this.showPreHeader();
       this.draggableGroupingPlugin.setDroppedGroups(groupedFields);
      // this.gridObj.invalidate(); // invalidate all rows and re-render

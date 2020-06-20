@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   AngularGridInstance,
   Aggregators,
@@ -19,7 +19,6 @@ import {
 } from 'angular-slickgrid';
 
 import { HttpClient } from '@angular/common/http';
-import { SlickGridComponent } from 'src/app/slick-grid/slick-grid.component';
 export interface PeriodicElement {
   id: number;
   ModelMaterial: string;
@@ -51,7 +50,6 @@ export class MaterialValidationComponent implements OnInit {
   material;
   gridObj: any;
   ELEMENT_DATA: any[]=[];
-  @ViewChild('SlickGridComponent') slickGridComponent:SlickGridComponent;
   constructor(private _httpClient: HttpClient) {
 
   }
@@ -196,14 +194,13 @@ export class MaterialValidationComponent implements OnInit {
       enableFiltering: true,
       enableSorting: true,
       enableColumnReorder: true,
-
-      exportOptions: {
-        sanitizeDataExport: true
-      },
       enablePagination: true,
       pagination: {
-        pageSizes: [10,50,100],
+        pageSizes: [10,20,50,100],
         pageSize: 10
+      },
+      exportOptions: {
+        sanitizeDataExport: true
       },
       gridMenu: {
         onCommand: (e, args) => {
@@ -222,6 +219,34 @@ export class MaterialValidationComponent implements OnInit {
       }
     };
 
+
+    // const ELEMENT_DATA1: any[] = [
+    //   {id:1,ModelMaterial: '', 
+    //   ct: '',
+    //   CtDistance:0,
+    //    Category: 'Conduit', 
+    //    Model: '-',
+    //    INSPIRErec:'',
+    //    bomvalue:'',
+    //    InspireRecommendation:["EMT","ENT","FMC","IMC","LFMC"],
+    //    ScopeboxMaterial:'PVC',UpdatedMaterial:'PVC'},
+
+    //   {id:2,ModelMaterial: '-', ct: 'PVC',CtDistance:0, Category: 'Conduitfit', Model: '-',INSPIRErec:'',bomvalue:'',
+    //   InspireRecommendation:["EMT","ENT","FMC","IMC","LFMC"],
+    //   ScopeboxMaterial:'PVC',UpdatedMaterial:'PVC'},
+    //   {id:3,ModelMaterial: '-', ct: '-',CtDistance:0,  Category: 'Conduitfiting', Model: '-',INSPIRErec:'',bomvalue:'',
+    //   InspireRecommendation:["EMT","ENT","FMC","IMC","LFMC"],
+    //   ScopeboxMaterial:'PVC',UpdatedMaterial:'PVC'},
+    //   {id:4,ModelMaterial: '-', ct: '-',CtDistance:1,  Category: 'Conduit', Model: '-',INSPIRErec:'',bomvalue:'',
+    //   InspireRecommendation:["EMT","ENT","FMC","IMC","LFMC"],
+    //   ScopeboxMaterial:'PVC',UpdatedMaterial:'PVC'},
+    //   {id:5,ModelMaterial: 'PVC', ct: '-' ,CtDistance:1, Category: 'Conduitfit', Model: '-',INSPIRErec:'',bomvalue:'',
+    //   InspireRecommendation:["EMT","ENT","FMC","IMC","LFMC"],
+    //   ScopeboxMaterial:'PVC',UpdatedMaterial:'PVC'},    
+    // ];
+    // debugger;
+    //  //const ELEMENT_DATA1: any[]=this.ELEMENT_DATA;
+    //   this.dataset=ELEMENT_DATA1;
 
   }
 
@@ -272,9 +297,7 @@ export class MaterialValidationComponent implements OnInit {
     debugger;
     this.selectedGroupingFields.forEach((g, i) => this.selectedGroupingFields[i] = '');
   }
-  ngAfterViewInit(): void{
-    this.slickGridComponent.renderGrid();
-  }
+
   ngOnInit(): void {
     debugger;
     this.prepareGrid();
@@ -295,18 +318,21 @@ export class MaterialValidationComponent implements OnInit {
            ModelMaterial:element.ModelMaterial
         })
       });
-      this.dataset=this.ELEMENT_DATA;
-//this.slickGridComponent.renderGrid();
+     this.dataset=this.ELEMENT_DATA;
+
       debugger;
-     
+      //this.prepareGrid();
     })
   }
+
+ 
+
 }
 
 const myCustomCheckmarkFormatter: Formatter = (row, cell, value, columnDef, dataContext) => {
-  debugger;
+  // debugger;
    let cellIcon;
-  if (dataContext.ModelMaterial.toLowerCase().search(dataContext.ScopeboxMaterial.split(' ')[0].toLowerCase()) > -1) {
+  if (dataContext.ModelMaterial && dataContext.ModelMaterial.toLowerCase().search(dataContext.ScopeboxMaterial.split(' ')[0].toLowerCase()) > -1) {
     cellIcon = '<i style="color:green" class="fa fa-check" aria-hidden="true"></i>';
   }
   else {
