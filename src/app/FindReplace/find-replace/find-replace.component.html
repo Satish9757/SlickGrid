@@ -1,6 +1,8 @@
-<div *ngIf="ShowTab" class="find-replace-container"><button class="filter-button"  color="accent" (click)="showFindReplace()">Find & Replace</button>
+<div *ngIf="ShowTab" class="find-replace-container">
+  <button mat-raised-button class="filter-button" color="accent"
+    (click)="showFindReplace()">Find & Replace</button>
 
-<div class="expanded-find-replace" *ngIf="isFindReplace">  
+  <div class="expanded-find-replace" *ngIf="isFindReplace">
     <div class="header">
       <h6 color="accent">
         <mat-icon>swap_horiz</mat-icon> FIND AND REPLACE
