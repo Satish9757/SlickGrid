@@ -2,8 +2,8 @@
     <!-- <button (click)="groupByFieldName('duration',0)">group by duration</button> -->
     <button mat-raised-button color="accent" *ngIf="isAddNewRow" (click)="AddNewRow()">Add new row</button>
     <div>
-        <app-find-replace></app-find-replace>
-        <app-search *ngIf="isSearchEnabled" (outPutDataSource)="filterData($event)" [inputDataSource]="dataset">
+        <app-find-replace [inputDataSource]="dataset" [columnDef]="columnDefinitions"></app-find-replace>
+        <app-search *ngIf="isSearchEnabled" (outPutDataSource)="filterData($event)"  [inputDataSource]="dataset">
         </app-search>
     </div>
 </div>

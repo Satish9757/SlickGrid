@@ -13,12 +13,12 @@
     </div>
     <div class="replace-container">
       <mat-form-field color="accent">
-        <label>MODEL VALUE</label>
-        <!-- <select (selectionChange)="bulkUpdateModelMaterial('current', $event)">
-          <option *ngFor="let material of updateMaterialList.modelList" [value]="material">
-            {{material}}
+        <label>Select column</label>
+        <select (selectionChange)="bulkUpdateModelMaterial('current', $event)">
+          <option *ngFor="let material of updateMaterialList" [value]="material.field">
+            {{material.name}}
           </option>
-        </select> -->
+        </select>
       </mat-form-field>
 
       <mat-form-field color="accent">

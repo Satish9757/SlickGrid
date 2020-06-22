@@ -9,8 +9,9 @@ export class FindReplaceComponent implements OnInit {
   ShowTab:boolean = false;
   isFindReplace: boolean = false;
   @Input() inputDataSource:any[];
+  @Input() columnDef:any[];
   @Output('data') data = new EventEmitter(); 
-  updateMaterialList: string[] = [];
+  updateMaterialList: any[] = [];
   constructor() { }
 
   ngOnInit(): void {
@@ -23,7 +24,12 @@ export class FindReplaceComponent implements OnInit {
     // });
     // debugger
   }
+
+  ngAfterViewInit():void{
+    debugger;
+  }
   showFindReplace(){
+   this.updateMaterialList= this.columnDef.map(x=>({'name':x.name,'field':x.field}));
   this.isFindReplace = !this.isFindReplace;
   }
   updateBulkData(){
@@ -35,6 +41,10 @@ export class FindReplaceComponent implements OnInit {
     // });
     debugger
 
+  }
+
+  bulkUpdateModelMaterial(t,e){
+debugger;
   }
 
 }
