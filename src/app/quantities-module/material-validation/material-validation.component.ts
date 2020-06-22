@@ -63,8 +63,8 @@ export class MaterialValidationComponent implements OnInit {
       { id: 'ct', name: 'CT / OT', field: 'ct', sortable: true, type: FieldType.number, minWidth: 90, filterable: true,formatter: myCustomCTData, },
       { id: 'Category', name: 'Component', field: 'Category', sortable: true, minWidth: 100, filterable: true},
       { id: 'ModelMaterial', name: 'MODEL VALUE', field: 'ModelMaterial', sortable: true,  minWidth: 90,  filterable: true },
-      { id: 'INSPIRErec', name: 'INSPIRE RECOMMENDATION', field: 'INSPIRErec',  sortable: true, minWidth: 90,  filterable: true },
-      { id: 'bomvalue', name: 'BOM VALUE', field: 'bomvalue',minWidth: 100,filterable: true, sortable: true }
+      { id: 'INSPIRErec', name: 'INSPIRE RECOMMENDATION', field: 'INSPIRErec',  sortable: true, minWidth: 90,  filterable: true,formatter:myCustomInsprieData },
+      { id: 'bomvalue', name: 'BOM VALUE', field: 'bomvalue',minWidth: 100,filterable: true, sortable: true,formatter:myCustomBOMValue }
     ];
 
 
@@ -175,7 +175,8 @@ export class MaterialValidationComponent implements OnInit {
           InspireRecommendation: element.InspireRecommendation,
           ScopeboxMaterial: element.ScopeboxMaterial,
            UpdatedMaterial: element.UpdatedMaterial,
-           ModelMaterial:element.ModelMaterial
+           ModelMaterial:element.ModelMaterial,
+           BomRecommendation:element.BomRecommendation,
         })
       });
      this.dataset=this.ELEMENT_DATA;
