@@ -15,29 +15,38 @@
         line-height: 27px;
         font-size: 12px;
     }
+    div {
+        display: flex;
+        flex-direction: row;
+    }
+
+    app-find-replace,
+    app-search {
+        margin: 10px;
+    }
 }
 
 // -----------Slick Grid Custom Elements-------------
 
 ::ng-deep {
-    .page-count{
+    .page-count {
         margin-left: 5px !important;
     }
     .slick-pagination .slick-pagination-settings {
         margin-top: 5px;
     }
 
-    .slick-pagination .slick-pagination-nav .pagination .page-link{
+    .slick-pagination .slick-pagination-nav .pagination .page-link {
         font-size: 18px;
     }
 
-    .slick-pagination .slick-pagination-nav{
+    .slick-pagination .slick-pagination-nav {
         display: flex;
         flex-basis: inherit;
         align-content: center;
     }
 
-    .slick-pagination .slick-pagination-nav .slick-page-number{
+    .slick-pagination .slick-pagination-nav .slick-page-number {
         margin: 0;
         display: flex;
         flex-direction: row;
@@ -137,6 +146,7 @@
         border-top: unset !important;
         border-bottom: unset !important;
         border-right: 1px solid #5e5e5e !important;
+        font-size: 12px;
     }
 
     .slickgrid-container .grid-canvas .slick-row:hover {
@@ -184,7 +194,8 @@
         color: #f2a61e;
     }
 
-    .slick-preheader-panel .ui-droppable, .slick-preheader-panel .ui-droppable-hover {
+    .slick-preheader-panel .ui-droppable,
+    .slick-preheader-panel .ui-droppable-hover {
         border: 1px solid #424242 !important;
         width: calc(100% - 25px) !important;
         margin: 0 10px;
@@ -197,11 +208,11 @@
     // }
 
     .slickgrid-container .slick-header-columns,
-    .slickgrid-container .slick-headerrow{
+    .slickgrid-container .slick-headerrow {
         background-color: #212121;
     }
 
-    .slick-preheader-panel .ui-droppable{
+    .slick-preheader-panel .ui-droppable {
         height: 40px;
     }
 }

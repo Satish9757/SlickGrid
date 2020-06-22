@@ -31,7 +31,7 @@
        "RevitId":134669,
        "Size":"1\"",
        "ModelMaterial":"PVC",
-       "ScopeboxMaterial":"EMT",
+       "ScopeboxMaterial":"RMC",
        "Workpackage":null,
        "BomRecommendation":[
           "EMT",

@@ -8,16 +8,19 @@ import { AngularSlickgridModule } from 'angular-slickgrid';
 import { SlickGridComponent } from './slick-grid/slick-grid.component';
 import { SearchComponent } from './search/search.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {MatSliderModule} from '@angular/material/slider';
-import {MatButtonModule} from '@angular/material/button';
-import {MatToolbarModule} from '@angular/material/toolbar';
-import {MatInputModule} from '@angular/material/input';
-import {MatIconModule} from '@angular/material/icon';
+import { MatSliderModule } from '@angular/material/slider';
+import { MatButtonModule } from '@angular/material/button';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatInputModule } from '@angular/material/input';
+import { MatIconModule } from '@angular/material/icon';
 import { MaterialValidationComponent } from './quantities-module/material-validation/material-validation.component';
 import { PropertyMappingComponent } from './property-mapping-module/property-mapping/property-mapping.component';
 import { RoleaccessComponent } from './roleaccess/roleaccess.component'
-import {HttpClientModule} from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { RowDetailsComponent } from './row-details/row-details.component';
+import { FindReplaceComponent } from './FindReplace/find-replace/find-replace.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import {MatSelectModule} from '@angular/material/select';
 
 @NgModule({
   declarations: [
@@ -27,9 +30,11 @@ import { RowDetailsComponent } from './row-details/row-details.component';
     MaterialValidationComponent,
     PropertyMappingComponent,
     RoleaccessComponent,
-    RowDetailsComponent
+    RowDetailsComponent,
+    FindReplaceComponent
   ],
   imports: [
+    MatFormFieldModule,
     BrowserModule,
     AppRoutingModule,
     AngularSlickgridModule.forRoot(),
@@ -37,7 +42,7 @@ import { RowDetailsComponent } from './row-details/row-details.component';
     MatSliderModule,
     MatIconModule,
     HttpClientModule,
-    MatButtonModule,MatToolbarModule,MatInputModule
+    MatButtonModule, MatToolbarModule, MatInputModule,MatSelectModule
   ],
   providers: [],
   bootstrap: [AppComponent]

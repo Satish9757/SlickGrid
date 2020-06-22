@@ -1,0 +1,17 @@
+::ng-deep app-material-validation{
+    .slick-row .dynamic-cell-detail{
+        background-color: #212121;
+        border: unset;
+        padding: 16px;
+    }
+
+    .slick-row .detail-view-toggle.expand,
+    .slick-row .detail-view-toggle.collapse{
+        color: #ffeecf ;
+    }
+
+    .slick-row .detail-view-toggle.expand:hover,
+    .slick-row .detail-view-toggle.collapse:hover{
+        color: #f2a61e ;
+    }
+}

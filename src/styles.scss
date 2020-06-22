@@ -29,3 +29,9 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   ::-webkit-scrollbar-thumb:hover {
     background: #295779;
   }
+
+  select:focus,
+  button:focus {
+    outline: none;
+    box-shadow: none;
+  }

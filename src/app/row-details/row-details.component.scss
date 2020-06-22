@@ -1,0 +1,44 @@
+.row {
+    display: flex;
+    flex-direction: row;
+}
+
+mat-form-field {
+    background-color: #424242;
+    font-size: 12px;
+    height: 27px;
+    padding: 0 10px;
+    margin: 0;
+    text-align: left;
+    border-radius: 0.25rem;
+    color: #f2a61e;
+}
+
+.col-sm-2 {
+    color: #ffffff;
+
+    select {
+        background-color: #424242;
+        font-size: 12px;
+        height: 27px;
+        padding: 0 10px;
+        margin: 0;
+        text-align: left;
+        border-radius: 0.25rem;
+        color: #9b9b9b;
+        border: unset;
+    }
+
+    select:focus {
+        outline: none;
+        box-shadow: none;
+      }
+  
+    option{
+        border: unset !important;
+    }
+
+    option:hover{
+        background-color: #212121 !important;
+    }
+}

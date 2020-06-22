@@ -1,9 +1,34 @@
 <div class="row">
-    <div class="col-xs-3"><label>Category:</label> <span>{{model?.Category }}</span></div>
-    <div class="col-xs-3"><label>Finish:</label> <span>{{model?.ModelMaterial }}</span></div>
-    <select>
-      <option *ngFor="let item of model?.InspireRecommendation">
-{{item}}
+  <div class="col-sm-2">
+    <p>{{model?.Level + ' / ' + model?.SbTypeName}}</p>
+  </div>
+  <div class="col-sm-2">
+    <p>{{model?.CtTypeName + ' / ' + model?.OcTypeName}}</p>
+  </div>
+  <div class="col-sm-2">
+    <p>{{model?.Category + ' / ' + model?.RevitId}}</p>
+  </div>
+  <div class="col-sm-2">
+    <p>{{model?.ModelMaterial}}</p>
+  </div>
+
+  <div class="col-sm-2">
+    <select *ngIf="model?.InspireRecommendation.length > 0"
+      [value]="model?.ScopeboxMaterial === 'PVC' ? 'PVC40' : model?.ScopeboxMaterial">
+      <option *ngFor="let Inspire of model?.InspireRecommendation" [value]="Inspire">
+        {{Inspire}}
       </option>
     </select>
   </div>
+
+  <div class="col-sm-2">
+    <select *ngIf="model?.BomRecommendation.length > 0"
+      [value]="model?.UpdatedMaterial === 'PVC' ? 'PVC40' : model?.UpdatedMaterial">
+      <option *ngFor="let Bom of model?.BomRecommendation" [value]="Bom">
+        {{Bom}}
+      </option>
+    </select>
+  </div>
+
+
+</div>

@@ -59,12 +59,12 @@ export class MaterialValidationComponent implements OnInit {
   prepareGrid() {
 
     this.columnDefinitions = [
-      { id: 'LevelArea', name: 'LEVEL / AREA', field: 'LevelArea', sortable: true,  width: 70, filterable: true, formatter: myCustomCheckmarkFormatter },
-      { id: 'ct', name: 'CT / OT', field: 'ct', sortable: true, type: FieldType.number, minWidth: 90, filterable: true ,formatter: myCustomCheckmarkFormatter},
+      { id: 'LevelArea', name: 'Level / Area', field: 'LevelArea', sortable: true,  width: 70, filterable: true, formatter: myCustomCheckmarkFormatter },
+      { id: 'ct', name: 'Ct / Ot', field: 'ct', sortable: true, type: FieldType.number, minWidth: 90, filterable: true ,formatter: myCustomCheckmarkFormatter},
       { id: 'Category', name: 'Component', field: 'Category', sortable: true, minWidth: 100, filterable: true},
-      { id: 'ModelMaterial', name: 'MODEL VALUE', field: 'ModelMaterial', sortable: true,  minWidth: 90,  filterable: true },
-      { id: 'INSPIRErec', name: 'INSPIRE RECOMMENDATION', field: 'INSPIRErec',  sortable: true, minWidth: 90,  filterable: true },
-      { id: 'bomvalue', name: 'BOM VALUE', field: 'bomvalue',minWidth: 100,filterable: true, sortable: true }
+      { id: 'ModelMaterial', name: 'Model Value', field: 'ModelMaterial', sortable: true,  minWidth: 90,  filterable: true },
+      { id: 'INSPIRErec', name: 'Inspire Recommendation', field: 'INSPIRErec',  sortable: true, minWidth: 90,  filterable: true,formatter:myCustomInsprieData },
+      { id: 'bomvalue', name: 'Bom Value', field: 'bomvalue',minWidth: 100,filterable: true, sortable: true,formatter:myCustomBOMValue }
     ];
 
 
@@ -72,6 +72,11 @@ export class MaterialValidationComponent implements OnInit {
       autoResize: {
         containerId: 'demo-container',
         sidePadding: 10
+      },
+      enablePagination: true,
+      pagination: {
+        pageSizes: [10,20,50,100],
+        pageSize: 10
       },
       enableFiltering: true,
       enableRowDetailView: true,
@@ -163,7 +168,6 @@ export class MaterialValidationComponent implements OnInit {
 
     this._httpClient.get("assets/sourceData.json").subscribe((dt: any[]) => {
       let id=0;
-      debugger;
       dt.forEach(element => {
         this.ELEMENT_DATA.push({
           id: id++,
@@ -176,7 +180,13 @@ export class MaterialValidationComponent implements OnInit {
           InspireRecommendation: element.InspireRecommendation,
           ScopeboxMaterial: element.ScopeboxMaterial,
            UpdatedMaterial: element.UpdatedMaterial,
-           ModelMaterial:element.ModelMaterial
+           ModelMaterial:element.ModelMaterial,
+           BomRecommendation:element.BomRecommendation,
+           SbTypeName:element.SbTypeName,
+           Level:element.Level,
+           CtTypeName:element.CtTypeName,
+           OcTypeName:element.OcTypeName,
+           RevitId:element.RevitId,
         })
       });
      this.dataset=this.ELEMENT_DATA;
