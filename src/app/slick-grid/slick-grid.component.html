@@ -1,7 +1,7 @@
 <div class="header">
     <!-- <button (click)="groupByFieldName('duration',0)">group by duration</button> -->
     <button mat-raised-button color="accent" *ngIf="isAddNewRow" (click)="AddNewRow()">Add new row</button>
-    <app-search *ngIf="isSearchEnabled" (outPutDataSource)="filterData($event)"   [inputDataSource]="dataset"></app-search>
+    <app-search *ngIf="isSearchEnabled" (outPutDataSource)="filterData($event)"  [inputDataSource]="dataset"></app-search>
 </div>
 
 <angular-slickgrid gridId="grid1"

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   AngularGridInstance,
   Aggregators,
@@ -19,7 +19,7 @@ import {
 } from 'angular-slickgrid';
 
 import { HttpClient } from '@angular/common/http';
-import { SlickGridComponent } from 'src/app/slick-grid/slick-grid.component';
+import { RowDetailsComponent } from 'src/app/row-details/row-details.component';
 export interface PeriodicElement {
   id: number;
   ModelMaterial: string;
@@ -51,7 +51,7 @@ export class MaterialValidationComponent implements OnInit {
   material;
   gridObj: any;
   ELEMENT_DATA: any[]=[];
-  @ViewChild('SlickGridComponent') slickGridComponent:SlickGridComponent;
+  detailViewRowCount = 9;
   constructor(private _httpClient: HttpClient) {
 
   }
@@ -59,128 +59,12 @@ export class MaterialValidationComponent implements OnInit {
   prepareGrid() {
 
     this.columnDefinitions = [
-      {
-        id: 'ModelMaterial', name: 'LEVEL / AREA', field: 'ModelMaterial',
-        width: 70, minWidth: 50,
-        cssClass: 'cell-title', 
-        formatter: myCustomCheckmarkFormatter, 
-        //formatter: this.checkModelAndScopeboxMaterial('sav','als'),
-        filterable: true,
-        sortable: true,
-        grouping: {
-          getter: 'title',
-          formatter: (g) => `Title: ${g.value}  <span style="color:green">(${g.count} items)</span>`,
-          aggregators: [
-            new Aggregators.Sum('cost')
-          ],
-          aggregateCollapsed: false,
-          collapsed: false
-        }
-      },
-      {
-        id: 'ct', name: 'CT / OT', field: 'ct',
-        width: 70,
-        sortable: true,
-        formatter: myCustomCTData,
-        filterable: true,
-        //filter: { model: Filters.slider, operator: '>=' },
-        type: FieldType.number,
-        groupTotalsFormatter: GroupTotalFormatters.sumTotals,
-        grouping: {
-          getter: 'duration',
-          formatter: (g) => `Duration: ${g.value}  <span style="color:green">(${g.count} items)</span>`,
-          comparer: (a, b) => {
-            return this.durationOrderByCount ? (a.count - b.count) : Sorters.numeric(a.value, b.value, SortDirectionNumber.asc);
-          },
-          aggregators: [
-            new Aggregators.Sum('cost')
-          ],
-          aggregateCollapsed: false,
-          collapsed: false
-        }
-      },
-      {
-        id: 'Category', name: 'COMPONENT', field: 'Category',
-        minWidth: 70, width: 90,
-        type: FieldType.number,
-        filterable: true,
-        sortable: true,
-        groupTotalsFormatter: GroupTotalFormatters.avgTotalsPercentage,
-        grouping: {
-          getter: 'percentComplete',
-          formatter: (g) => `% Complete:  ${g.value}  <span style="color:green">(${g.count} items)</span>`,
-          aggregators: [
-            new Aggregators.Sum('cost')
-          ],
-          aggregateCollapsed: false,
-          collapsed: false
-        },
-        params: { groupFormatterPrefix: '<i>Avg</i>: ' }
-      },
-      {
-        id: 'ModelMaterial', name: 'MODEL VALUE', field: 'ModelMaterial', minWidth: 60,
-        sortable: true,
-        filterable: true,
-        type: FieldType.dateUtc,
-        outputType: FieldType.dateIso,
-        exportWithFormatter: true,
-        grouping: {
-          getter: 'start',
-          formatter: (g) => `Start: ${g.value}  <span style="color:green">(${g.count} items)</span>`,
-          aggregators: [
-            new Aggregators.Sum('cost')
-          ],
-          aggregateCollapsed: false,
-          collapsed: false
-        }
-      },
-      {
-        id: 'INSPIRErec', name: 'INSPIRE RECOMMENDATION', field: 'INSPIRErec',
-        minWidth: 60,
-        sortable: true,
-        filterable: true,
-        formatter: myCustomInsprieData,
-        type: FieldType.dateUtc,
-        outputType: FieldType.dateIso,
-        exportWithFormatter: true,
-        grouping: {
-          getter: 'finish',
-          formatter: (g) => `Finish: ${g.value} <span style="color:green">(${g.count} items)</span>`,
-          aggregators: [
-            new Aggregators.Sum('cost')
-          ],
-          aggregateCollapsed: false,
-          collapsed: false
-        }
-      },
-      {
-        id: 'bomvalue', name: 'BOM VALUE', field: 'bomvalue',
-        width: 90,
-        sortable: true,
-        filterable: true,
-        formatter:  myCustomBOMValue,
-        filter: { model: Filters.inputText },
-        groupTotalsFormatter: GroupTotalFormatters.sumTotalsDollar,
-        type: FieldType.number,
-        grouping: {
-          getter: 'cost',
-          formatter: (g) => `Cost: ${g.value} <span style="color:green">(${g.count} items)</span>`,
-          aggregators: [
-            new Aggregators.Sum('cost')
-          ],
-          aggregateCollapsed: true,
-          collapsed: true
-        }
-      },
-     
-      // {
-      //   id: 'Status', name: 'Delete', field: 'Delete',
-      //   width: 10, minWidth: 20, maxWidth: 100,
-      //   cssClass: 'cell-effort-driven',
-      //   sortable: true,
-      //   formatter: Formatters.deleteIcon,       
-      // }
-  
+      { id: 'LevelArea', name: 'LEVEL / AREA', field: 'LevelArea', sortable: true,  width: 70, filterable: true, formatter: myCustomCheckmarkFormatter },
+      { id: 'ct', name: 'CT / OT', field: 'ct', sortable: true, type: FieldType.number, minWidth: 90, filterable: true ,formatter: myCustomCheckmarkFormatter},
+      { id: 'Category', name: 'Component', field: 'Category', sortable: true, minWidth: 100, filterable: true},
+      { id: 'ModelMaterial', name: 'MODEL VALUE', field: 'ModelMaterial', sortable: true,  minWidth: 90,  filterable: true },
+      { id: 'INSPIRErec', name: 'INSPIRE RECOMMENDATION', field: 'INSPIRErec',  sortable: true, minWidth: 90,  filterable: true,formatter:myCustomInsprieData },
+      { id: 'bomvalue', name: 'BOM VALUE', field: 'bomvalue',minWidth: 100,filterable: true, sortable: true,formatter:myCustomBOMValue }
     ];
 
 
@@ -189,39 +73,50 @@ export class MaterialValidationComponent implements OnInit {
         containerId: 'demo-container',
         sidePadding: 10
       },
-      enableDraggableGrouping: true,
-      createPreHeaderPanel: true,
-      showPreHeaderPanel: true,
-      preHeaderPanelHeight: 40,
       enableFiltering: true,
-      enableSorting: true,
-      enableColumnReorder: true,
+      enableRowDetailView: true,
+      rowSelectionOptions: {
+        selectActiveRow: true
+      },
+      datasetIdPropertyName: 'id', // optionally use a different "id"
+      rowDetailView: {
+        // optionally change the column index position of the icon (defaults to 0)
+        // columnIndexPosition: 1,
 
-      exportOptions: {
-        sanitizeDataExport: true
-      },
-      enablePagination: true,
-      pagination: {
-        pageSizes: [10,50,100],
-        pageSize: 10
-      },
-      gridMenu: {
-        onCommand: (e, args) => {
-          if (args.command === 'toggle-preheader') {
-            // in addition to the grid menu pre-header toggling (internally), we will also clear grouping
-            this.clearGrouping();
-          }
-        },
-      },
-      draggableGrouping: {
-        dropPlaceHolderText: 'Drop a column header here to group by the column',
-        // groupIconCssClass: 'fa fa-outdent',
-        deleteIconCssClass: 'fa fa-times',
-        onGroupChanged: (e, args) => this.onGroupChanged(args),
-        onExtensionRegistered: (extension) => this.draggableGroupingPlugin = extension,
+        // We can load the "process" asynchronously in 2 different ways (httpClient OR even Promise)
+        process: (item) => this.simulateServerAsyncCall(item),
+        // process: (item) => this.http.get(`api/item/${item.id}`),
+
+        // load only once and reuse the same item detail without calling process method
+        loadOnce: true,
+
+        // limit expanded row to only 1 at a time
+        singleRowExpand: false,
+
+        // false by default, clicking anywhere on the row will open the detail view
+        // when set to false, only the "+" icon would open the row detail
+        // if you use editor or cell navigation you would want this flag set to false (default)
+        useRowClick: true,
+
+        // how many grid rows do we want to use for the row detail panel (this is only set once and will be used for all row detail)
+        // also note that the detail view adds an extra 1 row for padding purposes
+        // so if you choose 4 panelRows, the display will in fact use 5 rows
+        panelRows: this.detailViewRowCount,
+
+        // you can override the logic for showing (or not) the expand icon
+        // for example, display the expand icon only on every 2nd row
+        // expandableOverride: (row: number, dataContext: any, grid: any) => (dataContext.id % 2 === 1),
+
+        // Preload View Component
+        //preloadComponent: RowDetailPreloadComponent,
+
+        // View Component to load when row detail data is ready
+        viewComponent: RowDetailsComponent,
+
+        // Optionally pass your Parent Component reference to your Child Component (row detail component)
+        parent: this
       }
     };
-
 
   }
 
@@ -232,22 +127,8 @@ export class MaterialValidationComponent implements OnInit {
 
   }
 
-
-
-  renderDifferentColspan(item: any) {
-    if (item) {
-      return {
-        columns: {
-          duration: {
-            colspan: 3 // "duration" will span over 3 columns
-          }
-        }
-      };
-    }
-  }
-
   onGroupChanged(change: { caller?: string; groupColumns: Grouping[] }) {
-    debugger;
+    
     // the "caller" property might not be in the SlickGrid core lib yet, reference PR https://github.com/6pac/SlickGrid/pull/303
      const caller = change && change.caller || [];
     const groups = change && change.groupColumns || [];
@@ -261,7 +142,7 @@ export class MaterialValidationComponent implements OnInit {
   }
 
   clearGrouping() {
-    debugger;
+    
     if (this.draggableGroupingPlugin && this.draggableGroupingPlugin.setDroppedGroups) {
       this.draggableGroupingPlugin.clearDroppedGroups();
     }
@@ -269,44 +150,73 @@ export class MaterialValidationComponent implements OnInit {
   }
 
   clearGroupingSelects() {
-    debugger;
+    
     this.selectedGroupingFields.forEach((g, i) => this.selectedGroupingFields[i] = '');
   }
-  ngAfterViewInit(): void{
-    this.slickGridComponent.renderGrid();
-  }
+
   ngOnInit(): void {
-    debugger;
+    
     this.prepareGrid();
+
+    this.dataset = [];
+
     this._httpClient.get("assets/sourceData.json").subscribe((dt: any[]) => {
+      let id=0;
       debugger;
       dt.forEach(element => {
         this.ELEMENT_DATA.push({
-          id: element.ObjectId,
+          id: id++,
           ct: '',
           CtDistance: 0,
           Category: element.Category,
           Model: element.ModelMaterial,
-          INSPIRErec: '',
+          INSPIRErec:'',
           bomvalue: '',
           InspireRecommendation: element.InspireRecommendation,
           ScopeboxMaterial: element.ScopeboxMaterial,
            UpdatedMaterial: element.UpdatedMaterial,
-           ModelMaterial:element.ModelMaterial
+           ModelMaterial:element.ModelMaterial,
+           BomRecommendation:element.BomRecommendation,
         })
       });
-      this.dataset=this.ELEMENT_DATA;
-//this.slickGridComponent.renderGrid();
-      debugger;
-     
-    })
+     this.dataset=this.ELEMENT_DATA;
+
+      
+    //   //this.prepareGrid();
+     })
   }
+
+  private randomNumber(min: number, max: number) {
+    return Math.floor(Math.random() * (max - min + 1) + min);
+  }
+
+  simulateServerAsyncCall(item: any) {
+    // random set of names to use for more item detail
+    const randomNames = ['John Doe', 'Jane Doe', 'Chuck Norris', 'Bumblebee', 'Jackie Chan', 'Elvis Presley', 'Bob Marley', 'Mohammed Ali', 'Bruce Lee', 'Rocky Balboa'];
+
+    // fill the template on async delay
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const itemDetail = item;
+
+        // let's add some extra properties to our item for a better async simulation
+        itemDetail.assignee = randomNames[this.randomNumber(0, 10)];
+        itemDetail.reporter = randomNames[this.randomNumber(0, 10)];
+
+        // resolve the data after delay specified
+        resolve(itemDetail);
+      }, 1000);
+    });
+  }
+
 }
 
+
+
 const myCustomCheckmarkFormatter: Formatter = (row, cell, value, columnDef, dataContext) => {
-  debugger;
+  // 
    let cellIcon;
-  if (dataContext.ModelMaterial.toLowerCase().search(dataContext.ScopeboxMaterial.split(' ')[0].toLowerCase()) > -1) {
+  if (dataContext.ModelMaterial && dataContext.ModelMaterial.toLowerCase().search(dataContext.ScopeboxMaterial.split(' ')[0].toLowerCase()) > -1) {
     cellIcon = '<i style="color:green" class="fa fa-check" aria-hidden="true"></i>';
   }
   else {
@@ -317,7 +227,7 @@ const myCustomCheckmarkFormatter: Formatter = (row, cell, value, columnDef, data
 };
 
 const myCustomCTData: Formatter = (row, cell, value, columnDef, dataContext) => {
-  debugger;
+  
   let cellIcon;
   if (dataContext.InspireRecommendation.filter(m => dataContext.ModelMaterial.toLowerCase().search(m.toLowerCase()) > -1).length > 0) {
     cellIcon = '<i style="color:green" class="fa fa-check" aria-hidden="true"></i>';
@@ -331,7 +241,7 @@ const myCustomCTData: Formatter = (row, cell, value, columnDef, dataContext) => 
 
 //----------- Inspire Data----------//
 const myCustomInsprieData: Formatter = (row, cell, value, columnDef, dataContext) => {
-  debugger;
+  
   let cellIcon;
   if (dataContext.ScopeboxMaterial === 'PVC') {
     cellIcon = 'PVC40';
@@ -340,11 +250,11 @@ const myCustomInsprieData: Formatter = (row, cell, value, columnDef, dataContext
     cellIcon = dataContext.ScopeboxMaterial;
   }
   return cellIcon;
-};
+}
 
 //----------- Inspire Data----------//
 const myCustomBOMValue: Formatter = (row, cell, value, columnDef, dataContext) => {
-  debugger;
+  
   let cellIcon;
   if (dataContext.UpdatedMaterial === 'PVC') {
     cellIcon = 'PVC40';
