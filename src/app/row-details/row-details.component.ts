@@ -9,7 +9,15 @@ export class RowDetailsComponent implements OnInit {
   model: {
     Category: string;
     ModelMaterial: string;
-    InspireRecommendation:any[]
+    InspireRecommendation:any[];
+    BomRecommendation:any[];
+    ScopeboxMaterial:string;
+    UpdatedMaterial:string;
+    SbTypeName:string;
+    Level:string;
+    OcTypeName:string;
+    CtTypeName:string;
+    RevitId:number;
   };
   constructor() { }
 

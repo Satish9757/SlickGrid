@@ -177,6 +177,11 @@ export class MaterialValidationComponent implements OnInit {
            UpdatedMaterial: element.UpdatedMaterial,
            ModelMaterial:element.ModelMaterial,
            BomRecommendation:element.BomRecommendation,
+           SbTypeName:element.SbTypeName,
+           Level:element.Level,
+           CtTypeName:element.CtTypeName,
+           OcTypeName:element.OcTypeName,
+           RevitId:element.RevitId,
         })
       });
      this.dataset=this.ELEMENT_DATA;

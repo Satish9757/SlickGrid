@@ -18,6 +18,7 @@ import { PropertyMappingComponent } from './property-mapping-module/property-map
 import { RoleaccessComponent } from './roleaccess/roleaccess.component'
 import {HttpClientModule} from '@angular/common/http';
 import { RowDetailsComponent } from './row-details/row-details.component';
+import { FindReplaceComponent } from './FindReplace/find-replace/find-replace.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { RowDetailsComponent } from './row-details/row-details.component';
     MaterialValidationComponent,
     PropertyMappingComponent,
     RoleaccessComponent,
-    RowDetailsComponent
+    RowDetailsComponent,
+    FindReplaceComponent
   ],
   imports: [
     BrowserModule,
