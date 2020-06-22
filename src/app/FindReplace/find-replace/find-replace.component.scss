@@ -1,0 +1,72 @@
+.find-replace-container {
+    position: relative;
+  
+    .expanded-find-replace {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      border-top-left-radius: 10px;
+      position: absolute;
+      z-index: 11111;
+      width: 335px;
+      height: 200px;
+      top: -9px;
+      border-top-left-radius: 10px;
+      box-shadow: 0px 0px 25px 0px rgba(0, 0, 0, 0.75);
+    }
+    // -------------------Header------------------------
+    .header {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      width: auto;
+  
+      h6 {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+        margin: 0;
+        width: 175px;
+      }
+  
+      .mat-stroked-button {
+        font-size: 12px;
+        line-height: 26px;
+        height: 26px;
+        border-radius: 20px;
+      }
+    }
+  
+    // ----------------------Find And Replace---------------
+    .replace-container {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      padding: 20px;
+      font-size: 12px;
+    }
+    // ---------------------Footer Buttons--------------
+    .footer {
+      mat-toolbar {
+        padding: 0px 10px;
+      }
+      .mat-toolbar-single-row {
+        height: 40px;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+      }
+  
+      .mat-stroked-button,
+      .mat-raised-button {
+        font-size: 12px;
+        line-height: 26px;
+        height: 26px;
+        border-radius: 20px;
+        margin: 5px;
+      }
+    }
+  }
