@@ -1,4 +1,5 @@
-<div *ngIf="ShowTab" class="find-replace-container"><button class="filter-button"  color="accent" (click)="showFindReplace()">Find & Replace</button>
+<div *ngIf="ShowTab" class="find-replace-container">
+    <button class="filter-button"  color="accent" (click)="showFindReplace()">Find & Replace</button>
 
 <div class="expanded-find-replace" *ngIf="isFindReplace">  
     <div class="header">
@@ -11,16 +12,16 @@
     </div>
     <div class="replace-container">
       <mat-form-field color="accent">
-        <mat-label>MODEL VALUE</mat-label>
-        <!-- <mat-select (selectionChange)="bulkUpdateModelMaterial('current', $event)">
-          <mat-option *ngFor="let material of updateMaterialList.modelList" [value]="material">
+        <label>MODEL VALUE</label>
+        <!-- <select (selectionChange)="bulkUpdateModelMaterial('current', $event)">
+          <option *ngFor="let material of updateMaterialList.modelList" [value]="material">
             {{material}}
-          </mat-option>
-        </mat-select> -->
+          </option>
+        </select> -->
       </mat-form-field>
 
       <mat-form-field color="accent">
-        <mat-label>BOM VALUE</mat-label>
+        <label>BOM VALUE</label>
         <!-- <mat-select (selectionChange)="bulkUpdateBOMMaterial('updated', $event)"
           [disabled]="bulkData.current === ''">
           <mat-option *ngFor="let material of materialsList" [value]="material">
@@ -30,11 +31,11 @@
       </mat-form-field>
     </div>
     <div class="footer">
-      <mat-toolbar>
+      <!-- <toolbar> -->
         <button mat-raised-button color="accent" (click)="updateBulkData()">
           REPLACE
         </button>
-      </mat-toolbar>
+      <!-- </toolbar> -->
 
     </div>
   </div>

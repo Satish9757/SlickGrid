@@ -98,6 +98,10 @@ this.gridOptionLocal=this.gridOptions;
   filterData(data) {
     this.dataset = data;
   }
+  findReplace(data){
+    this.dataset = data;
+
+  }
   
   clearGrouping(){
 
