@@ -1,0 +1,9 @@
+<div class="row">
+    <div class="col-xs-3"><label>Category:</label> <span>{{model?.Category }}</span></div>
+    <div class="col-xs-3"><label>Finish:</label> <span>{{model?.ModelMaterial }}</span></div>
+    <select>
+      <option *ngFor="let item of model?.InspireRecommendation">
+{{item}}
+      </option>
+    </select>
+  </div>

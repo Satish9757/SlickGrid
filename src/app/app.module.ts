@@ -17,6 +17,7 @@ import { MaterialValidationComponent } from './quantities-module/material-valida
 import { PropertyMappingComponent } from './property-mapping-module/property-mapping/property-mapping.component';
 import { RoleaccessComponent } from './roleaccess/roleaccess.component'
 import {HttpClientModule} from '@angular/common/http';
+import { RowDetailsComponent } from './row-details/row-details.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import {HttpClientModule} from '@angular/common/http';
     SearchComponent,
     MaterialValidationComponent,
     PropertyMappingComponent,
-    RoleaccessComponent
+    RoleaccessComponent,
+    RowDetailsComponent
   ],
   imports: [
     BrowserModule,
