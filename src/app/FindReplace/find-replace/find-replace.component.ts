@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { FindReplaceConfig } from './find-replace.config';
 
 @Component({
   selector: 'app-find-replace',
@@ -6,11 +7,12 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
   styleUrls: ['./find-replace.component.scss']
 })
 export class FindReplaceComponent implements OnInit {
+  selectedOption:any;
   ShowTab:boolean = false;
   isFindReplace: boolean = false;
-  @Input() inputDataSource:any[];
-  @Input() columnDef:any[];
+
   @Output('data') data = new EventEmitter(); 
+  @Input() findReplaceConfig:FindReplaceConfig;
   updateMaterialList: any[] = [];
   constructor() { }
 
@@ -29,7 +31,8 @@ export class FindReplaceComponent implements OnInit {
     debugger;
   }
   showFindReplace(){
-   this.updateMaterialList= this.columnDef.map(x=>({'name':x.name,'field':x.field}));
+    this.selectedOption=this.findReplaceConfig.defualtValue;
+   this.updateMaterialList= this.findReplaceConfig.columnDef.map(x=>({'name':x.name,'field':x.field}));
   this.isFindReplace = !this.isFindReplace;
   }
   updateBulkData(){

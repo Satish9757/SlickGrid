@@ -14,8 +14,8 @@
     <div class="replace-container">
       <mat-form-field color="accent">
         <label>Select column</label>
-        <select (selectionChange)="bulkUpdateModelMaterial('current', $event)">
-          <option *ngFor="let material of updateMaterialList" [value]="material.field">
+        <select  [(ngModel)]="selectedOption" (selectionChange)="bulkUpdateModelMaterial('current', $event)">
+          <option *ngFor="let material of findReplaceConfig.columnDef" [value]="material.field">
             {{material.name}}
           </option>
         </select>

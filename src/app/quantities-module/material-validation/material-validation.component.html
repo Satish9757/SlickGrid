@@ -1,7 +1,7 @@
 <div class="main">
     <div class="slick-container">
-      <app-slick-grid [columnDefinitions]="columnDefinitions" [gridOptions]="gridOptions" [dataset]="dataset"
-        (deleteData)="deleteData($event)" [isSearchEnabled]="isSearch" [isAddNewRow]="isAddNewRoq">
+      <app-slick-grid [columnDefinitions]="columnDefinitions" [gridOptions]="gridOptions" 
+        (deleteData)="deleteData($event)"  [slickGridConfig]="slickGridConfig">
       </app-slick-grid>
     </div>
   </div>

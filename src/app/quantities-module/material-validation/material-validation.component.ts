@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, DebugElement } from '@angular/core';
 import {
   AngularGridInstance,
   Aggregators,
@@ -20,6 +20,7 @@ import {
 
 import { HttpClient } from '@angular/common/http';
 import { RowDetailsComponent } from 'src/app/row-details/row-details.component';
+import { SlickGridConfig } from 'src/app/slick-grid/slickgrid.config';
 export interface PeriodicElement {
   id: number;
   ModelMaterial: string;
@@ -39,6 +40,7 @@ export interface PeriodicElement {
   styleUrls: ['./material-validation.component.scss']
 })
 export class MaterialValidationComponent implements OnInit {
+  slickGridConfig: SlickGridConfig;
   title = 'SlickGridPOC';
   columnDefinitions: Column[] = [];
   gridOptions: GridOption = {};
@@ -50,7 +52,7 @@ export class MaterialValidationComponent implements OnInit {
   draggableGroupingPlugin: any;
   material;
   gridObj: any;
-  ELEMENT_DATA: any[]=[];
+  ELEMENT_DATA: any[] = [];
   detailViewRowCount = 9;
   constructor(private _httpClient: HttpClient) {
 
@@ -59,12 +61,12 @@ export class MaterialValidationComponent implements OnInit {
   prepareGrid() {
 
     this.columnDefinitions = [
-      { id: 'LevelArea', name: 'Level / Area', field: 'LevelArea', sortable: true,  width: 70, filterable: true, formatter: myCustomCheckmarkFormatter },
-      { id: 'ct', name: 'Ct / Ot', field: 'ct', sortable: true, type: FieldType.number, minWidth: 90, filterable: true ,formatter: myCustomCheckmarkFormatter},
-      { id: 'Category', name: 'Component', field: 'Category', sortable: true, minWidth: 100, filterable: true},
-      { id: 'ModelMaterial', name: 'Model Value', field: 'ModelMaterial', sortable: true,  minWidth: 90,  filterable: true },
-      { id: 'INSPIRErec', name: 'Inspire Recommendation', field: 'INSPIRErec',  sortable: true, minWidth: 90,  filterable: true,formatter:myCustomInsprieData },
-      { id: 'bomvalue', name: 'Bom Value', field: 'bomvalue',minWidth: 100,filterable: true, sortable: true,formatter:myCustomBOMValue }
+      { id: 'LevelArea', name: 'Level / Area', field: 'LevelArea', sortable: true, width: 70, filterable: true, formatter: myCustomCheckmarkFormatter },
+      { id: 'ct', name: 'Ct / Ot', field: 'ct', sortable: true, type: FieldType.number, minWidth: 90, filterable: true, formatter: myCustomCheckmarkFormatter },
+      { id: 'Category', name: 'Component', field: 'Category', sortable: true, minWidth: 100, filterable: true },
+      { id: 'ModelMaterial', name: 'Model Value', field: 'ModelMaterial', sortable: true, minWidth: 90, filterable: true },
+      { id: 'INSPIRErec', name: 'Inspire Recommendation', field: 'INSPIRErec', sortable: true, minWidth: 90, filterable: true, formatter: myCustomInsprieData },
+      { id: 'bomvalue', name: 'Bom Value', field: 'bomvalue', minWidth: 100, filterable: true, sortable: true, formatter: myCustomBOMValue }
     ];
 
 
@@ -75,7 +77,7 @@ export class MaterialValidationComponent implements OnInit {
       },
       enablePagination: true,
       pagination: {
-        pageSizes: [10,20,50,100],
+        pageSizes: [10, 20, 50, 100],
         pageSize: 10
       },
       enableFiltering: true,
@@ -128,18 +130,18 @@ export class MaterialValidationComponent implements OnInit {
   deleteData(event) {
     alert(JSON.stringify(event))
   }
-  
+
   SelectCellEditor() {
 
   }
 
   onGroupChanged(change: { caller?: string; groupColumns: Grouping[] }) {
-    
+
     // the "caller" property might not be in the SlickGrid core lib yet, reference PR https://github.com/6pac/SlickGrid/pull/303
-     const caller = change && change.caller || [];
+    const caller = change && change.caller || [];
     const groups = change && change.groupColumns || [];
 
-     if (Array.isArray(this.selectedGroupingFields) && Array.isArray(groups) && groups.length > 0) {
+    if (Array.isArray(this.selectedGroupingFields) && Array.isArray(groups) && groups.length > 0) {
       // update all Group By select dropdown
       this.selectedGroupingFields.forEach((g, i) => this.selectedGroupingFields[i] = groups[i] && groups[i].getter || '');
     } else if (groups.length === 0 && caller === 'remove-group') {
@@ -148,7 +150,7 @@ export class MaterialValidationComponent implements OnInit {
   }
 
   clearGrouping() {
-    
+
     if (this.draggableGroupingPlugin && this.draggableGroupingPlugin.setDroppedGroups) {
       this.draggableGroupingPlugin.clearDroppedGroups();
     }
@@ -156,18 +158,32 @@ export class MaterialValidationComponent implements OnInit {
   }
 
   clearGroupingSelects() {
-    
+
     this.selectedGroupingFields.forEach((g, i) => this.selectedGroupingFields[i] = '');
   }
 
   ngOnInit(): void {
+    debugger
+    this.slickGridConfig=new SlickGridConfig();
     
     this.prepareGrid();
-
     this.dataset = [];
+    this.setSlickConfig();
+    this.generateGridData();
 
+  }
+
+  private setSlickConfig() {
+    this.slickGridConfig.isSearch=true;
+    this.slickGridConfig.isFindReaplce = true;
+    this.slickGridConfig.findReplaceConfig.isDisabled = true;
+    this.slickGridConfig.findReplaceConfig.defualtValue = "Category";
+    this.slickGridConfig.findReplaceConfig.columnDef=this.columnDefinitions;
+    
+  }
+  private generateGridData() {
     this._httpClient.get("assets/sourceData.json").subscribe((dt: any[]) => {
-      let id=0;
+      let id = 0;
       dt.forEach(element => {
         this.ELEMENT_DATA.push({
           id: id++,
@@ -175,25 +191,26 @@ export class MaterialValidationComponent implements OnInit {
           CtDistance: 0,
           Category: element.Category,
           Model: element.ModelMaterial,
-          INSPIRErec:'',
+          INSPIRErec: '',
           bomvalue: '',
           InspireRecommendation: element.InspireRecommendation,
           ScopeboxMaterial: element.ScopeboxMaterial,
-           UpdatedMaterial: element.UpdatedMaterial,
-           ModelMaterial:element.ModelMaterial,
-           BomRecommendation:element.BomRecommendation,
-           SbTypeName:element.SbTypeName,
-           Level:element.Level,
-           CtTypeName:element.CtTypeName,
-           OcTypeName:element.OcTypeName,
-           RevitId:element.RevitId,
+          UpdatedMaterial: element.UpdatedMaterial,
+          ModelMaterial: element.ModelMaterial,
+          BomRecommendation: element.BomRecommendation,
+          SbTypeName: element.SbTypeName,
+          Level: element.Level,
+          CtTypeName: element.CtTypeName,
+          OcTypeName: element.OcTypeName,
+          RevitId: element.RevitId,
         })
       });
-     this.dataset=this.ELEMENT_DATA;
-
-      
-    //   //this.prepareGrid();
-     })
+      debugger;
+      this.slickGridConfig.dataSource = this.ELEMENT_DATA;
+      this.slickGridConfig.searchConfig.dataSource=this.ELEMENT_DATA;
+      this.slickGridConfig.findReplaceConfig.dataSource=this.ELEMENT_DATA;
+      //   //this.prepareGrid();
+    })
   }
 
   private randomNumber(min: number, max: number) {
@@ -225,7 +242,7 @@ export class MaterialValidationComponent implements OnInit {
 
 const myCustomCheckmarkFormatter: Formatter = (row, cell, value, columnDef, dataContext) => {
   // 
-   let cellIcon;
+  let cellIcon;
   if (dataContext.ModelMaterial && dataContext.ModelMaterial.toLowerCase().search(dataContext.ScopeboxMaterial.split(' ')[0].toLowerCase()) > -1) {
     cellIcon = '<i style="color:green" class="fa fa-check" aria-hidden="true"></i>';
   }
@@ -233,11 +250,11 @@ const myCustomCheckmarkFormatter: Formatter = (row, cell, value, columnDef, data
     cellIcon = '<i style="color:red" class="fa fa-times" aria-hidden="true"></i>'
   }
   // // you can return a string of a object (of type FormatterResultObject), the 2 types are shown below
-   return cellIcon;
+  return cellIcon;
 };
 
 const myCustomCTData: Formatter = (row, cell, value, columnDef, dataContext) => {
-  
+
   let cellIcon;
   if (dataContext.InspireRecommendation.filter(m => dataContext.ModelMaterial.toLowerCase().search(m.toLowerCase()) > -1).length > 0) {
     cellIcon = '<i style="color:green" class="fa fa-check" aria-hidden="true"></i>';
@@ -251,7 +268,7 @@ const myCustomCTData: Formatter = (row, cell, value, columnDef, dataContext) => 
 
 //----------- Inspire Data----------//
 const myCustomInsprieData: Formatter = (row, cell, value, columnDef, dataContext) => {
-  
+
   let cellIcon;
   if (dataContext.ScopeboxMaterial === 'PVC') {
     cellIcon = 'PVC40';
@@ -264,7 +281,7 @@ const myCustomInsprieData: Formatter = (row, cell, value, columnDef, dataContext
 
 //----------- Inspire Data----------//
 const myCustomBOMValue: Formatter = (row, cell, value, columnDef, dataContext) => {
-  
+
   let cellIcon;
   if (dataContext.UpdatedMaterial === 'PVC') {
     cellIcon = 'PVC40';
