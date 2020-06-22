@@ -123,6 +123,7 @@ export class MaterialValidationComponent implements OnInit {
   deleteData(event) {
     alert(JSON.stringify(event))
   }
+  
   SelectCellEditor() {
 
   }
