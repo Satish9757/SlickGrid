@@ -10,6 +10,8 @@ export class FindReplaceComponent implements OnInit {
   selectedOption:any;
   ShowTab:boolean = false;
   isFindReplace: boolean = false;
+  Find:string='';
+  Replace:string='';
 
   @Output('data') data = new EventEmitter(); 
   @Input() findReplaceConfig:FindReplaceConfig;
@@ -17,37 +19,23 @@ export class FindReplaceComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    this.ShowTab = true;
-    //this.updateMaterialList['modelList'] = [];
-    // this.inputDataSource.forEach(element => {
-    //   if (this.updateMaterialList['modelList'].includes(element['ModelMaterial']) === false && element['ModelMaterial']) {
-    //     this.updateMaterialList['modelList'].push(element['ModelMaterial'])
-    //   }
-    // });
-    // debugger
+    this.ShowTab = true;   
   }
 
   ngAfterViewInit():void{
     debugger;
   }
   showFindReplace(){
+    debugger
     this.selectedOption=this.findReplaceConfig.defualtValue;
-   this.updateMaterialList= this.findReplaceConfig.columnDef.map(x=>({'name':x.name,'field':x.field}));
+    this.updateMaterialList= this.findReplaceConfig.columnDef.map(x=>({'name':x.name,'field':x.field}));
   this.isFindReplace = !this.isFindReplace;
   }
-  updateBulkData(){
-    // this.updateMaterialList['modelList'] = [];
-    // this.inputDataSource.forEach(element => {
-    //   if (this.updateMaterialList['modelList'].includes(element['ModelMaterial']) === false && element['ModelMaterial']) {
-    //     this.updateMaterialList['modelList'].push(element['ModelMaterial'])
-    //   }
-    // });
+  
+  updateTable(){   
     debugger
-
+    this.findReplaceConfig.dataSource.filter(e => e.ScopeboxMaterial === 'EMT' ? e.ScopeboxMaterial ='abc' :'');
   }
 
-  bulkUpdateModelMaterial(t,e){
-debugger;
-  }
 
 }

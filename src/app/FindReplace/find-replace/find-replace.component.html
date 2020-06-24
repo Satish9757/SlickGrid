@@ -1,4 +1,4 @@
-<!-- <div *ngIf="ShowTab" class="find-replace-container">
+<div *ngIf="ShowTab" class="find-replace-container">
   <button mat-raised-button class="filter-button" color="accent"
     (click)="showFindReplace()">Find & Replace</button>
 
@@ -7,37 +7,31 @@
       <h6 color="accent">
         <mat-icon>swap_horiz</mat-icon> FIND AND REPLACE
       </h6>
-      <mat-icon color="accent" (click)="showFindReplace()" matTooltip="Close" style="cursor:pointer;">
+      <mat-icon color="accent"  matTooltip="Close" style="cursor:pointer;">
         clear
       </mat-icon>
     </div>
     <div class="replace-container">
-      <mat-form-field color="accent">
+
         <label>Select column</label>
-        <select  [(ngModel)]="selectedOption" (selectionChange)="bulkUpdateModelMaterial('current', $event)">
+        <select  [(ngModel)]="selectedOption" >
           <option *ngFor="let material of findReplaceConfig.columnDef" [value]="material.field">
             {{material.name}}
           </option>
         </select>
-      </mat-form-field>
-
-      <mat-form-field color="accent">
-        <label>BOM VALUE</label> -->
-        <!-- <mat-select (selectionChange)="bulkUpdateBOMMaterial('updated', $event)"
-          [disabled]="bulkData.current === ''">
-          <mat-option *ngFor="let material of materialsList" [value]="material">
-            {{material}}
-          </mat-option>
-        </mat-select> -->
-      <!-- </mat-form-field>
+       
+     
+        <label>BOM VALUE</label> 
+        <input matInput placeholder="find..." type="search" >       
+   
+      <input matInput placeholder="Replace..." type="search" >
     </div>
-    <div class="footer"> -->
-      <!-- <toolbar> -->
-        <!-- <button mat-raised-button color="accent" (click)="updateBulkData()">
+    <div class="footer"> 
+    
+        <button mat-raised-button color="accent" (click)="updateTable()">
           REPLACE
-        </button> -->
-      <!-- </toolbar> -->
-<!-- 
+        </button> 
+  
+    </div>
     </div>
   </div>
-</div> -->
