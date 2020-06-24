@@ -114,8 +114,11 @@ var dateTime = date+'_'+time;
   filterData(data) {
     this.slickGridConfig.dataSource = data;
   }
-  findReplace(data) {
+
+  replacedData(data) {
+    debugger;
     this.slickGridConfig.dataSource = data;
+    this.angularGrid.gridService.renderGrid();
 
   }
 

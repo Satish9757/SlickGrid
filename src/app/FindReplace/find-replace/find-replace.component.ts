@@ -10,10 +10,10 @@ export class FindReplaceComponent implements OnInit {
   selectedOption:any;
   ShowTab:boolean = false;
   isFindReplace: boolean = false;
-  Find:string='';
-  Replace:string='';
+  find:string='';
+  replace:string='';
 
-  @Output('data') data = new EventEmitter(); 
+  @Output('replacedData') replacedData = new EventEmitter(); 
   @Input() findReplaceConfig:FindReplaceConfig;
   updateMaterialList: any[] = [];
   constructor() { }
@@ -33,9 +33,20 @@ export class FindReplaceComponent implements OnInit {
   }
   
   updateTable(){   
-    debugger
-    this.findReplaceConfig.dataSource.filter(e => e.ScopeboxMaterial === 'EMT' ? e.ScopeboxMaterial ='abc' :'');
+   
+  //  const replcedData= this.findReplaceConfig.dataSource.filter(function(e){
+  //   return e[`${this.selectedOption}`] === this.find ? e[`${this.selectedOption}`] =this.replace :'';
+  //  }) 
+  const findText=this.find;
+  const replaceText=this.replace;
+  const select=this.selectedOption;
+  const replcedData= this.findReplaceConfig.dataSource.filter(function(e){
+    return e[`${select}`]===findText ?e[`${select}`]=replaceText:''
+  })
+    this.replacedData.emit(replcedData);
   }
+
+
 
 
 }

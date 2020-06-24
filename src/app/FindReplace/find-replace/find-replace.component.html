@@ -14,7 +14,7 @@
     <div class="replace-container">
 
         <label>Select column</label>
-        <select  [(ngModel)]="selectedOption" >
+        <select  [(ngModel)]="selectedOption">
           <option *ngFor="let material of findReplaceConfig.columnDef" [value]="material.field">
             {{material.name}}
           </option>
@@ -22,9 +22,9 @@
        
      
         <label>BOM VALUE</label> 
-        <input matInput placeholder="find..." type="search" >       
+        <input  placeholder="find..." type="search" [(ngModel)]="find" >       
    
-      <input matInput placeholder="Replace..." type="search" >
+      <input  placeholder="Replace..." type="search" [(ngModel)]="replace" >
     </div>
     <div class="footer"> 
     
