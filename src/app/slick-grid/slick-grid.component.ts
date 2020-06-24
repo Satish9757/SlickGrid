@@ -14,7 +14,7 @@ import {
   GroupTotalFormatters,
   SortDirectionNumber,
   Sorters,
- } from 'angular-slickgrid';
+} from 'angular-slickgrid';
 import { SlickGridConfig } from './slickgrid.config';
 
 @Component({
@@ -23,27 +23,32 @@ import { SlickGridConfig } from './slickgrid.config';
   styleUrls: ['./slick-grid.component.scss']
 })
 export class SlickGridComponent implements OnInit {
-  dataView :any;
+  dataView: any;
   @Input() columnDefinitions: Column[] = [];
   @Input() gridOptions: GridOption = {};
   @Output() deleteData = new EventEmitter();
-  @Input() isSearchEnabled:boolean;
-  @Input() isAddNewRow:boolean;
-  @Input() slickGridConfig:SlickGridConfig;
+  @Input() isSearchEnabled: boolean;
+  @Input() isAddNewRow: boolean;
+  @Input() slickGridConfig: SlickGridConfig;
   angularGrid: AngularGridInstance;
   dataSource = [];
   gridObj;
-  dataviewObj; 
-  gridOptionLocal:GridOption={};
-  draggableGroupingPlugin:any;
+  dataviewObj;
+  gridOptionLocal: GridOption = {};
+  draggableGroupingPlugin: any;
   selectedGroupingFields: Array<string | GroupingGetterFunction> = ['', '', ''];
   constructor() { }
 
   ngOnInit(): void {
-this.gridOptionLocal=this.gridOptions;
+
+    this.gridOptions.enableExcelExport=true;
+    this.gridOptionLocal = this.gridOptions;
+
   }
+
+
   angularGridReady(_angularGrid: AngularGridInstance) {
-    const obj1={
+    const obj1 = {
       onCommand: (e, args) => {
         if (args.command === 'toggle-preheader') {
           // in addition to the grid menu pre-header toggling (internally), we will also clear grouping
@@ -51,21 +56,22 @@ this.gridOptionLocal=this.gridOptions;
         }
       },
     }
-    const obj2={
-        dropPlaceHolderText: 'Drop a column header here to group by the column',
-        // groupIconCssClass: 'fa fa-outdent',
-        deleteIconCssClass: 'fa fa-times',
-        onGroupChanged: (e, args) => this.onGroupChanged(args),
-        onExtensionRegistered: (extension) => this.draggableGroupingPlugin = extension,
-      
+    const obj2 = {
+      dropPlaceHolderText: 'Drop a column header here to group by the column',
+      // groupIconCssClass: 'fa fa-outdent',
+      deleteIconCssClass: 'fa fa-times',
+      onGroupChanged: (e, args) => this.onGroupChanged(args),
+      onExtensionRegistered: (extension) => this.draggableGroupingPlugin = extension,
+
     }
-    this.gridOptionLocal["gridMenu"]=obj1;
-    this.gridOptionLocal["draggableGrouping"]=obj2;
+    this.gridOptionLocal["gridMenu"] = obj1;
+    this.gridOptionLocal["draggableGrouping"] = obj2;
     this.angularGrid = _angularGrid;
     this.dataSource = this.angularGrid.dataView.getItems();
     this.gridObj = _angularGrid.slickGrid;
     this.dataviewObj = _angularGrid.dataView;
-  
+   
+
   }
   onCellClicked(e, args) {
     //this.angularGrid = ins;
@@ -92,23 +98,29 @@ this.gridOptionLocal=this.gridOptions;
     if (confirm("are you sure want to delete??")) {
       this.deleteData.emit(data)
       this.angularGrid.gridService.deleteItemById(data.id);
+
     }
 
+  }
+
+  exportToExcel(){
+    debugger;
+    this.angularGrid.excelExportService.exportToExcel({ filename: this.slickGridConfig.downloadFileName+Date.now });
   }
 
   filterData(data) {
     this.slickGridConfig.dataSource = data;
   }
-  findReplace(data){
+  findReplace(data) {
     this.slickGridConfig.dataSource = data;
 
   }
-  
-  clearGrouping(){
+
+  clearGrouping() {
 
   }
 
- public renderGrid(){
+  public renderGrid() {
     this.angularGrid.gridService.renderGrid();
   }
 
@@ -135,11 +147,11 @@ this.gridOptionLocal=this.gridOptions;
     this.clearGrouping();
     if (this.draggableGroupingPlugin && this.draggableGroupingPlugin.setDroppedGroups) {
       // get the field names from Group By select(s) dropdown, but filter out any empty fields
-      const groupedFields=[];// = this.selectedGroupingFields.filter((g) => g !== '');
+      const groupedFields = [];// = this.selectedGroupingFields.filter((g) => g !== '');
       groupedFields.push(fieldName);
       this.showPreHeader();
       this.draggableGroupingPlugin.setDroppedGroups(groupedFields);
-     // this.gridObj.invalidate(); // invalidate all rows and re-render
+      // this.gridObj.invalidate(); // invalidate all rows and re-render
     }
   }
 

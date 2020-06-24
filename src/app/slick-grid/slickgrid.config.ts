@@ -3,6 +3,7 @@ import { SearchConfig } from '../search/search.config';
 
  export class SlickGridConfig{
 constructor(){}
+    downloadFileName:string="download";
     isSearch:boolean=false;
     dataSource:any[];
     isFindReaplce:boolean=false;

@@ -15,7 +15,8 @@ import {
   SortDirectionNumber,
   Sorters,
   Editors,
-  Formatter
+  Formatter,
+  ExcelExportService
 } from 'angular-slickgrid';
 
 import { HttpClient } from '@angular/common/http';
@@ -34,6 +35,8 @@ export interface PeriodicElement {
   ScopeboxMaterial: string;
   UpdatedMaterial: string;
 }
+
+
 @Component({
   selector: 'app-material-validation',
   templateUrl: './material-validation.component.html',
@@ -71,6 +74,7 @@ export class MaterialValidationComponent implements OnInit {
 
 
     this.gridOptions = {
+      enableExcelExport: true,
       autoResize: {
         containerId: 'demo-container',
         sidePadding: 10
@@ -122,7 +126,19 @@ export class MaterialValidationComponent implements OnInit {
 
         // Optionally pass your Parent Component reference to your Child Component (row detail component)
         parent: this
-      }
+      },
+      // gridMenu:{
+      //   customItems:[
+      //     {
+      //     title: "Export to Excel",
+      //     disabled: false,
+      //     command: "exportToExcel",
+      //     cssClass: 'bold fa fa-file-excel-o',     // container css class
+      //     textCssClass: 'red'  
+      //     }
+      //   ]
+      // }
+
     };
 
   }
@@ -135,6 +151,7 @@ export class MaterialValidationComponent implements OnInit {
 
   }
 
+  
   onGroupChanged(change: { caller?: string; groupColumns: Grouping[] }) {
 
     // the "caller" property might not be in the SlickGrid core lib yet, reference PR https://github.com/6pac/SlickGrid/pull/303
@@ -181,6 +198,7 @@ export class MaterialValidationComponent implements OnInit {
     this.slickGridConfig.findReplaceConfig.columnDef=this.columnDefinitions;
     
   }
+
   private generateGridData() {
     this._httpClient.get("assets/sourceData.json").subscribe((dt: any[]) => {
       let id = 0;
@@ -235,6 +253,8 @@ export class MaterialValidationComponent implements OnInit {
       }, 1000);
     });
   }
+
+
 
 }
 
