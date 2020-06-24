@@ -296,6 +296,7 @@ export class PropertyMappingComponent implements OnInit {
       });
       this.slickGridConfig.dataSource = this.ELEMENT_DATA;
       this.slickGridConfig.searchConfig.dataSource=this.ELEMENT_DATA;
+      this.slickGridConfig.findReplaceConfig.dataSource=this.ELEMENT_DATA;
       //   //this.prepareGrid();
     })
   }
