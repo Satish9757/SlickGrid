@@ -15,6 +15,7 @@ import {
   SortDirectionNumber,
   Sorters,
  } from 'angular-slickgrid';
+import { SlickGridConfig } from './slickgrid.config';
 
 @Component({
   selector: 'app-slick-grid',
@@ -25,10 +26,10 @@ export class SlickGridComponent implements OnInit {
   dataView :any;
   @Input() columnDefinitions: Column[] = [];
   @Input() gridOptions: GridOption = {};
-  @Input() dataset: any[] = [];
   @Output() deleteData = new EventEmitter();
   @Input() isSearchEnabled:boolean;
   @Input() isAddNewRow:boolean;
+  @Input() slickGridConfig:SlickGridConfig;
   angularGrid: AngularGridInstance;
   dataSource = [];
   gridObj;
@@ -96,10 +97,10 @@ this.gridOptionLocal=this.gridOptions;
   }
 
   filterData(data) {
-    this.dataset = data;
+    this.slickGridConfig.dataSource = data;
   }
   findReplace(data){
-    this.dataset = data;
+    this.slickGridConfig.dataSource = data;
 
   }
   

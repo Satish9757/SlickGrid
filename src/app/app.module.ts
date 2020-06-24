@@ -21,6 +21,7 @@ import { RowDetailsComponent } from './row-details/row-details.component';
 import { FindReplaceComponent } from './FindReplace/find-replace/find-replace.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import {MatSelectModule} from '@angular/material/select';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import {MatSelectModule} from '@angular/material/select';
     PropertyMappingComponent,
     RoleaccessComponent,
     RowDetailsComponent,
-    FindReplaceComponent
+    FindReplaceComponent,
+    
   ],
   imports: [
     MatFormFieldModule,
@@ -42,6 +44,8 @@ import {MatSelectModule} from '@angular/material/select';
     MatSliderModule,
     MatIconModule,
     HttpClientModule,
+    FormsModule,
+    ReactiveFormsModule,
     MatButtonModule, MatToolbarModule, MatInputModule,MatSelectModule
   ],
   providers: [],

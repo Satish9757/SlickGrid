@@ -19,6 +19,7 @@ import {
 } from 'angular-slickgrid';
 
 import { HttpClient } from '@angular/common/http';
+import { SlickGridConfig } from 'src/app/slick-grid/slickgrid.config';
 export interface PeriodicElement {
   id: number;
   ModelMaterial: string;
@@ -52,6 +53,7 @@ export class PropertyMappingComponent implements OnInit {
   material;
   gridObj: any;
   ELEMENT_DATA: any[]=[];
+  slickGridConfig: SlickGridConfig;
   constructor(private _httpClient: HttpClient) {
 
   }
@@ -253,13 +255,27 @@ export class PropertyMappingComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    
+    this.slickGridConfig=new SlickGridConfig();
     this.prepareGrid();
+    this.dataset = [];
+    this.setSlickConfig();
+    this.generateGridData();
+
+  }
+   private setSlickConfig() {
+    this.slickGridConfig.isSearch=true;
+    this.slickGridConfig.isFindReaplce = true;
+    this.slickGridConfig.findReplaceConfig.isDisabled = true;
+    this.slickGridConfig.findReplaceConfig.defualtValue = "Category";
+    this.slickGridConfig.findReplaceConfig.columnDef=this.columnDefinitions;
+  }
+
+  private generateGridData() {
     this._httpClient.get("assets/sourceData.json").subscribe((dt: any[]) => {
-      
+      let id = 0;
       dt.forEach(element => {
         this.ELEMENT_DATA.push({
-          id: element.ObjectId,
+          id: id++,
           ct: '',
           CtDistance: 0,
           Category: element.Category,
@@ -268,17 +284,21 @@ export class PropertyMappingComponent implements OnInit {
           bomvalue: '',
           InspireRecommendation: element.InspireRecommendation,
           ScopeboxMaterial: element.ScopeboxMaterial,
-           UpdatedMaterial: element.UpdatedMaterial,
-           ModelMaterial:element.ModelMaterial
+          UpdatedMaterial: element.UpdatedMaterial,
+          ModelMaterial: element.ModelMaterial,
+          BomRecommendation: element.BomRecommendation,
+          SbTypeName: element.SbTypeName,
+          Level: element.Level,
+          CtTypeName: element.CtTypeName,
+          OcTypeName: element.OcTypeName,
+          RevitId: element.RevitId,
         })
       });
-     this.dataset=this.ELEMENT_DATA;
-
-      
-      //this.prepareGrid();
+      this.slickGridConfig.dataSource = this.ELEMENT_DATA;
+      this.slickGridConfig.searchConfig.dataSource=this.ELEMENT_DATA;
+      //   //this.prepareGrid();
     })
   }
-
 }
 
 const myCustomCheckmarkFormatter: Formatter = (row, cell, value, columnDef, dataContext) => {

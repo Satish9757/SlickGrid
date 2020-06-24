@@ -11,16 +11,16 @@
         clear
       </mat-icon>
     </div>
-    <div class="replace-container"> -->
-      <!-- <mat-form-field color="accent">
-        <label>MODEL VALUE</label>
-        <select (selectionChange)="bulkUpdateModelMaterial('current', $event)">
-          <option *ngFor="let material of updateMaterialList.modelList" [value]="material">
-            {{material}}
+    <div class="replace-container">
+      <mat-form-field color="accent">
+        <label>Select column</label>
+        <select  [(ngModel)]="selectedOption" (selectionChange)="bulkUpdateModelMaterial('current', $event)">
+          <option *ngFor="let material of findReplaceConfig.columnDef" [value]="material.field">
+            {{material.name}}
           </option>
         </select>
-      </mat-form-field> -->
-<!-- 
+      </mat-form-field>
+
       <mat-form-field color="accent">
         <label>BOM VALUE</label> -->
         <!-- <mat-select (selectionChange)="bulkUpdateBOMMaterial('updated', $event)"

@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { SearchConfig } from './search.config';
 
 @Component({
   selector: 'app-search',
@@ -7,7 +8,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 })
 export class SearchComponent implements OnInit {
   searchInput:string;
-  @Input() inputDataSource:any[];
+  @Input() searchConfig:SearchConfig;
   @Output('outPutDataSource') outPutDataSource = new EventEmitter(); 
   constructor() { }
 
@@ -15,7 +16,7 @@ export class SearchComponent implements OnInit {
   }
 
   search(data){
-     const filterData= this.inputDataSource.filter(ele => JSON.stringify(ele).trim().toLowerCase().includes(data.trim().toLowerCase()));
+    const filterData= this.searchConfig.dataSource.filter(ele => JSON.stringify(ele).trim().toLowerCase().includes(data.trim().toLowerCase()));
       this.outPutDataSource.emit(filterData);
   }
 
