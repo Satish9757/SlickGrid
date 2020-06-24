@@ -1,86 +1,86 @@
-// .find-replace-container {
-//     position: relative;
+.find-replace-container {
+    position: relative;
   
-//     .expanded-find-replace {
-//       display: flex;
-//       flex-direction: column;
-//       height: 100%;
-//       border-top-left-radius: 10px;
-//       position: absolute;
-//       z-index: 11111;
-//       width: 335px;
-//       height: 200px;
-//       top: -9px;
-//       border-top-left-radius: 10px;
-//       box-shadow: 0px 0px 25px 0px rgba(0, 0, 0, 0.75);
-//       background-color: #212121;
-//     }
-//     // -------------------Header------------------------
-//     .header {
-//       display: flex;
-//       flex-direction: row;
-//       justify-content: space-between;
-//       align-items: center;
-//       padding: 10px;
-//       width: auto;
+    .expanded-find-replace {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      border-top-left-radius: 10px;
+      position: absolute;
+      z-index: 11111;
+      width: 335px;
+      height: 200px;
+      top: -9px;
+      border-top-left-radius: 10px;
+      box-shadow: 0px 0px 25px 0px rgba(0, 0, 0, 0.75);
+      background-color: #212121;
+    }
+    // -------------------Header------------------------
+    .header {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      width: auto;
   
-//       h6 {
-//         display: flex;
-//         flex-direction: row;
-//         justify-content: space-around;
-//         align-items: center;
-//         margin: 0;
-//         width: 175px;
-//         color: #f2a61e;
-//       }
+      h6 {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+        margin: 0;
+        width: 175px;
+        color: #f2a61e;
+      }
 
-//       mat-icon{
-//         color: #f2a61e;
-//       }
+      mat-icon{
+        color: #f2a61e;
+      }
   
-//       .mat-stroked-button {
-//         font-size: 12px;
-//         line-height: 26px;
-//         height: 26px;
-//         border-radius: 20px;
-//       }
-//     }
+      .mat-stroked-button {
+        font-size: 12px;
+        line-height: 26px;
+        height: 26px;
+        border-radius: 20px;
+      }
+    }
   
-//     // ----------------------Find And Replace---------------
-//     .replace-container {
-//       display: flex;
-//       flex-direction: column;
-//       height: 100%;
-//       padding: 20px;
-//       font-size: 12px;
-//     }
-//     // ---------------------Footer Buttons--------------
-//     .footer {
-//       border-top: 1px dashed #f2a61e;
-//       mat-toolbar {
-//         padding: 0px 10px;
-//       }
-//       .mat-toolbar-single-row {
-//         height: 40px;
-//         display: flex;
-//         flex-direction: row;
-//         justify-content: flex-end;
-//       }
+    // ----------------------Find And Replace---------------
+    .replace-container {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      padding: 20px;
+      font-size: 12px;
+    }
+    // ---------------------Footer Buttons--------------
+    .footer {
+      border-top: 1px dashed #f2a61e;
+      mat-toolbar {
+        padding: 0px 10px;
+      }
+      .mat-toolbar-single-row {
+        height: 40px;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+      }
   
-//       .mat-stroked-button,
-//       .mat-raised-button {
-//         font-size: 12px;
-//         line-height: 26px;
-//         height: 26px;
-//         margin: 5px;
-//       }
-//     }
-//   }
+      .mat-stroked-button,
+      .mat-raised-button {
+        font-size: 12px;
+        line-height: 26px;
+        height: 26px;
+        margin: 5px;
+      }
+    }
+  }
 
-//   .mat-raised-button {
-//     background-color: #f2a61e;
-//     color: #000000;
-//     height: 27px;
-//     line-height: 27px;
-//     font-size: 12px;
-// }
+  .mat-raised-button {
+    background-color: #f2a61e;
+    color: #000000;
+    height: 27px;
+    line-height: 27px;
+    font-size: 12px;
+}

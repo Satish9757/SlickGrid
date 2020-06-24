@@ -22,6 +22,7 @@ import { FindReplaceComponent } from './FindReplace/find-replace/find-replace.co
 import { MatFormFieldModule } from '@angular/material/form-field';
 import {MatSelectModule} from '@angular/material/select';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { EditorComponent } from './editor/editor.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     RoleaccessComponent,
     RowDetailsComponent,
     FindReplaceComponent,
+    EditorComponent,
     
   ],
   imports: [

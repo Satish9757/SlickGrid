@@ -18,13 +18,6 @@ export class FindReplaceComponent implements OnInit {
 
   ngOnInit(): void {
     this.ShowTab = true;
-    //this.updateMaterialList['modelList'] = [];
-    // this.inputDataSource.forEach(element => {
-    //   if (this.updateMaterialList['modelList'].includes(element['ModelMaterial']) === false && element['ModelMaterial']) {
-    //     this.updateMaterialList['modelList'].push(element['ModelMaterial'])
-    //   }
-    // });
-    // debugger
   }
 
   ngAfterViewInit():void{
@@ -35,19 +28,7 @@ export class FindReplaceComponent implements OnInit {
    this.updateMaterialList= this.findReplaceConfig.columnDef.map(x=>({'name':x.name,'field':x.field}));
   this.isFindReplace = !this.isFindReplace;
   }
-  updateBulkData(){
-    // this.updateMaterialList['modelList'] = [];
-    // this.inputDataSource.forEach(element => {
-    //   if (this.updateMaterialList['modelList'].includes(element['ModelMaterial']) === false && element['ModelMaterial']) {
-    //     this.updateMaterialList['modelList'].push(element['ModelMaterial'])
-    //   }
-    // });
-    debugger
-
+  bulkUpdateModelMaterial(a,b){
+    
   }
-
-  bulkUpdateModelMaterial(t,e){
-debugger;
-  }
-
 }

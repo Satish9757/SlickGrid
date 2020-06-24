@@ -104,8 +104,11 @@ export class SlickGridComponent implements OnInit {
   }
 
   exportToExcel(){
-    debugger;
-    this.angularGrid.excelExportService.exportToExcel({ filename: this.slickGridConfig.downloadFileName+Date.now });
+    var today = new Date();
+var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+var dateTime = date+'_'+time;
+    this.angularGrid.excelExportService.exportToExcel({ filename: this.slickGridConfig.downloadFileName+dateTime.toString() });
   }
 
   filterData(data) {

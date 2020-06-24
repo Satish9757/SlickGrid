@@ -127,18 +127,6 @@ export class MaterialValidationComponent implements OnInit {
         // Optionally pass your Parent Component reference to your Child Component (row detail component)
         parent: this
       },
-      // gridMenu:{
-      //   customItems:[
-      //     {
-      //     title: "Export to Excel",
-      //     disabled: false,
-      //     command: "exportToExcel",
-      //     cssClass: 'bold fa fa-file-excel-o',     // container css class
-      //     textCssClass: 'red'  
-      //     }
-      //   ]
-      // }
-
     };
 
   }
@@ -152,37 +140,8 @@ export class MaterialValidationComponent implements OnInit {
   }
 
   
-  onGroupChanged(change: { caller?: string; groupColumns: Grouping[] }) {
-
-    // the "caller" property might not be in the SlickGrid core lib yet, reference PR https://github.com/6pac/SlickGrid/pull/303
-    const caller = change && change.caller || [];
-    const groups = change && change.groupColumns || [];
-
-    if (Array.isArray(this.selectedGroupingFields) && Array.isArray(groups) && groups.length > 0) {
-      // update all Group By select dropdown
-      this.selectedGroupingFields.forEach((g, i) => this.selectedGroupingFields[i] = groups[i] && groups[i].getter || '');
-    } else if (groups.length === 0 && caller === 'remove-group') {
-      this.clearGroupingSelects();
-    }
-  }
-
-  clearGrouping() {
-
-    if (this.draggableGroupingPlugin && this.draggableGroupingPlugin.setDroppedGroups) {
-      this.draggableGroupingPlugin.clearDroppedGroups();
-    }
-    this.gridObj.invalidate(); // invalidate all rows and re-render
-  }
-
-  clearGroupingSelects() {
-
-    this.selectedGroupingFields.forEach((g, i) => this.selectedGroupingFields[i] = '');
-  }
-
   ngOnInit(): void {
-    debugger
     this.slickGridConfig=new SlickGridConfig();
-    
     this.prepareGrid();
     this.dataset = [];
     this.setSlickConfig();
@@ -196,7 +155,7 @@ export class MaterialValidationComponent implements OnInit {
     this.slickGridConfig.findReplaceConfig.isDisabled = true;
     this.slickGridConfig.findReplaceConfig.defualtValue = "Category";
     this.slickGridConfig.findReplaceConfig.columnDef=this.columnDefinitions;
-    
+    this.slickGridConfig.downloadFileName="project1";
   }
 
   private generateGridData() {
