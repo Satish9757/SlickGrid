@@ -22,20 +22,21 @@ import {
 import { HttpClient } from '@angular/common/http';
 import { RowDetailsComponent } from 'src/app/row-details/row-details.component';
 import { SlickGridConfig } from 'src/app/slick-grid/slickgrid.config';
-
-// export interface PeriodicElement {
-//   id: number;
-//   ModelMaterial: string;
-//   ct: string;
-//   Category: string;
-//   Model: string;
-//   INSPIRErec: string;
-//   bomvalue: string;
-//   CtDistance: number;
-//   InspireRecommendation: string[];
-//   ScopeboxMaterial: string;
-//   UpdatedMaterial: string;
-// }
+import { CustomRowModel } from 'src/app/slick-grid/customRowModel';
+import { SlickGridService } from 'src/app/slick-grid/slick-grid.service';
+export interface PeriodicElement {
+  id: number;
+  ModelMaterial: string;
+  ct: string;
+  Category: string;
+  Model: string;
+  INSPIRErec: string;
+  bomvalue: string;
+  CtDistance: number;
+  InspireRecommendation: string[];
+  ScopeboxMaterial: string;
+  UpdatedMaterial: string;
+}
 
 
 @Component({
@@ -58,7 +59,7 @@ export class MaterialValidationComponent implements OnInit {
   gridObj: any;
   ELEMENT_DATA: any[] = [];
   detailViewRowCount = 9;
-  constructor(private _httpClient: HttpClient) {
+  constructor(private _httpClient: HttpClient,private slickGridService:SlickGridService) {
 
   }
 
@@ -140,9 +141,9 @@ export class MaterialValidationComponent implements OnInit {
 
   }
 
-  
+
   ngOnInit(): void {
-    this.slickGridConfig=new SlickGridConfig();
+    this.slickGridConfig = new SlickGridConfig();
     this.prepareGrid();
     this.dataset = [];
     this.setSlickConfig();
@@ -151,12 +152,15 @@ export class MaterialValidationComponent implements OnInit {
   }
 
   private setSlickConfig() {
-    this.slickGridConfig.isSearch=true;
+    debugger;
+    this.slickGridConfig.isSearch = true;
+    this.slickGridConfig.isCustomRowStyle=true;
     this.slickGridConfig.isFindReaplce = true;
     this.slickGridConfig.findReplaceConfig.isDisabled = true;
     this.slickGridConfig.findReplaceConfig.defualtValue = "Category";
-    this.slickGridConfig.findReplaceConfig.columnDef=this.columnDefinitions;
-    this.slickGridConfig.downloadFileName="project1";
+    this.slickGridConfig.findReplaceConfig.columnDef = this.columnDefinitions;
+    this.slickGridConfig.downloadConfig.downloadFileName = "project1";
+    this.slickGridConfig.downloadConfig.isCustomDownload=false;
   }
 
   private generateGridData() {
@@ -185,8 +189,8 @@ export class MaterialValidationComponent implements OnInit {
       });
       debugger;
       this.slickGridConfig.dataSource = this.ELEMENT_DATA;
-      this.slickGridConfig.searchConfig.dataSource=this.ELEMENT_DATA;
-      this.slickGridConfig.findReplaceConfig.dataSource=this.ELEMENT_DATA;
+      this.slickGridConfig.searchConfig.dataSource = this.ELEMENT_DATA;
+      this.slickGridConfig.findReplaceConfig.dataSource = this.ELEMENT_DATA;
       //   //this.prepareGrid();
     })
   }
@@ -214,9 +218,33 @@ export class MaterialValidationComponent implements OnInit {
     });
   }
 
+  downloadExcel() {
+alert('my download is called')
+  }
+  customRowStyle(customRowModel:CustomRowModel){
+this.slickGridService.custRowRule=this.customRowStyleImpl(customRowModel);
+  }
+
+  customRowStyleImpl(customRowModel:CustomRowModel){
+    const newCssClass = 'duration-bg';debugger;
 
 
-}
+      const item =customRowModel.dataView.getItem(customRowModel.rowNumber);
+      let meta = (customRowModel.metaData(customRowModel.rowNumber) || {});
+      if (meta && item) {
+        debugger;
+        // convert to number
+        if (item.Category === "Conduit Elbow") {
+          meta.cssClasses = (meta.cssClasses || '') + ' ' + newCssClass;
+        }
+        else {
+          meta.cssClasses = (meta.cssClasses || '');
+        }
+      }
+      return meta;
+
+    };
+  }
 
 
 

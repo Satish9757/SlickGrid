@@ -31,6 +31,9 @@
 // -----------Slick Grid Custom Elements-------------
 
 ::ng-deep {
+    .duration-bg .r3{
+        background-color: red !important;
+    }
   
    .slick-gridmenu-item:nth-child(4){
         display: none !important;

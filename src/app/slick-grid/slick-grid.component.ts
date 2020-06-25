@@ -16,6 +16,8 @@ import {
   Sorters,
 } from 'angular-slickgrid';
 import { SlickGridConfig } from './slickgrid.config';
+import { CustomRowModel } from './customRowModel';
+import { SlickGridService } from './slick-grid.service';
 
 @Component({
   selector: 'app-slick-grid',
@@ -30,6 +32,9 @@ export class SlickGridComponent implements OnInit {
   @Input() isSearchEnabled: boolean;
   @Input() isAddNewRow: boolean;
   @Input() slickGridConfig: SlickGridConfig;
+  @Output() downloadExcel = new EventEmitter();
+  @Output() customRowStyle = new EventEmitter();
+  customRowModel: CustomRowModel = new CustomRowModel();
   angularGrid: AngularGridInstance;
   dataSource = [];
   gridObj;
@@ -37,11 +42,11 @@ export class SlickGridComponent implements OnInit {
   gridOptionLocal: GridOption = {};
   draggableGroupingPlugin: any;
   selectedGroupingFields: Array<string | GroupingGetterFunction> = ['', '', ''];
-  constructor() { }
+  constructor(private slickGridService: SlickGridService) { }
 
   ngOnInit(): void {
 
-    this.gridOptions.enableExcelExport=true;
+    this.gridOptions.enableExcelExport = true;
     this.gridOptionLocal = this.gridOptions;
 
   }
@@ -70,12 +75,21 @@ export class SlickGridComponent implements OnInit {
     this.dataSource = this.angularGrid.dataView.getItems();
     this.gridObj = _angularGrid.slickGrid;
     this.dataviewObj = _angularGrid.dataView;
-   
+    // setTimeout(() => {
+    debugger;
+    this.dataviewObj.getItemMetadata = this.updateItemMetadataForDurationOver50(this.dataviewObj.getItemMetadata);
+    //  }, 5000);
 
   }
+
   onCellClicked(e, args) {
+   
     //this.angularGrid = ins;
     const metadata = this.angularGrid.gridService.getColumnFromEventArguments(args);
+    if(this.slickGridConfig.isOnClickCellAlert){
+      this.slickGridService.changeAlert(metadata.dataContext);
+    }
+    
     if (metadata.columnDef.field === "Delete") {
       //call delete function
       this.deleteRow(metadata.dataContext);
@@ -103,12 +117,17 @@ export class SlickGridComponent implements OnInit {
 
   }
 
-  exportToExcel(){
-    var today = new Date();
-var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-var dateTime = date+'_'+time;
-    this.angularGrid.excelExportService.exportToExcel({ filename: this.slickGridConfig.downloadFileName+dateTime.toString() });
+  exportToExcel() {
+    if (this.slickGridConfig.downloadConfig && this.slickGridConfig.downloadConfig.isCustomDownload) {
+      this.downloadExcel.emit();
+    }
+    else {
+      var today = new Date();
+      var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+      var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+      var dateTime = date + '_' + time;
+      this.angularGrid.excelExportService.exportToExcel({ filename: this.slickGridConfig.downloadConfig.downloadFileName + dateTime.toString() });
+    }
   }
 
   filterData(data) {
@@ -163,5 +182,35 @@ var dateTime = date+'_'+time;
 
   showPreHeader() {
     this.gridObj.setPreHeaderPanelVisibility(true);
+  }
+
+  updateItemMetadataForDurationOver50(previousItemMetadata: any) {
+    const newCssClass = 'duration-bg';
+
+    return (rowNumber: number) => {
+      this.customRowModel.dataView = this.dataviewObj;
+      this.customRowModel.metaData = previousItemMetadata;
+      this.customRowModel.rowNumber = rowNumber;
+      this.customRowStyle.emit(this.customRowModel);
+      let a = this.slickGridService.custRowRule;
+      debugger;
+      return a;
+      // debugger;
+      // const item = this.dataviewObj.getItem(rowNumber);
+      // let meta = (previousItemMetadata(rowNumber) || {});
+      // if (meta && item) {
+      //   debugger;
+      //   // convert to number
+      //   if (item.Category === "Conduit Elbow") {
+      //     meta.cssClasses = (meta.cssClasses || '') + ' ' + newCssClass;
+      //   }
+      //   else {
+      //     meta.cssClasses = (meta.cssClasses || '');
+      //   }
+      // }
+      // return meta;
+
+    };
+
   }
 }
