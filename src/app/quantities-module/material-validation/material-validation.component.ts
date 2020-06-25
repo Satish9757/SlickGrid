@@ -22,19 +22,20 @@ import {
 import { HttpClient } from '@angular/common/http';
 import { RowDetailsComponent } from 'src/app/row-details/row-details.component';
 import { SlickGridConfig } from 'src/app/slick-grid/slickgrid.config';
-export interface PeriodicElement {
-  id: number;
-  ModelMaterial: string;
-  ct: string;
-  Category: string;
-  Model: string;
-  INSPIRErec: string;
-  bomvalue: string;
-  CtDistance: number;
-  InspireRecommendation: string[];
-  ScopeboxMaterial: string;
-  UpdatedMaterial: string;
-}
+
+// export interface PeriodicElement {
+//   id: number;
+//   ModelMaterial: string;
+//   ct: string;
+//   Category: string;
+//   Model: string;
+//   INSPIRErec: string;
+//   bomvalue: string;
+//   CtDistance: number;
+//   InspireRecommendation: string[];
+//   ScopeboxMaterial: string;
+//   UpdatedMaterial: string;
+// }
 
 
 @Component({
@@ -72,7 +73,7 @@ export class MaterialValidationComponent implements OnInit {
       { id: 'bomvalue', name: 'Bom Value', field: 'bomvalue', minWidth: 100, filterable: true, sortable: true, formatter: myCustomBOMValue }
     ];
 
-
+// ----- Grid otions show & hide function 
     this.gridOptions = {
       enableExcelExport: true,
       autoResize: {
