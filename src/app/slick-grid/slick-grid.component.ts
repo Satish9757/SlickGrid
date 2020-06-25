@@ -33,8 +33,8 @@ export class SlickGridComponent implements OnInit {
   @Input() isAddNewRow: boolean;
   @Input() slickGridConfig: SlickGridConfig;
   @Output() downloadExcel = new EventEmitter();
-  @Output() customRowStyle=new EventEmitter();
-  customRowModel:CustomRowModel=new CustomRowModel();
+  @Output() customRowStyle = new EventEmitter();
+  customRowModel: CustomRowModel = new CustomRowModel();
   angularGrid: AngularGridInstance;
   dataSource = [];
   gridObj;
@@ -42,7 +42,7 @@ export class SlickGridComponent implements OnInit {
   gridOptionLocal: GridOption = {};
   draggableGroupingPlugin: any;
   selectedGroupingFields: Array<string | GroupingGetterFunction> = ['', '', ''];
-  constructor(private slickGridService:SlickGridService) { }
+  constructor(private slickGridService: SlickGridService) { }
 
   ngOnInit(): void {
 
@@ -81,9 +81,15 @@ export class SlickGridComponent implements OnInit {
     //  }, 5000);
 
   }
+
   onCellClicked(e, args) {
+   
     //this.angularGrid = ins;
     const metadata = this.angularGrid.gridService.getColumnFromEventArguments(args);
+    if(this.slickGridConfig.isOnClickCellAlert){
+      this.slickGridService.changeAlert(metadata.dataContext);
+    }
+    
     if (metadata.columnDef.field === "Delete") {
       //call delete function
       this.deleteRow(metadata.dataContext);
@@ -182,13 +188,13 @@ export class SlickGridComponent implements OnInit {
     const newCssClass = 'duration-bg';
 
     return (rowNumber: number) => {
-      this.customRowModel.dataView=this.dataviewObj;
-      this.customRowModel.metaData=previousItemMetadata;
-      this.customRowModel.rowNumber=rowNumber;
-this.customRowStyle.emit(this.customRowModel);
-let a=this.slickGridService.custRowRule;
-debugger;
-return a;
+      this.customRowModel.dataView = this.dataviewObj;
+      this.customRowModel.metaData = previousItemMetadata;
+      this.customRowModel.rowNumber = rowNumber;
+      this.customRowStyle.emit(this.customRowModel);
+      let a = this.slickGridService.custRowRule;
+      debugger;
+      return a;
       // debugger;
       // const item = this.dataviewObj.getItem(rowNumber);
       // let meta = (previousItemMetadata(rowNumber) || {});

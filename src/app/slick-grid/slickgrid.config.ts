@@ -9,9 +9,11 @@ constructor(){}
     dataSource:any[];
     isFindReaplce:boolean=false;
     isCustomRowStyle:boolean=false;
+    isOnClickCellAlert:boolean=false;
     findReplaceConfig:FindReplaceConfig=new FindReplaceConfig();
     searchConfig:SearchConfig=new SearchConfig();
     customRowData:any;
+
 
 }
 export class DownLoadConfig{

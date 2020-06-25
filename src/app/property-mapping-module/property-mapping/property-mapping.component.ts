@@ -20,6 +20,7 @@ import {
 
 import { HttpClient } from '@angular/common/http';
 import { SlickGridConfig } from 'src/app/slick-grid/slickgrid.config';
+import { SlickGridService } from 'src/app/slick-grid/slick-grid.service';
 export interface PeriodicElement {
   id: number;
   ModelMaterial: string;
@@ -54,7 +55,7 @@ export class PropertyMappingComponent implements OnInit {
   gridObj: any;
   ELEMENT_DATA: any[]=[];
   slickGridConfig: SlickGridConfig;
-  constructor(private _httpClient: HttpClient) {
+  constructor(private _httpClient: HttpClient,private slickGridService:SlickGridService) {
 
   }
 
@@ -260,6 +261,9 @@ export class PropertyMappingComponent implements OnInit {
     this.dataset = [];
     this.setSlickConfig();
     this.generateGridData();
+    this.slickGridService.todos.subscribe(data=>{
+      alert(JSON.stringify(data));
+    })
 
   }
    private setSlickConfig() {
@@ -269,6 +273,7 @@ export class PropertyMappingComponent implements OnInit {
     this.slickGridConfig.findReplaceConfig.isDisabled = true;
     this.slickGridConfig.findReplaceConfig.defualtValue = "Category";
     this.slickGridConfig.findReplaceConfig.columnDef=this.columnDefinitions;
+    this.slickGridConfig.isOnClickCellAlert=true;
   }
 
   private generateGridData() {
