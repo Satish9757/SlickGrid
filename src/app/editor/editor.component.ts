@@ -53,6 +53,7 @@ const myCustomTitleValidator: EditorValidator = (value: any, args: EditorArgs) =
 
 // create a custom Formatter to show the Task + value
 const taskFormatter = (row, cell, value, columnDef, dataContext) => {
+  debugger
   if (value && Array.isArray(value)) {
     const taskValues = value.map((val) => `Task ${val}`);
     const values = taskValues.join(', ');
@@ -133,7 +134,7 @@ export class EditorComponent implements OnInit {
         type: FieldType.float,
         exportWithFormatter: true,
         editor: {
-          model: Editors.text,
+          model: Editors.float,
           minValue: 0,
           maxValue: 100,
           // params: { hideSliderNumber: true },
@@ -200,9 +201,12 @@ export class EditorComponent implements OnInit {
         filterable: true,
         sortable: true,
         minWidth: 100,
+        type: FieldType.string,
         editor: {
-          model: Editors.autoComplete,
-          collectionAsync: this.http.get(URL_COUNTRY_NAMES),
+          placeholder: 'Choose Country',
+         model: Editors.singleSelect,
+          collectionAsync: this.http.get<{ value: string; label: string;}[]>(URL_COUNTRY_NAMES),        
+          required: true
         },
         filter: {
           model: Filters.autoComplete,

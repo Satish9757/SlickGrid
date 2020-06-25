@@ -24,19 +24,19 @@ import { RowDetailsComponent } from 'src/app/row-details/row-details.component';
 import { SlickGridConfig } from 'src/app/slick-grid/slickgrid.config';
 import { CustomRowModel } from 'src/app/slick-grid/customRowModel';
 import { SlickGridService } from 'src/app/slick-grid/slick-grid.service';
-export interface PeriodicElement {
-  id: number;
-  ModelMaterial: string;
-  ct: string;
-  Category: string;
-  Model: string;
-  INSPIRErec: string;
-  bomvalue: string;
-  CtDistance: number;
-  InspireRecommendation: string[];
-  ScopeboxMaterial: string;
-  UpdatedMaterial: string;
-}
+// export interface PeriodicElement {
+//   id: number;
+//   ModelMaterial: string;
+//   ct: string;
+//   Category: string;
+//   Model: string;
+//   INSPIRErec: string;
+//   bomvalue: string;
+//   CtDistance: number;
+//   InspireRecommendation: string[];
+//   ScopeboxMaterial: string;
+//   UpdatedMaterial: string;
+// }
 
 
 @Component({
@@ -44,6 +44,7 @@ export interface PeriodicElement {
   templateUrl: './material-validation.component.html',
   styleUrls: ['./material-validation.component.scss']
 })
+
 export class MaterialValidationComponent implements OnInit {
   slickGridConfig: SlickGridConfig;
   title = 'SlickGridPOC';
@@ -219,6 +220,7 @@ export class MaterialValidationComponent implements OnInit {
   }
 
   downloadExcel() {
+  debugger
 alert('my download is called')
   }
   customRowStyle(customRowModel:CustomRowModel){
@@ -287,7 +289,7 @@ const myCustomInsprieData: Formatter = (row, cell, value, columnDef, dataContext
   return cellIcon;
 }
 
-//----------- Inspire Data----------//
+//----------- BOM Data----------//
 const myCustomBOMValue: Formatter = (row, cell, value, columnDef, dataContext) => {
 
   let cellIcon;
