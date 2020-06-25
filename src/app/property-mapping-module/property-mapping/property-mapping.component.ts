@@ -263,6 +263,7 @@ export class PropertyMappingComponent implements OnInit {
 
   }
    private setSlickConfig() {
+     this.slickGridConfig.downloadConfig.downloadFileName="project 1";
     this.slickGridConfig.isSearch=true;
     this.slickGridConfig.isFindReaplce = true;
     this.slickGridConfig.findReplaceConfig.isDisabled = true;
