@@ -156,8 +156,8 @@ export class PropertyMappingComponent implements OnInit {
           getter: 'Category',
           formatter: (g) => `Component:  ${g.value}  <span style="color:green">(${g.count} items)</span>`,
           
-          aggregateCollapsed: false,
-          collapsed: false
+          aggregateCollapsed: true,
+          collapsed: true
         },
         params: { groupFormatterPrefix: '<i>Avg</i>: ' }
       },
@@ -174,8 +174,8 @@ export class PropertyMappingComponent implements OnInit {
           getter: 'ModelMaterial',
           formatter: (g) => `ModelMaterial: ${g.value}  <span style="color:green">(${g.count} items)</span>`,
          
-          aggregateCollapsed: false,
-          collapsed: false
+          aggregateCollapsed: true,
+          collapsed: true
         }
       },
       {
