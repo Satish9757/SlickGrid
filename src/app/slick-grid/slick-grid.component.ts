@@ -34,6 +34,8 @@ export class SlickGridComponent implements OnInit {
   @Input() slickGridConfig: SlickGridConfig;
   @Output() downloadExcel = new EventEmitter();
   @Output() customRowStyle = new EventEmitter();
+
+  
   customRowModel: CustomRowModel = new CustomRowModel();
   angularGrid: AngularGridInstance;
   dataSource = [];

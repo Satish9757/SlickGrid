@@ -57,10 +57,14 @@ export class PropertyMappingComponent implements OnInit {
       this.dataset = [];      
       this.generateGridData();
       this.slickGridService.todos.subscribe(data=>{
+        console.log(JSON.stringify(data))
         alert(JSON.stringify(data));
       })
-  
+  this.setGridConfig();
     
+  }
+  setGridConfig(){
+    this.slickGridConfig.isOnClickCellAlert=true;
   }
   private generateGridData() {
     this._httpClient.get("assets/sourceData.json").subscribe((dt: any[]) => {
@@ -86,8 +90,8 @@ export class PropertyMappingComponent implements OnInit {
           RevitId: element.RevitId,
         })
       });
-      this.dataset = this.ELEMENT_DATA;
-      //this.slickGridConfig.dataSource = this.ELEMENT_DATA;
+      //this.dataset = this.ELEMENT_DATA;
+      this.slickGridConfig.dataSource = this.ELEMENT_DATA;
       //this.slickGridConfig.searchConfig.dataSource=this.ELEMENT_DATA;
       //this.slickGridConfig.findReplaceConfig.dataSource=this.ELEMENT_DATA;
       //   //this.prepareGrid();
