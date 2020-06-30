@@ -79,7 +79,7 @@ export class SlickGridComponent implements OnInit {
     debugger;
     this.dataviewObj.getItemMetadata = this.updateItemMetadataForDurationOver50(this.dataviewObj.getItemMetadata);
     //  }, 5000);
-
+this.setCopyPaste();
   }
 
   onCellClicked(e, args) {
@@ -213,4 +213,52 @@ export class SlickGridComponent implements OnInit {
     };
 
   }
+
+  setCopyPaste(){
+   let newRowIds = 0;
+   let pluginOptions = {
+    clipboardCommandHandler: function(editCommand){ this.undoRedoBuffer.queueAndExecuteCommand.call(this.undoRedoBuffer,editCommand); },
+    readOnlyMode : false,
+    includeHeaderWhenCopying : false,
+    newRowCreator: function(count) {
+      for (var i = 0; i < count; i++) {
+        var item = {
+          id: "newRow_" + this.newRowIds++
+        }
+        this.angularGrid.gridService.getData().addItem(item);
+      }
+    }
+  };
+  let undoRedoBuffer = {
+    commandQueue : [],
+    commandCtr : 0,
+
+    queueAndExecuteCommand : function(editCommand) {
+      this.commandQueue[this.commandCtr] = editCommand;
+      this.commandCtr++;
+      editCommand.execute();
+    },
+
+    undo : function() {
+      if (this.commandCtr == 0) { return; }
+
+      this.commandCtr--;
+      var command = this.commandQueue[this.commandCtr];
+
+      if (command && this.angularGrid.gridService.GlobalEditorLock.cancelCurrentEdit()) {
+        command.undo();
+      }
+    },
+    redo : function() {
+      if (this.commandCtr >= this.commandQueue.length) { return; }
+      var command = this.commandQueue[this.commandCtr];
+      this.commandCtr++;
+      if (command && this.angularGrid.gridService.GlobalEditorLock.cancelCurrentEdit()) {
+        command.execute();
+      }
+    }
 }
+  }
+
+}
+
