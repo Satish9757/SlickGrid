@@ -55,33 +55,33 @@ export class SlickGridComponent implements OnInit {
 
 
   angularGridReady(_angularGrid: AngularGridInstance) {
-    const obj1 = {
-      onCommand: (e, args) => {
-        if (args.command === 'toggle-preheader') {
-          // in addition to the grid menu pre-header toggling (internally), we will also clear grouping
-          this.clearGrouping();
-        }
-      },
-    }
-    const obj2 = {
-      dropPlaceHolderText: 'Drop a column header here to group by the column',
-      // groupIconCssClass: 'fa fa-outdent',
-      deleteIconCssClass: 'fa fa-times',
-      onGroupChanged: (e, args) => this.onGroupChanged(args),
-      onExtensionRegistered: (extension) => this.draggableGroupingPlugin = extension,
+    // const obj1 = {
+    //   onCommand: (e, args) => {
+    //     if (args.command === 'toggle-preheader') {
+    //       // in addition to the grid menu pre-header toggling (internally), we will also clear grouping
+    //       this.clearGrouping();
+    //     }
+    //   },
+    // }
+    // const obj2 = {
+    //   dropPlaceHolderText: 'Drop a column header here to group by the column',
+    //   // groupIconCssClass: 'fa fa-outdent',
+    //   deleteIconCssClass: 'fa fa-times',
+    //   onGroupChanged: (e, args) => this.onGroupChanged(args),
+    //   onExtensionRegistered: (extension) => this.draggableGroupingPlugin = extension,
 
-    }
-    this.gridOptionLocal["gridMenu"] = obj1;
-    this.gridOptionLocal["draggableGrouping"] = obj2;
+    // }
+    //this.gridOptionLocal["gridMenu"] = obj1;
+    //this.gridOptionLocal["draggableGrouping"] = obj2;
     this.angularGrid = _angularGrid;
     this.dataSource = this.angularGrid.dataView.getItems();
     this.gridObj = _angularGrid.slickGrid;
     this.dataviewObj = _angularGrid.dataView;
     // setTimeout(() => {
     debugger;
-    this.dataviewObj.getItemMetadata = this.updateItemMetadataForDurationOver50(this.dataviewObj.getItemMetadata);
+    //this.dataviewObj.getItemMetadata = this.updateItemMetadataForDurationOver50(this.dataviewObj.getItemMetadata);
     //  }, 5000);
-this.setCopyPaste();
+//this.setCopyPaste();
   }
 
   onCellClicked(e, args) {
