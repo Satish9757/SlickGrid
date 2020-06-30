@@ -21,6 +21,7 @@ import {
 // import { CustomInputEditor } from './custom-inputEditor';
 // import { CustomInputFilter } from './custom-inputFilter';
 import { Subject } from 'rxjs';
+import { SlickGridConfig } from '../slick-grid/slickgrid.config';
 
 // using external non-typed js libraries
 declare const Slick: any;
@@ -67,7 +68,7 @@ const taskFormatter = (row, cell, value, columnDef, dataContext) => {
 })
 export class EditorComponent implements OnInit {
   
-
+  slickGridConfig: SlickGridConfig;
   private _commandQueue = [];
   angularGrid: AngularGridInstance;
   columnDefinitions: Column[];
@@ -84,8 +85,15 @@ export class EditorComponent implements OnInit {
   constructor(private http: HttpClient) { }
 
   ngOnInit() {
+    
+    this.slickGridConfig = new SlickGridConfig();
     this.prepareGrid();
+    this.setSlickConfig();
     //private translate: TranslateService
+  }
+
+  private setSlickConfig() {
+
   }
 
   angularGridReady(angularGrid: AngularGridInstance) {
@@ -302,7 +310,7 @@ export class EditorComponent implements OnInit {
       
     };
 
-    this.dataset = this.mockData(NB_ITEMS);
+    this.slickGridConfig.dataSource =  this.mockData(NB_ITEMS);
   }
 
 

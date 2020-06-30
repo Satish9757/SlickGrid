@@ -186,7 +186,7 @@ this.setCopyPaste();
 
   updateItemMetadataForDurationOver50(previousItemMetadata: any) {
     const newCssClass = 'duration-bg';
-
+if(this.slickGridConfig.isCustomRowStyle){
     return (rowNumber: number) => {
       this.customRowModel.dataView = this.dataviewObj;
       this.customRowModel.metaData = previousItemMetadata;
@@ -195,22 +195,9 @@ this.setCopyPaste();
       let a = this.slickGridService.custRowRule;
       debugger;
       return a;
-      // debugger;
-      // const item = this.dataviewObj.getItem(rowNumber);
-      // let meta = (previousItemMetadata(rowNumber) || {});
-      // if (meta && item) {
-      //   debugger;
-      //   // convert to number
-      //   if (item.Category === "Conduit Elbow") {
-      //     meta.cssClasses = (meta.cssClasses || '') + ' ' + newCssClass;
-      //   }
-      //   else {
-      //     meta.cssClasses = (meta.cssClasses || '');
-      //   }
-      // }
-      // return meta;
 
     };
+  }
 
   }
 

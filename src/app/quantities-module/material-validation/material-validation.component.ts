@@ -4,7 +4,7 @@ import {
   Aggregators,
   Column,
   DelimiterType,
-    FieldType,
+  FieldType,
   FileType,
   Filters,
   Formatters,
@@ -60,14 +60,14 @@ export class MaterialValidationComponent implements OnInit {
   gridObj: any;
   ELEMENT_DATA: any[] = [];
   detailViewRowCount = 9;
-  constructor(private _httpClient: HttpClient,private slickGridService:SlickGridService) {
+  constructor(private _httpClient: HttpClient, private slickGridService: SlickGridService) {
 
   }
 
   prepareGrid() {
 
     this.columnDefinitions = [
-      { id: 'LevelArea', name: 'Level / Area', field: 'LevelArea', sortable: true, width: 70, filterable: true, formatter: myCustomCheckmarkFormatter },
+      { id: 'LevelArea', name: 'Level / Area', field: 'LevelArea', sortable: true, width: 70, filterable: false, formatter: myCustomCheckmarkFormatter },
       { id: 'ct', name: 'Ct / Ot', field: 'ct', sortable: true, type: FieldType.number, minWidth: 90, filterable: true, formatter: myCustomCheckmarkFormatter },
       { id: 'Category', name: 'Component', field: 'Category', sortable: true, minWidth: 100, filterable: true },
       { id: 'ModelMaterial', name: 'Model Value', field: 'ModelMaterial', sortable: true, minWidth: 90, filterable: true },
@@ -75,7 +75,7 @@ export class MaterialValidationComponent implements OnInit {
       { id: 'bomvalue', name: 'Bom Value', field: 'bomvalue', minWidth: 100, filterable: true, sortable: true, }
     ];
 
-// ----- Grid otions show & hide function 
+    // ----- Grid otions show & hide function 
     this.gridOptions = {
       enableExcelExport: true,
       autoResize: {
@@ -84,8 +84,8 @@ export class MaterialValidationComponent implements OnInit {
       },
       enablePagination: true,
       pagination: {
-        pageSizes: [10, 20, 50, 100],
-        pageSize: 10
+        pageSizes: [20, 50, 100],
+        pageSize: 20
       },
       enableFiltering: true,
       enableRowDetailView: true,
@@ -155,13 +155,13 @@ export class MaterialValidationComponent implements OnInit {
   private setSlickConfig() {
     debugger;
     this.slickGridConfig.isSearch = true;
-    this.slickGridConfig.isCustomRowStyle=true;
+    this.slickGridConfig.isCustomRowStyle = true;
     this.slickGridConfig.isFindReaplce = true;
     this.slickGridConfig.findReplaceConfig.isDisabled = true;
     this.slickGridConfig.findReplaceConfig.defualtValue = "Category";
     this.slickGridConfig.findReplaceConfig.columnDef = this.columnDefinitions;
     this.slickGridConfig.downloadConfig.downloadFileName = "project1";
-    this.slickGridConfig.downloadConfig.isCustomDownload=false;
+    this.slickGridConfig.downloadConfig.isCustomDownload = true;
   }
 
   private generateGridData() {
@@ -173,7 +173,7 @@ export class MaterialValidationComponent implements OnInit {
           ct: '',
           CtDistance: 0,
           Category: element.Category,
-          Model: element.ModelMaterial,    
+          Model: element.ModelMaterial,
           InspireRecommendation: element.InspireRecommendation,
           ScopeboxMaterial: element.ScopeboxMaterial,
           UpdatedMaterial: element.UpdatedMaterial,
@@ -184,15 +184,15 @@ export class MaterialValidationComponent implements OnInit {
           CtTypeName: element.CtTypeName,
           OcTypeName: element.OcTypeName,
           RevitId: element.RevitId,
-          INSPIRErec: element.ScopeboxMaterial === 'PVC' ? 'PVC40' : element.ScopeboxMaterial ,
-          bomvalue:element.UpdatedMaterial === 'PVC' ? 'PVC40' : element.UpdatedMaterial,
+          INSPIRErec: element.ScopeboxMaterial === 'PVC' ? 'PVC40' : element.ScopeboxMaterial,
+          bomvalue: element.UpdatedMaterial === 'PVC' ? 'PVC40' : element.UpdatedMaterial,
         })
       });
       debugger;
       this.slickGridConfig.dataSource = this.ELEMENT_DATA;
       this.slickGridConfig.searchConfig.dataSource = this.ELEMENT_DATA;
       this.slickGridConfig.findReplaceConfig.dataSource = this.ELEMENT_DATA;
-      
+
     })
   }
 
@@ -220,33 +220,32 @@ export class MaterialValidationComponent implements OnInit {
   }
 
   downloadExcel() {
-  debugger
-alert('my download is called')
+    alert('my download is called')
   }
-  customRowStyle(customRowModel:CustomRowModel){
-this.slickGridService.custRowRule=this.customRowStyleImpl(customRowModel);
+  customRowStyle(customRowModel: CustomRowModel) {
+    this.slickGridService.custRowRule = this.customRowStyleImpl(customRowModel);
   }
 
-  customRowStyleImpl(customRowModel:CustomRowModel){
-    const newCssClass = 'duration-bg';debugger;
+  customRowStyleImpl(customRowModel: CustomRowModel) {
+    const newCssClass = 'duration-bg'; debugger;
 
 
-      const item =customRowModel.dataView.getItem(customRowModel.rowNumber);
-      let meta = (customRowModel.metaData(customRowModel.rowNumber) || {});
-      if (meta && item) {
-        debugger;
-        // convert to number
-        if (item.Category === "Conduit Elbow") {
-          meta.cssClasses = (meta.cssClasses || '') + ' ' + newCssClass;
-        }
-        else {
-          meta.cssClasses = (meta.cssClasses || '');
-        }
+    const item = customRowModel.dataView.getItem(customRowModel.rowNumber);
+    let meta = (customRowModel.metaData(customRowModel.rowNumber) || {});
+    if (meta && item) {
+      debugger;
+      // convert to number
+      if (item.Category === "Conduit Elbow") {
+        meta.cssClasses = (meta.cssClasses || '') + ' ' + newCssClass;
       }
-      return meta;
+      else {
+        meta.cssClasses = (meta.cssClasses || '');
+      }
+    }
+    return meta;
 
-    };
-  }
+  };
+}
 
 
 

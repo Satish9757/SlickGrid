@@ -14,7 +14,7 @@
     <div class="replace-container">
 
         <label>Select column</label>
-        <select  [(ngModel)]="selectedOption">
+        <select  [(ngModel)]="selectedOption" [disabled]="findReplaceConfig.isDisabled">
           <option *ngFor="let material of findReplaceConfig.columnDef" [value]="material.field">
             {{material.name}}
           </option>
