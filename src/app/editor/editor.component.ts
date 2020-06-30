@@ -79,6 +79,7 @@ export class EditorComponent implements OnInit {
   updatedObject: any;
   selectedLanguage = 'en';
   duplicateTitleHeaderCount = 1;
+  dataViewObj:any;
 
   constructor(private http: HttpClient) { }
 
@@ -90,6 +91,7 @@ export class EditorComponent implements OnInit {
   angularGridReady(angularGrid: AngularGridInstance) {
     this.angularGrid = angularGrid;
     this.gridObj = angularGrid.slickGrid;
+    this.dataViewObj = angularGrid.dataView;
   }
 
   prepareGrid() {
@@ -102,6 +104,8 @@ export class EditorComponent implements OnInit {
         filterable: true,
         sortable: true,
         type: FieldType.string,
+        queryFieldSorter: 'id',
+        formatter: Formatters.tree,
         editor: {
           model: Editors.text,
           required: true,
@@ -285,6 +289,17 @@ export class EditorComponent implements OnInit {
         this._commandQueue.push(editCommand);
         editCommand.execute();
       },
+      enableAutoSizeColumns: true,
+      enableAutoResize: true,     
+      enableTreeData: true,
+      treeDataOptions: {
+        columnId: 'title',
+        levelPropName: 'indent',
+        parentPropName: 'parentId'
+      },
+      headerRowHeight: 45,
+      rowHeight: 40,
+      
     };
 
     this.dataset = this.mockData(NB_ITEMS);
@@ -292,6 +307,9 @@ export class EditorComponent implements OnInit {
 
 
   mockData(itemCount, startingIndex = 0) {
+    let indent = 0;
+    const parents = [];
+    const data = [];
     // mock a dataset
     const tempDataset = [];
     for (let i = startingIndex; i < (startingIndex + itemCount); i++) {
@@ -301,9 +319,26 @@ export class EditorComponent implements OnInit {
       const randomDay = Math.floor((Math.random() * 29));
       const randomPercent = Math.round(Math.random() * 100);
       const randomFinish = new Date(randomFinishYear, (randomMonth + 1), randomDay);
+      let parentId;
+      // for implementing filtering/sorting, don't go over indent of 2
+      if (Math.random() > 0.8 && i > 0 && indent < 3) {
+        indent++;
+        parents.push(i - 1);
+      } else if (Math.random() < 0.3 && indent > 0) {
+        indent--;
+        parents.pop();
+      }
+
+      if (parents.length > 0) {
+        parentId = parents[parents.length - 1];
+      } else {
+        parentId = null;
+      }
 
       tempDataset.push({
         id: i,
+        indent:indent,
+        parentId:parentId,
         title: 'Task ' + i,
         duration: (i % 33 === 0) ? null : Math.round(Math.random() * 100) + '',
         start: new Date(randomYear, randomMonth, randomDay),

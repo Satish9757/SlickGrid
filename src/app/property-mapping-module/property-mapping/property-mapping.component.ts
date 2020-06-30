@@ -15,6 +15,7 @@ import {
   SortDirectionNumber,
   Sorters,
   Editors,
+  Editor,
   Formatter
 } from 'angular-slickgrid';
 
@@ -130,7 +131,7 @@ export class PropertyMappingComponent implements OnInit {
         type: FieldType.dateUtc,
         outputType: FieldType.dateIso,
         exportWithFormatter: true,
-        grouping: {
+              grouping: {
           getter: 'start',
           formatter: (g) => `Start: ${g.value}  <span style="color:green">(${g.count} items)</span>`,
           aggregators: [

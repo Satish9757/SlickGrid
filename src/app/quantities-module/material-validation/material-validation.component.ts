@@ -4,7 +4,7 @@ import {
   Aggregators,
   Column,
   DelimiterType,
-  FieldType,
+    FieldType,
   FileType,
   Filters,
   Formatters,
@@ -72,7 +72,7 @@ export class MaterialValidationComponent implements OnInit {
       { id: 'Category', name: 'Component', field: 'Category', sortable: true, minWidth: 100, filterable: true },
       { id: 'ModelMaterial', name: 'Model Value', field: 'ModelMaterial', sortable: true, minWidth: 90, filterable: true },
       { id: 'INSPIRErec', name: 'Inspire Recommendation', field: 'INSPIRErec', sortable: true, minWidth: 90, filterable: true, formatter: myCustomInsprieData },
-      { id: 'bomvalue', name: 'Bom Value', field: 'bomvalue', minWidth: 100, filterable: true, sortable: true, formatter: myCustomBOMValue }
+      { id: 'bomvalue', name: 'Bom Value', field: 'bomvalue', minWidth: 100, filterable: true, sortable: true, }
     ];
 
 // ----- Grid otions show & hide function 
@@ -173,9 +173,7 @@ export class MaterialValidationComponent implements OnInit {
           ct: '',
           CtDistance: 0,
           Category: element.Category,
-          Model: element.ModelMaterial,
-          INSPIRErec: '',
-          bomvalue: '',
+          Model: element.ModelMaterial,    
           InspireRecommendation: element.InspireRecommendation,
           ScopeboxMaterial: element.ScopeboxMaterial,
           UpdatedMaterial: element.UpdatedMaterial,
@@ -186,13 +184,15 @@ export class MaterialValidationComponent implements OnInit {
           CtTypeName: element.CtTypeName,
           OcTypeName: element.OcTypeName,
           RevitId: element.RevitId,
+          INSPIRErec: element.ScopeboxMaterial === 'PVC' ? 'PVC40' : element.ScopeboxMaterial ,
+          bomvalue:element.UpdatedMaterial === 'PVC' ? 'PVC40' : element.UpdatedMaterial,
         })
       });
       debugger;
       this.slickGridConfig.dataSource = this.ELEMENT_DATA;
       this.slickGridConfig.searchConfig.dataSource = this.ELEMENT_DATA;
       this.slickGridConfig.findReplaceConfig.dataSource = this.ELEMENT_DATA;
-      //   //this.prepareGrid();
+      
     })
   }
 
