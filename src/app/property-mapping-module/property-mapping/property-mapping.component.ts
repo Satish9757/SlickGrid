@@ -91,6 +91,7 @@ export class PropertyMappingComponent implements OnInit {
         })
       });
       //this.dataset = this.ELEMENT_DATA;
+      
       this.slickGridConfig.dataSource = this.ELEMENT_DATA;
       //this.slickGridConfig.searchConfig.dataSource=this.ELEMENT_DATA;
       //this.slickGridConfig.findReplaceConfig.dataSource=this.ELEMENT_DATA;
@@ -98,12 +99,12 @@ export class PropertyMappingComponent implements OnInit {
     })
   }
 
-  angularGridReady(angularGrid: AngularGridInstance) {
-    ;
-    this.angularGrid = angularGrid;
-    this.gridObj = angularGrid.slickGrid; // grid object
-    this.dataviewObj = angularGrid.dataView;
-  }
+  // angularGridReady(angularGrid: AngularGridInstance) {
+  //   ;
+  //   this.angularGrid = angularGrid;
+  //   this.gridObj = angularGrid.slickGrid; // grid object
+  //   this.dataviewObj = angularGrid.dataView;
+  // }
 
   /* Define grid Options and Columns */
   defineGrid() {
