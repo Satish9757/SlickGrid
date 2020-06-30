@@ -16,6 +16,9 @@ import {
   Sorters,
   Formatter
 } from 'angular-slickgrid';
+import { SlickGridService } from 'src/app/slick-grid/slick-grid.service';
+import { HttpClient } from '@angular/common/http';
+import { SlickGridConfig } from 'src/app/slick-grid/slickgrid.config';
 
 
 @Component({
@@ -37,17 +40,58 @@ export class PropertyMappingComponent implements OnInit {
   gridObj: any;
   gridOptions: GridOption;
   processing = false;
+  ELEMENT_DATA: any[]=[];
+  slickGridConfig: SlickGridConfig;
   selectedGroupingFields: Array<string | GroupingGetterFunction> = ['', '', ''];
 
-  constructor() {
+  constructor(private _httpClient: HttpClient,private slickGridService:SlickGridService) {
     // define the grid options & columns and then create the grid itself
-    this.loadData(500);
-    this.defineGrid();
+  //  this.loadData(500);
+    //this.defineGrid();
   }
 
   ngOnInit(): void {
     // populate the dataset once the grid is ready
-    this.defineGrid();
+    this.slickGridConfig=new SlickGridConfig();
+    this.defineGrid();         
+      this.dataset = [];      
+      this.generateGridData();
+      this.slickGridService.todos.subscribe(data=>{
+        alert(JSON.stringify(data));
+      })
+  
+    
+  }
+  private generateGridData() {
+    this._httpClient.get("assets/sourceData.json").subscribe((dt: any[]) => {
+      let id = 0;
+      dt.forEach(element => {
+        this.ELEMENT_DATA.push({
+          id: id++,
+          ct: '',          
+          CtDistance: 0,
+          Category: element.Category,
+          Model: element.ModelMaterial,
+          INSPIRErec: '',
+          bomvalue: '',
+          InspireRecommendation: element.InspireRecommendation,
+          ScopeboxMaterial: element.ScopeboxMaterial,
+          UpdatedMaterial: element.UpdatedMaterial,
+          ModelMaterial: element.ModelMaterial,
+          BomRecommendation: element.BomRecommendation,
+          SbTypeName: element.SbTypeName,
+          Level: element.Level,
+          CtTypeName: element.CtTypeName,
+          OcTypeName: element.OcTypeName,
+          RevitId: element.RevitId,
+        })
+      });
+      this.dataset = this.ELEMENT_DATA;
+      //this.slickGridConfig.dataSource = this.ELEMENT_DATA;
+      //this.slickGridConfig.searchConfig.dataSource=this.ELEMENT_DATA;
+      //this.slickGridConfig.findReplaceConfig.dataSource=this.ELEMENT_DATA;
+      //   //this.prepareGrid();
+    })
   }
 
   angularGridReady(angularGrid: AngularGridInstance) {
@@ -61,140 +105,112 @@ export class PropertyMappingComponent implements OnInit {
   defineGrid() {
     this.columnDefinitions = [
       {
-        id: 'title', name: 'Title', field: 'title',
+        id: 'Model', name: 'LEVEL / AREA', field: 'Model',
         width: 70, minWidth: 50,
         cssClass: 'cell-title',
         filterable: true,
         sortable: true,
+        //formatter: myCustomCheckmarkFormatter, 
         grouping: {
-          getter: 'title',
-          formatter: (g) => `Title: ${g.value}  <span style="color:green">(${g.count} items)</span>`,
-          aggregators: [
-            new Aggregators.Sum('cost')
-          ],
+          getter: 'Model',
+          formatter: (g) => `Level: ${g.value}  <span style="color:green">(${g.count} items)</span>`,
+          
           aggregateCollapsed: false,
           collapsed: false
         }
       },
       {
-        id: 'duration', name: 'Duration', field: 'duration',
+        id: 'ct', name: 'CT / OT', field: 'ct',
         width: 70,
         sortable: true,
         filterable: true,
-        filter: { model: Filters.slider, operator: '>=' },
-        type: FieldType.number,
+        //filter: { model: Filters.slider, operator: '>=' },
+       // type: FieldType.number,
+        formatter: myCustomCTData,
         groupTotalsFormatter: GroupTotalFormatters.sumTotals,
         grouping: {
-          getter: 'duration',
-          formatter: (g) => `Duration: ${g.value}  <span style="color:green">(${g.count} items)</span>`,
+          getter: 'ct',
+          formatter: (g) => `ct: ${g.value}  <span style="color:green">(${g.count} items)</span>`,
           // comparer: (a, b) => {
           //   return this.durationOrderByCount ? (a.count - b.count) : Sorters.numeric(a.value, b.value, SortDirectionNumber.asc);
           // },
-          aggregators: [
-            new Aggregators.Sum('cost')
-          ],
+         
           aggregateCollapsed: false,
           collapsed: false
         }
       },
       {
-        id: 'percentComplete', name: '% Complete', field: 'percentComplete',
+        id: 'Category', name: 'Component', field: 'Category',
         minWidth: 70, width: 90,
-        formatter: Formatters.percentCompleteBar,
-        type: FieldType.number,
+        //formatter: Formatters.percentCompleteBar,
+        //type: FieldType.number,
         filterable: true,
-        filter: { model: Filters.compoundSlider },
+        filter: { model: Filters.inputText },
         sortable: true,
         groupTotalsFormatter: GroupTotalFormatters.avgTotalsPercentage,
         grouping: {
-          getter: 'percentComplete',
-          formatter: (g) => `% Complete:  ${g.value}  <span style="color:green">(${g.count} items)</span>`,
-          aggregators: [
-            new Aggregators.Sum('cost')
-          ],
+          getter: 'Category',
+          formatter: (g) => `Component:  ${g.value}  <span style="color:green">(${g.count} items)</span>`,
+          
           aggregateCollapsed: false,
           collapsed: false
         },
         params: { groupFormatterPrefix: '<i>Avg</i>: ' }
       },
       {
-        id: 'start', name: 'Start', field: 'start', minWidth: 60,
+        id: 'ModelMaterial', name: 'MODEL VALUE', field: 'ModelMaterial', minWidth: 60,
         sortable: true,
         filterable: true,
-        filter: { model: Filters.compoundDate },
-        formatter: Formatters.dateIso,
-        type: FieldType.dateUtc,
-        outputType: FieldType.dateIso,
+        //filter: { model: Filters.compoundDate },
+        //formatter: Formatters.dateIso,
+        //type: FieldType.dateUtc,
+        //outputType: FieldType.dateIso,
         exportWithFormatter: true,
               grouping: {
-          getter: 'start',
-          formatter: (g) => `Start: ${g.value}  <span style="color:green">(${g.count} items)</span>`,
-          aggregators: [
-            new Aggregators.Sum('cost')
-          ],
+          getter: 'ModelMaterial',
+          formatter: (g) => `ModelMaterial: ${g.value}  <span style="color:green">(${g.count} items)</span>`,
+         
           aggregateCollapsed: false,
           collapsed: false
         }
       },
       {
-        id: 'finish', name: 'Finish', field: 'finish',
+        id: 'INSPIRErec', name: 'INSPIRE RECOMMENDATION', field: 'INSPIRErec',
         minWidth: 60,
         sortable: true,
         filterable: true,
-        filter: { model: Filters.compoundDate },
-        formatter: Formatters.dateIso,
-        type: FieldType.dateUtc,
-        outputType: FieldType.dateIso,
+        formatter: myCustomInsprieData,
+        //filter: { model: Filters.compoundDate },
+       // formatter: Formatters.dateIso,
+        //type: FieldType.dateUtc,
+       // outputType: FieldType.dateIso,
         exportWithFormatter: true,
         grouping: {
-          getter: 'finish',
-          formatter: (g) => `Finish: ${g.value} <span style="color:green">(${g.count} items)</span>`,
-          aggregators: [
-            new Aggregators.Sum('cost')
-          ],
+          getter: 'INSPIRErec',
+          formatter: (g) => `INSPIRE RECOMMENDATION: ${g.value} <span style="color:green">(${g.count} items)</span>`,
+          
           aggregateCollapsed: false,
           collapsed: false
         }
       },
       {
-        id: 'cost', name: 'Cost', field: 'cost',
+        id: 'bomvalue', name: 'BOM VALUE', field: 'bomvalue',
         width: 90,
         sortable: true,
         filterable: true,
-        filter: { model: Filters.compoundInput },
-        formatter: Formatters.dollar,
-        groupTotalsFormatter: GroupTotalFormatters.sumTotalsDollar,
-        type: FieldType.number,
+        formatter:  myCustomBOMValue,
+        //filter: { model: Filters.compoundInput },
+        //formatter: Formatters.dollar,
+        //groupTotalsFormatter: GroupTotalFormatters.sumTotalsDollar,
+        //type: FieldType.number,
         grouping: {
-          getter: 'cost',
-          formatter: (g) => `Cost: ${g.value} <span style="color:green">(${g.count} items)</span>`,
-          aggregators: [
-            new Aggregators.Sum('cost')
-          ],
+          getter: 'bomvalue',
+          formatter: (g) => `bomvalue: ${g.value} <span style="color:green">(${g.count} items)</span>`,
+         
           aggregateCollapsed: true,
           collapsed: true
         }
-      },
-      {
-        id: 'effortDriven', name: 'Effort Driven', field: 'effortDriven',
-        width: 80, minWidth: 20, maxWidth: 100,
-        cssClass: 'cell-effort-driven',
-        sortable: true,
-        filterable: true,
-        filter: {
-          collection: [{ value: '', label: '' }, { value: true, label: 'True' }, { value: false, label: 'False' }],
-          model: Filters.singleSelect
-        },
-        formatter: Formatters.checkmark,
-        grouping: {
-          getter: 'effortDriven',
-          formatter: (g) => `Effort-Driven: ${g.value ? 'True' : 'False'} <span style="color:green">(${g.count} items)</span>`,
-          aggregators: [
-            new Aggregators.Sum('cost')
-          ],
-          collapsed: false
-        }
-      }
+      },      
     ];
 
     this.gridOptions = {
@@ -229,7 +245,7 @@ export class PropertyMappingComponent implements OnInit {
       }
     };
 
-    this.loadData(500);
+    //this.loadData(500);
   }
 
   loadData(rowCount: number) {
