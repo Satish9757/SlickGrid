@@ -24,20 +24,6 @@ import { RowDetailsComponent } from 'src/app/row-details/row-details.component';
 import { SlickGridConfig } from 'src/app/slick-grid/slickgrid.config';
 import { CustomRowModel } from 'src/app/slick-grid/customRowModel';
 import { SlickGridService } from 'src/app/slick-grid/slick-grid.service';
-// export interface PeriodicElement {
-//   id: number;
-//   ModelMaterial: string;
-//   ct: string;
-//   Category: string;
-//   Model: string;
-//   INSPIRErec: string;
-//   bomvalue: string;
-//   CtDistance: number;
-//   InspireRecommendation: string[];
-//   ScopeboxMaterial: string;
-//   UpdatedMaterial: string;
-// }
-
 
 @Component({
   selector: 'app-material-validation',
@@ -54,24 +40,31 @@ export class MaterialValidationComponent implements OnInit {
   isSearch: boolean = true;
   isAddNewRoq: boolean = true;
   durationOrderByCount = false;
-  selectedGroupingFields: Array<string | GroupingGetterFunction> = ['', '', ''];
+  //selectedGroupingFields: Array<string | GroupingGetterFunction> = ['', '', ''];
   draggableGroupingPlugin: any;
   material;
   gridObj: any;
   ELEMENT_DATA: any[] = [];
   detailViewRowCount = 9;
   constructor(private _httpClient: HttpClient, private slickGridService: SlickGridService) {
+  }
+
+  ngOnInit(): void {
+    this.slickGridConfig = new SlickGridConfig();
+    this.prepareGrid();
+    this.dataset = [];
+    this.setSlickConfig();
+    this.generateGridData();
 
   }
 
   prepareGrid() {
-
     this.columnDefinitions = [
       { id: 'LevelArea', name: 'Level / Area', field: 'LevelArea', sortable: true, width: 70, filterable: false, formatter: myCustomCheckmarkFormatter },
       { id: 'ct', name: 'Ct / Ot', field: 'ct', sortable: true, type: FieldType.number, minWidth: 90, filterable: true, formatter: myCustomCheckmarkFormatter },
       { id: 'Category', name: 'Component', field: 'Category', sortable: true, minWidth: 100, filterable: true },
       { id: 'ModelMaterial', name: 'Model Value', field: 'ModelMaterial', sortable: true, minWidth: 90, filterable: true },
-      { id: 'INSPIRErec', name: 'Inspire Recommendation', field: 'INSPIRErec', sortable: true, minWidth: 90, filterable: true, formatter: myCustomInsprieData },
+      { id: 'INSPIRErec', name: 'Inspire Recommendation', field: 'INSPIRErec', sortable: true, minWidth: 90, filterable: true },
       { id: 'bomvalue', name: 'Bom Value', field: 'bomvalue', minWidth: 100, filterable: true, sortable: true, }
     ];
 
@@ -94,12 +87,9 @@ export class MaterialValidationComponent implements OnInit {
       },
       datasetIdPropertyName: 'id', // optionally use a different "id"
       rowDetailView: {
-        // optionally change the column index position of the icon (defaults to 0)
-        // columnIndexPosition: 1,
 
         // We can load the "process" asynchronously in 2 different ways (httpClient OR even Promise)
         process: (item) => this.simulateServerAsyncCall(item),
-        // process: (item) => this.http.get(`api/item/${item.id}`),
 
         // load only once and reuse the same item detail without calling process method
         loadOnce: true,
@@ -116,22 +106,12 @@ export class MaterialValidationComponent implements OnInit {
         // also note that the detail view adds an extra 1 row for padding purposes
         // so if you choose 4 panelRows, the display will in fact use 5 rows
         panelRows: this.detailViewRowCount,
-
-        // you can override the logic for showing (or not) the expand icon
-        // for example, display the expand icon only on every 2nd row
-        // expandableOverride: (row: number, dataContext: any, grid: any) => (dataContext.id % 2 === 1),
-
-        // Preload View Component
-        //preloadComponent: RowDetailPreloadComponent,
-
         // View Component to load when row detail data is ready
         viewComponent: RowDetailsComponent,
-
         // Optionally pass your Parent Component reference to your Child Component (row detail component)
         parent: this
       },
     };
-
   }
 
   deleteData(event) {
@@ -139,17 +119,6 @@ export class MaterialValidationComponent implements OnInit {
   }
 
   SelectCellEditor() {
-
-  }
-
-
-  ngOnInit(): void {
-    this.slickGridConfig = new SlickGridConfig();
-    this.prepareGrid();
-    this.dataset = [];
-    this.setSlickConfig();
-    this.generateGridData();
-
   }
 
   private setSlickConfig() {
@@ -188,7 +157,6 @@ export class MaterialValidationComponent implements OnInit {
           bomvalue: element.UpdatedMaterial === 'PVC' ? 'PVC40' : element.UpdatedMaterial,
         })
       });
-      debugger;
       this.slickGridConfig.dataSource = this.ELEMENT_DATA;
       this.slickGridConfig.searchConfig.dataSource = this.ELEMENT_DATA;
       this.slickGridConfig.findReplaceConfig.dataSource = this.ELEMENT_DATA;

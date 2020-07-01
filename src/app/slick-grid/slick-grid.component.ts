@@ -47,10 +47,8 @@ export class SlickGridComponent implements OnInit {
   constructor(private slickGridService: SlickGridService) { }
 
   ngOnInit(): void {
-
     this.gridOptions.enableExcelExport = true;
     this.gridOptionLocal = this.gridOptions;
-
   }
 
 
@@ -84,19 +82,20 @@ export class SlickGridComponent implements OnInit {
 //this.setCopyPaste();
   }
 
-  onCellClicked(e, args) {
-   
-    //this.angularGrid = ins;
+  onCellClicked(e, args) {   
     const metadata = this.angularGrid.gridService.getColumnFromEventArguments(args);
     if(this.slickGridConfig.isOnClickCellAlert){
       this.slickGridService.changeAlert(metadata.dataContext);
     }
-    
+    // if (metadata.columnDef.field === 'edit') {
+    //    // this.alertWarning = `open a modal window to edit: ${metadata.dataContext.title}`;
+    //     this.angularGrid.gridService.highlightRow(args.row, 1500);
+    // }
     if (metadata.columnDef.field === "Delete") {
       //call delete function
       this.deleteRow(metadata.dataContext);
     }
-    this.angularGrid.gridService.highlightRow(args.row, 1500);
+   
 
   }
 
@@ -114,9 +113,7 @@ export class SlickGridComponent implements OnInit {
     if (confirm("are you sure want to delete??")) {
       this.deleteData.emit(data)
       this.angularGrid.gridService.deleteItemById(data.id);
-
     }
-
   }
 
   exportToExcel() {
@@ -151,8 +148,7 @@ export class SlickGridComponent implements OnInit {
     this.angularGrid.gridService.renderGrid();
   }
 
-  onGroupChanged(change: { caller?: string; groupColumns: Grouping[] }) {
-    debugger;
+  onGroupChanged(change: { caller?: string; groupColumns: Grouping[] }) {    
     // the "caller" property might not be in the SlickGrid core lib yet, reference PR https://github.com/6pac/SlickGrid/pull/303
     const caller = change && change.caller || [];
     const groups = change && change.groupColumns || [];
@@ -170,7 +166,6 @@ export class SlickGridComponent implements OnInit {
   }
 
   groupByFieldName(fieldName) {
-    debugger;
     this.clearGrouping();
     if (this.draggableGroupingPlugin && this.draggableGroupingPlugin.setDroppedGroups) {
       // get the field names from Group By select(s) dropdown, but filter out any empty fields

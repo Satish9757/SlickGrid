@@ -28,8 +28,7 @@ import { SlickGridConfig } from 'src/app/slick-grid/slickgrid.config';
 })
 
 
-export class PropertyMappingComponent implements OnInit {
- 
+export class PropertyMappingComponent implements OnInit { 
   angularGrid: AngularGridInstance;
   columnDefinitions: Column[];
   dataset: any[];

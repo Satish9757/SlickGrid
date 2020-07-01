@@ -1,9 +1,18 @@
-<!-- <app-slick-grid  (onAngularGridCreated)="angularGridReady($event)"
+<!-- <angular-slickgrid  (onAngularGridCreated)="angularGridReady($event)"
 (sgOnCellChange)="onCellChanged($event.detail.eventData, $event.detail.args)"
 (sgOnClick)="onCellClicked($event.detail.eventData, $event.detail.args)"
 (sgOnValidationError)="onValidationError($event.detail.eventData, $event.detail.args)"
 [columnDefinitions]="columnDefinitions" [gridOptions]="gridOptions" [dataset]="dataset">
-</app-slick-grid> -->
+</angular-slickgrid> -->
 
-<app-slick-grid [columnDefinitions]="columnDefinitions" [gridOptions]="gridOptions" [slickGridConfig]="slickGridConfig">
+<app-slick-grid [columnDefinitions]="columnDefinitions" [gridOptions]="gridOptions" [slickGridConfig]="slickGridConfig" 
+(sgOnValidationError)="onValidationError($event.detail.eventData, $event.detail.args)"
+>
 </app-slick-grid>
+
+<!-- <angular-slickgrid gridId="grid2" (onAngularGridCreated)="angularGridReady($event)"
+(sgOnCellChange)="onCellChanged($event.detail.eventData, $event.detail.args)"
+(sgOnClick)="onCellClicked($event.detail.eventData, $event.detail.args)"
+(sgOnValidationError)="onValidationError($event.detail.eventData, $event.detail.args)"
+[columnDefinitions]="columnDefinitions" [gridOptions]="gridOptions" [dataset]="dataset">
+</angular-slickgrid> -->

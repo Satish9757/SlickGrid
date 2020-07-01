@@ -1,7 +1,5 @@
-
 import { Component, Injectable, OnInit } from '@angular/core'
 import { HttpClient } from '@angular/common/http';
-// import { TranslateService } from '@ngx-translate/core';
 import {
   AngularGridInstance,
   AutocompleteOption,
@@ -18,8 +16,6 @@ import {
   OperatorType,
   Sorters,
 }  from 'angular-slickgrid';
-// import { CustomInputEditor } from './custom-inputEditor';
-// import { CustomInputFilter } from './custom-inputFilter';
 import { Subject } from 'rxjs';
 import { SlickGridConfig } from '../slick-grid/slickgrid.config';
 
@@ -53,8 +49,7 @@ const myCustomTitleValidator: EditorValidator = (value: any, args: EditorArgs) =
 };
 
 // create a custom Formatter to show the Task + value
-const taskFormatter = (row, cell, value, columnDef, dataContext) => {
-  debugger
+const taskFormatter = (row, cell, value, columnDef, dataContext) => { 
   if (value && Array.isArray(value)) {
     const taskValues = value.map((val) => `Task ${val}`);
     const values = taskValues.join(', ');
@@ -62,12 +57,12 @@ const taskFormatter = (row, cell, value, columnDef, dataContext) => {
   }
   return '';
 };
+
 @Component({
   selector:'app-editor',
   templateUrl: './editor.component.html'
 })
-export class EditorComponent implements OnInit {
-  
+export class EditorComponent implements OnInit {  
   slickGridConfig: SlickGridConfig;
   private _commandQueue = [];
   angularGrid: AngularGridInstance;
@@ -77,22 +72,20 @@ export class EditorComponent implements OnInit {
   gridObj: any;
   isAutoEdit = true;
   alertWarning: any;
-  updatedObject: any;
-  selectedLanguage = 'en';
+  updatedObject: any; 
   duplicateTitleHeaderCount = 1;
   dataViewObj:any;
 
   constructor(private http: HttpClient) { }
 
-  ngOnInit() {
-    
+  ngOnInit() {    
     this.slickGridConfig = new SlickGridConfig();
     this.prepareGrid();
-    this.setSlickConfig();
-    //private translate: TranslateService
+    this.setSlickConfig();    
   }
 
-  private setSlickConfig() {
+  //set dynamic button hide / show 
+  private setSlickConfig() {                               
 
   }
 
@@ -275,6 +268,14 @@ export class EditorComponent implements OnInit {
           operator: OperatorType.inContains,
         }
       }
+      , 
+      {
+          id: 'Status', name: 'Delete', field: 'Delete',
+          minWidth: 10, maxWidth: 100,
+          cssClass: 'cell-effort-driven',
+          sortable: true,
+          formatter: Formatters.deleteIcon,       
+        }
     ];
 
     this.gridOptions = {
@@ -299,7 +300,7 @@ export class EditorComponent implements OnInit {
       },
       enableAutoSizeColumns: true,
       enableAutoResize: true,     
-      enableTreeData: true,
+     enableTreeData: true,
       treeDataOptions: {
         columnId: 'title',
         levelPropName: 'indent',
@@ -309,7 +310,6 @@ export class EditorComponent implements OnInit {
       rowHeight: 40,
       
     };
-
     this.slickGridConfig.dataSource =  this.mockData(NB_ITEMS);
   }
 
@@ -367,30 +367,32 @@ export class EditorComponent implements OnInit {
     this.updatedObject = args.item;
   }
 
-  onCellClicked(e, args) {
-    const metadata = this.angularGrid.gridService.getColumnFromEventArguments(args);
-    console.log(metadata);
+  // onCellClicked(e, args) {
+  //   alert('abc')
+  //   const metadata = this.angularGrid.gridService.getColumnFromEventArguments(args);
+  //   console.log(metadata);
 
-    if (metadata.columnDef.id === 'edit') {
-      this.alertWarning = `open a modal window to edit: ${metadata.dataContext.title}`;
+  //   if (metadata.columnDef.id === 'edit') {
+  //     this.alertWarning = `open a modal window to edit: ${metadata.dataContext.title}`;
 
-      // highlight the row, to customize the color, you can change the SASS variable $row-highlight-background-color
-      this.angularGrid.gridService.highlightRow(args.row, 1500);
+  //     // highlight the row, to customize the color, you can change the SASS variable $row-highlight-background-color
+  //     this.angularGrid.gridService.highlightRow(args.row, 1500);
 
-      // you could also select the row, when using "enableCellNavigation: true", it automatically selects the row
-      // this.angularGrid.gridService.setSelectedRow(args.row);
-    } else if (metadata.columnDef.id === 'delete') {
-      if (confirm('Are you sure?')) {
-        this.angularGrid.gridService.deleteItemById(metadata.dataContext.id);
-      }
-    }
-  }
+  //     // you could also select the row, when using "enableCellNavigation: true", it automatically selects the row
+  //     // this.angularGrid.gridService.setSelectedRow(args.row);
+  //   } else if (metadata.columnDef.id === 'delete') {
+  //     if (confirm('Are you sure?')) {
+  //       this.angularGrid.gridService.deleteItemById(metadata.dataContext.id);
+  //     }
+  //   }
+  // }
 
   onValidationError(e, args) {
     alert(args.validationResults.msg);
   }
 
   changeAutoCommit() {
+    alert('commit')
     this.gridOptions.autoCommitEdit = !this.gridOptions.autoCommitEdit;
     this.gridObj.setOptions({
       autoCommitEdit: this.gridOptions.autoCommitEdit
@@ -429,25 +431,9 @@ export class EditorComponent implements OnInit {
   dynamicallyRemoveLastColumn() {
     this.columnDefinitions.pop();
     this.columnDefinitions = this.columnDefinitions.slice();
-
-    // NOTE if you use an Extensions (Checkbox Selector, Row Detail, ...) that modifies the column definitions in any way
-    // you MUST use the code below, first you must reassign the Editor facade (from the internalColumnEditor back to the editor)
-    // in other words, SlickGrid is not using the same as Angular-Slickgrid uses (editor with a "model" and other properties are a facade, SlickGrid only uses what is inside the model)
-    /*
-    const allColumns = this.angularGrid.gridService.getAllColumnDefinitions();
-    const allOriginalColumns = allColumns.map((column) => {
-      column.editor = column.internalColumnEditor;
-      return column;
-    });
-
-    // remove your column the full set of columns
-    // and use slice or spread [...] to trigger an Angular dirty change
-    allOriginalColumns.pop();
-    this.columnDefinitions = allOriginalColumns.slice();
-    */
   }
 
-  setAutoEdit(isAutoEdit) {
+  setAutoEdit(isAutoEdit) {  
     this.isAutoEdit = isAutoEdit;
     this.gridObj.setOptions({ autoEdit: isAutoEdit }); // change the grid option dynamically
     return true;

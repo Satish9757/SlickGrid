@@ -23,6 +23,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import {MatSelectModule} from '@angular/material/select';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { EditorComponent } from './editor/editor.component';
+import { SupplierBOMComponent } from './quantities-module/supplier-bom/supplier-bom.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { EditorComponent } from './editor/editor.component';
     RowDetailsComponent,
     FindReplaceComponent,
     EditorComponent,
+    SupplierBOMComponent,
     
   ],
   imports: [
