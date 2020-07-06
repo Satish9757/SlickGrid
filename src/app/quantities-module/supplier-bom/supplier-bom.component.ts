@@ -16,7 +16,8 @@ import {
   Sorters,
   Editors,
   Formatter,
-  ExcelExportService
+  ExcelExportService,
+  SelectedRange
 } from 'angular-slickgrid';
 import { HttpClient } from '@angular/common/http';
 import { SlickGridConfig } from 'src/app/slick-grid/slickgrid.config';
@@ -44,9 +45,9 @@ export class SupplierBOMComponent implements OnInit {
   prepareGrid() {
     this.columnDefinitions = [
       { id: 'Description', name: 'ITEM', field: 'Description', sortable: true, width: 70, filterable: false,  },
-      { id: 'ScopeboxName', name: 'SCOPEBOX', field: 'ScopeboxName', sortable: true, minWidth: 90, filterable: true, },
-      { id: 'Level', name: 'LEVEL', field: 'Level', sortable: true, minWidth: 100, filterable: true },
-      { id: 'Area', name: 'AREA', field: 'Area', sortable: true, minWidth: 90, filterable: true },
+      { id: 'ScopeboxName', name: 'SCOPEBOX', field: 'ScopeboxName', sortable: true, minWidth: 90, filterable: true, exportWithFormatter: true },
+      { id: 'Level', name: 'LEVEL', field: 'Level', sortable: true, minWidth: 100, filterable: true ,exportWithFormatter: true },
+      { id: 'Area', name: 'AREA', field: 'Area', sortable: true, minWidth: 90, filterable: true,exportWithFormatter: true  },
       { id: 'UOM', name: 'UOM', field: 'UOM', sortable: true, minWidth: 90, filterable: true },
       { id: 'Qty', name: 'QTY', field: 'Qty', minWidth: 100, filterable: true, sortable: true, },
       { id: 'SkuDescription', name: 'SUPPLIER CATALOG DESCRIPTION', field: 'SkuDescription', minWidth: 100, filterable: true, sortable: true, }
@@ -56,22 +57,37 @@ export class SupplierBOMComponent implements OnInit {
 
     // ----- Grid otions show & hide function 
     this.gridOptions = {
-      enableExcelExport: true,
-      autoResize: {
-        containerId: 'demo-container',
-        sidePadding: 10
-      },
+       enableExcelExport: true,     
       enablePagination: true,
       pagination: {
         pageSizes: [20, 50, 100],
         pageSize: 20
       },
       enableFiltering: true,
-      //enableRowDetailView: true,
-      rowSelectionOptions: {
-        selectActiveRow: true
+      // //enableRowDetailView: true,
+      // rowSelectionOptions: {
+      //   selectActiveRow: true
+      // },
+      autoResize: {
+        containerId: 'demo-container',
+        sidePadding: 10
       },
-      datasetIdPropertyName: 'id', // optionally use a different "id"
+      enableAutoResize: true,
+      enableCellNavigation: true,
+      showCustomFooter: true, // display some metrics in the bottom custom footer
+      customFooterOptions: {
+        // optionally display some text on the left footer container
+        leftFooterText: 'custom footer text',
+        hideTotalItemCount: true,
+        hideLastUpdateTimestamp: true
+      },
+      enableExcelCopyBuffer: true,
+      excelCopyBufferOptions: {
+        onCopyCells: (e, args: { ranges: SelectedRange[] }) => console.log('onCopyCells', args.ranges),
+        onPasteCells: (e, args: { ranges: SelectedRange[] }) => console.log('onPasteCells', args.ranges),
+        onCopyCancelled: (e, args: { ranges: SelectedRange[] }) => console.log('onCopyCancelled', args.ranges),
+      },
+      //datasetIdPropertyName: 'id', // optionally use a different "id"
       // rowDetailView: {
       //   process: (item) => this.simulateServerAsyncCall(item),
       //   loadOnce: true,
@@ -84,7 +100,6 @@ export class SupplierBOMComponent implements OnInit {
     };
   }
   private generateGridData() {
-    debugger
     this._httpClient.get("assets/SupplierData.json").subscribe((dt: any[]) => {
       let id = 0;
       dt.forEach(element => {

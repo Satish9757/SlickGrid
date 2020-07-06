@@ -15,6 +15,7 @@ import {
   OnEventArgs,
   OperatorType,
   Sorters,
+  SelectedRange,
 }  from 'angular-slickgrid';
 import { Subject } from 'rxjs';
 import { SlickGridConfig } from '../slick-grid/slickgrid.config';
@@ -289,7 +290,7 @@ export class EditorComponent implements OnInit {
       editable: true,
       enableCellNavigation: true,
       enableColumnPicker: true,
-      enableExcelCopyBuffer: true,
+      
       enableFiltering: true,
       alwaysShowVerticalScroll: false,
       frozenColumn: 0,
@@ -308,6 +309,7 @@ export class EditorComponent implements OnInit {
       },
       headerRowHeight: 45,
       rowHeight: 40,
+      
       
     };
     this.slickGridConfig.dataSource =  this.mockData(NB_ITEMS);

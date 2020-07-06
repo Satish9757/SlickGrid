@@ -1,1 +1,8 @@
-<p>roleaccess works!</p>
+<div >
+    <angular-slickgrid gridId="grid2"
+              [columnDefinitions]="columnDefinitions"
+              [gridOptions]="gridOptions"
+              [dataset]="dataset"
+              (onAngularGridCreated)="angularGridReady($event)">
+    </angular-slickgrid>
+  </div>
