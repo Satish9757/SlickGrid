@@ -61,7 +61,7 @@ export class RoleaccessComponent implements OnInit {
       showCustomFooter: true, // display some metrics in the bottom custom footer
       customFooterOptions: {
         // optionally display some text on the left footer container
-        leftFooterText: 'custom footer text',
+        leftFooterText: 'AECInspire 1.1',
         hideTotalItemCount: true,
         hideLastUpdateTimestamp: true
       },

@@ -33,16 +33,13 @@ export class FindReplaceComponent implements OnInit {
   }
   
   updateTable(){   
-   
-  //  const replcedData= this.findReplaceConfig.dataSource.filter(function(e){
-  //   return e[`${this.selectedOption}`] === this.find ? e[`${this.selectedOption}`] =this.replace :'';
-  //  }) 
+   debugger  
   const findText=this.find;
   const replaceText=this.replace;
   const select=this.selectedOption;
   const replcedData= this.findReplaceConfig.dataSource.filter(function(e){
-    return e[`${select}`]===findText ?e[`${select}`]=replaceText:''
-  })
+    return e[`${select}`]===findText ?e[`${select}`]=replaceText:e[`${select}`]
+   })
     this.replacedData.emit(replcedData);
   }
 
