@@ -53,45 +53,21 @@ export class SlickGridComponent implements OnInit {
 
 
   angularGridReady(_angularGrid: AngularGridInstance) {
-    // const obj1 = {
-    //   onCommand: (e, args) => {
-    //     if (args.command === 'toggle-preheader') {
-    //       // in addition to the grid menu pre-header toggling (internally), we will also clear grouping
-    //       this.clearGrouping();
-    //     }
-    //   },
-    // }
-    // const obj2 = {
-    //   dropPlaceHolderText: 'Drop a column header here to group by the column',
-    //   // groupIconCssClass: 'fa fa-outdent',
-    //   deleteIconCssClass: 'fa fa-times',
-    //   onGroupChanged: (e, args) => this.onGroupChanged(args),
-    //   onExtensionRegistered: (extension) => this.draggableGroupingPlugin = extension,
-
-    // }
-    //this.gridOptionLocal["gridMenu"] = obj1;
-    //this.gridOptionLocal["draggableGrouping"] = obj2;
     this.angularGrid = _angularGrid;
     this.dataSource = this.angularGrid.dataView.getItems();
     this.gridObj = _angularGrid.slickGrid;
-    this.dataviewObj = _angularGrid.dataView;
-    // setTimeout(() => {
-    debugger;
-    this.dataviewObj.getItemMetadata = this.updateItemMetadataForDurationOver50(this.dataviewObj.getItemMetadata);
-    // }, 5000);
-    //this.setCopyPaste();
+    this.dataviewObj = _angularGrid.dataView;  
+    if(this.slickGridConfig.isCustomRowStyle){
+      this.dataviewObj.getItemMetadata = this.updateItemMetadataForDurationOver50(this.dataviewObj.getItemMetadata);
+    }
+   
   }
 
-
-  onCellClicked(e, args) {   
+  onCellClicked(e, args) { 
     const metadata = this.angularGrid.gridService.getColumnFromEventArguments(args);
     if(this.slickGridConfig.isOnClickCellAlert){
       this.slickGridService.changeAlert(metadata.dataContext);
     }
-    // if (metadata.columnDef.field === 'edit') {
-    //    // this.alertWarning = `open a modal window to edit: ${metadata.dataContext.title}`;
-    //     this.angularGrid.gridService.highlightRow(args.row, 1500);
-    // }
     if (metadata.columnDef.field === "Delete") {
       //call delete function
       this.deleteRow(metadata.dataContext);
@@ -149,7 +125,8 @@ export class SlickGridComponent implements OnInit {
     this.angularGrid.gridService.renderGrid();
   }
 
-  onGroupChanged(change: { caller?: string; groupColumns: Grouping[] }) {    
+  onGroupChanged(change: { caller?: string; groupColumns: Grouping[] }) { 
+    debugger;   
     // the "caller" property might not be in the SlickGrid core lib yet, reference PR https://github.com/6pac/SlickGrid/pull/303
     const caller = change && change.caller || [];
     const groups = change && change.groupColumns || [];
@@ -183,6 +160,7 @@ export class SlickGridComponent implements OnInit {
   }
 
   updateItemMetadataForDurationOver50(previousItemMetadata: any) {
+    debugger;
     const newCssClass = 'duration-bg';
 if(this.slickGridConfig.isCustomRowStyle){
     return (rowNumber: number) => {
