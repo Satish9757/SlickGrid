@@ -77,10 +77,11 @@ export class SlickGridComponent implements OnInit {
     this.dataviewObj = _angularGrid.dataView;
     // setTimeout(() => {
     debugger;
-    //this.dataviewObj.getItemMetadata = this.updateItemMetadataForDurationOver50(this.dataviewObj.getItemMetadata);
-    //  }, 5000);
-//this.setCopyPaste();
+    this.dataviewObj.getItemMetadata = this.updateItemMetadataForDurationOver50(this.dataviewObj.getItemMetadata);
+    // }, 5000);
+    //this.setCopyPaste();
   }
+
 
   onCellClicked(e, args) {   
     const metadata = this.angularGrid.gridService.getColumnFromEventArguments(args);
@@ -190,7 +191,7 @@ if(this.slickGridConfig.isCustomRowStyle){
       this.customRowModel.rowNumber = rowNumber;
       this.customRowStyle.emit(this.customRowModel);
       let a = this.slickGridService.custRowRule;
-      debugger;
+
       return a;
 
     };

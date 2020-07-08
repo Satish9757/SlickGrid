@@ -158,6 +158,8 @@ export class MaterialValidationComponent implements OnInit {
         })
       });
       this.slickGridConfig.dataSource = this.ELEMENT_DATA;
+      debugger
+      
       this.slickGridConfig.searchConfig.dataSource = this.ELEMENT_DATA;
       this.slickGridConfig.findReplaceConfig.dataSource = this.ELEMENT_DATA;
 

@@ -16,11 +16,9 @@ export class SearchComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    this.userInput$.pipe(debounceTime(800), distinctUntilChanged()).subscribe(data =>{
-      debugger
+    this.userInput$.pipe(debounceTime(800), distinctUntilChanged()).subscribe(data =>{     
       const filterData= this.searchConfig.dataSource.filter(ele =>
-        { 
-  
+        {   
   const {Category,CtTypeName,INSPIRErec,Model,ModelMaterial,SbTypeName,ScopeboxMaterial,OcTypeName,UpdatedMaterial,assignee,bomvalue,RevitId} = ele;
   const newElement = {Category,CtTypeName,INSPIRErec,Model,ModelMaterial,SbTypeName,ScopeboxMaterial,OcTypeName,UpdatedMaterial,assignee,bomvalue,RevitId};
          return JSON.stringify(newElement).trim().toLowerCase().includes(data.trim().toLowerCase())});
