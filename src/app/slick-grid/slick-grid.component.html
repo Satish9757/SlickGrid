@@ -2,13 +2,15 @@
     <!-- <button (click)="groupByFieldName('duration',0)">group by duration</button> -->
     <button mat-raised-button color="accent" *ngIf="isAddNewRow" (click)="AddNewRow()">Add new row</button>
     <div>
-        <!-- <app-find-replace></app-find-replace> -->
-        <app-search *ngIf="isSearchEnabled" (outPutDataSource)="filterData($event)" [inputDataSource]="dataset">
+        <app-find-replace *ngIf="slickGridConfig && slickGridConfig.isFindReaplce" [findReplaceConfig]="slickGridConfig.findReplaceConfig" (replacedData)="replacedData($event)" ></app-find-replace>
+        <app-search *ngIf="slickGridConfig && slickGridConfig.isSearch" (outPutDataSource)="filterData($event)"  [searchConfig]="slickGridConfig.searchConfig">
         </app-search>
+        <button mat-raised-button class="filter-button" color="accent"
+        (click)="exportToExcel()">Export to Excel</button>
     </div>
 </div>
 
 <angular-slickgrid gridId="grid1" [columnDefinitions]="columnDefinitions" [gridOptions]="gridOptionLocal"
-    [dataset]="dataset" (sgOnClick)="onCellClicked($event.detail.eventData, $event.detail.args)"
+    [dataset]="slickGridConfig.dataSource" (sgOnClick)="onCellClicked($event.detail.eventData, $event.detail.args)"
     (onAngularGridCreated)="angularGridReady($event)">
 </angular-slickgrid>

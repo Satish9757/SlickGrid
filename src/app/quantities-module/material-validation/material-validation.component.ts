@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, DebugElement } from '@angular/core';
 import {
   AngularGridInstance,
   Aggregators,
@@ -15,30 +15,24 @@ import {
   SortDirectionNumber,
   Sorters,
   Editors,
-  Formatter
+  Formatter,
+  ExcelExportService
 } from 'angular-slickgrid';
 
 import { HttpClient } from '@angular/common/http';
 import { RowDetailsComponent } from 'src/app/row-details/row-details.component';
-export interface PeriodicElement {
-  id: number;
-  ModelMaterial: string;
-  ct: string;
-  Category: string;
-  Model: string;
-  INSPIRErec: string;
-  bomvalue: string;
-  CtDistance: number;
-  InspireRecommendation: string[];
-  ScopeboxMaterial: string;
-  UpdatedMaterial: string;
-}
+import { SlickGridConfig } from 'src/app/slick-grid/slickgrid.config';
+import { CustomRowModel } from 'src/app/slick-grid/customRowModel';
+import { SlickGridService } from 'src/app/slick-grid/slick-grid.service';
+
 @Component({
   selector: 'app-material-validation',
   templateUrl: './material-validation.component.html',
   styleUrls: ['./material-validation.component.scss']
 })
+
 export class MaterialValidationComponent implements OnInit {
+  slickGridConfig: SlickGridConfig;
   title = 'SlickGridPOC';
   columnDefinitions: Column[] = [];
   gridOptions: GridOption = {};
@@ -46,37 +40,45 @@ export class MaterialValidationComponent implements OnInit {
   isSearch: boolean = true;
   isAddNewRoq: boolean = true;
   durationOrderByCount = false;
-  selectedGroupingFields: Array<string | GroupingGetterFunction> = ['', '', ''];
+  //selectedGroupingFields: Array<string | GroupingGetterFunction> = ['', '', ''];
   draggableGroupingPlugin: any;
   material;
   gridObj: any;
-  ELEMENT_DATA: any[]=[];
+  ELEMENT_DATA: any[] = [];
   detailViewRowCount = 9;
-  constructor(private _httpClient: HttpClient) {
+  constructor(private _httpClient: HttpClient, private slickGridService: SlickGridService) {
+  }
+
+  ngOnInit(): void {
+    this.slickGridConfig = new SlickGridConfig();
+    this.prepareGrid();
+    this.dataset = [];
+    this.setSlickConfig();
+    this.generateGridData();
 
   }
 
   prepareGrid() {
-
     this.columnDefinitions = [
-      { id: 'LevelArea', name: 'Level / Area', field: 'LevelArea', sortable: true,  width: 70, filterable: true, formatter: myCustomCheckmarkFormatter },
-      { id: 'ct', name: 'Ct / Ot', field: 'ct', sortable: true, type: FieldType.number, minWidth: 90, filterable: true ,formatter: myCustomCheckmarkFormatter},
-      { id: 'Category', name: 'Component', field: 'Category', sortable: true, minWidth: 100, filterable: true},
-      { id: 'ModelMaterial', name: 'Model Value', field: 'ModelMaterial', sortable: true,  minWidth: 90,  filterable: true },
-      { id: 'INSPIRErec', name: 'Inspire Recommendation', field: 'INSPIRErec',  sortable: true, minWidth: 90,  filterable: true,formatter:myCustomInsprieData },
-      { id: 'bomvalue', name: 'Bom Value', field: 'bomvalue',minWidth: 100,filterable: true, sortable: true,formatter:myCustomBOMValue }
+      { id: 'LevelArea', name: 'Level / Area', field: 'LevelArea', sortable: true, width: 70, filterable: false, formatter: myCustomCheckmarkFormatter },
+      { id: 'ct', name: 'Ct / Ot', field: 'ct', sortable: true, type: FieldType.number, minWidth: 90, filterable: true, formatter: myCustomCheckmarkFormatter },
+      { id: 'Category', name: 'Component', field: 'Category', sortable: true, minWidth: 100, filterable: true },
+      { id: 'ModelMaterial', name: 'Model Value', field: 'ModelMaterial', sortable: true, minWidth: 90, filterable: true },
+      { id: 'INSPIRErec', name: 'Inspire Recommendation', field: 'INSPIRErec', sortable: true, minWidth: 90, filterable: true },
+      { id: 'bomvalue', name: 'Bom Value', field: 'bomvalue', minWidth: 100, filterable: true, sortable: true, }
     ];
 
-
+    // ----- Grid otions show & hide function 
     this.gridOptions = {
+      enableExcelExport: true,
       autoResize: {
         containerId: 'demo-container',
         sidePadding: 10
       },
       enablePagination: true,
       pagination: {
-        pageSizes: [10,20,50,100],
-        pageSize: 10
+        pageSizes: [20, 50, 100],
+        pageSize: 20
       },
       enableFiltering: true,
       enableRowDetailView: true,
@@ -85,12 +87,9 @@ export class MaterialValidationComponent implements OnInit {
       },
       datasetIdPropertyName: 'id', // optionally use a different "id"
       rowDetailView: {
-        // optionally change the column index position of the icon (defaults to 0)
-        // columnIndexPosition: 1,
 
         // We can load the "process" asynchronously in 2 different ways (httpClient OR even Promise)
         process: (item) => this.simulateServerAsyncCall(item),
-        // process: (item) => this.http.get(`api/item/${item.id}`),
 
         // load only once and reuse the same item detail without calling process method
         loadOnce: true,
@@ -107,66 +106,36 @@ export class MaterialValidationComponent implements OnInit {
         // also note that the detail view adds an extra 1 row for padding purposes
         // so if you choose 4 panelRows, the display will in fact use 5 rows
         panelRows: this.detailViewRowCount,
-
-        // you can override the logic for showing (or not) the expand icon
-        // for example, display the expand icon only on every 2nd row
-        // expandableOverride: (row: number, dataContext: any, grid: any) => (dataContext.id % 2 === 1),
-
-        // Preload View Component
-        //preloadComponent: RowDetailPreloadComponent,
-
         // View Component to load when row detail data is ready
         viewComponent: RowDetailsComponent,
-
         // Optionally pass your Parent Component reference to your Child Component (row detail component)
         parent: this
-      }
+      },
     };
-
   }
 
   deleteData(event) {
     alert(JSON.stringify(event))
   }
+
   SelectCellEditor() {
-
   }
 
-  onGroupChanged(change: { caller?: string; groupColumns: Grouping[] }) {
-    
-    // the "caller" property might not be in the SlickGrid core lib yet, reference PR https://github.com/6pac/SlickGrid/pull/303
-     const caller = change && change.caller || [];
-    const groups = change && change.groupColumns || [];
-
-     if (Array.isArray(this.selectedGroupingFields) && Array.isArray(groups) && groups.length > 0) {
-      // update all Group By select dropdown
-      this.selectedGroupingFields.forEach((g, i) => this.selectedGroupingFields[i] = groups[i] && groups[i].getter || '');
-    } else if (groups.length === 0 && caller === 'remove-group') {
-      this.clearGroupingSelects();
-    }
+  private setSlickConfig() {
+    debugger;
+    this.slickGridConfig.isSearch = true;
+    this.slickGridConfig.isCustomRowStyle = true;
+    this.slickGridConfig.isFindReaplce = true;
+    this.slickGridConfig.findReplaceConfig.isDisabled = true;
+    this.slickGridConfig.findReplaceConfig.defualtValue = "Category";
+    this.slickGridConfig.findReplaceConfig.columnDef = this.columnDefinitions;
+    this.slickGridConfig.downloadConfig.downloadFileName = "project1";
+    this.slickGridConfig.downloadConfig.isCustomDownload = true;
   }
 
-  clearGrouping() {
-    
-    if (this.draggableGroupingPlugin && this.draggableGroupingPlugin.setDroppedGroups) {
-      this.draggableGroupingPlugin.clearDroppedGroups();
-    }
-    this.gridObj.invalidate(); // invalidate all rows and re-render
-  }
-
-  clearGroupingSelects() {
-    
-    this.selectedGroupingFields.forEach((g, i) => this.selectedGroupingFields[i] = '');
-  }
-
-  ngOnInit(): void {
-    
-    this.prepareGrid();
-
-    this.dataset = [];
-
+  private generateGridData() {
     this._httpClient.get("assets/sourceData.json").subscribe((dt: any[]) => {
-      let id=0;
+      let id = 0;
       dt.forEach(element => {
         this.ELEMENT_DATA.push({
           id: id++,
@@ -174,25 +143,27 @@ export class MaterialValidationComponent implements OnInit {
           CtDistance: 0,
           Category: element.Category,
           Model: element.ModelMaterial,
-          INSPIRErec:'',
-          bomvalue: '',
           InspireRecommendation: element.InspireRecommendation,
           ScopeboxMaterial: element.ScopeboxMaterial,
-           UpdatedMaterial: element.UpdatedMaterial,
-           ModelMaterial:element.ModelMaterial,
-           BomRecommendation:element.BomRecommendation,
-           SbTypeName:element.SbTypeName,
-           Level:element.Level,
-           CtTypeName:element.CtTypeName,
-           OcTypeName:element.OcTypeName,
-           RevitId:element.RevitId,
+          UpdatedMaterial: element.UpdatedMaterial,
+          ModelMaterial: element.ModelMaterial,
+          BomRecommendation: element.BomRecommendation,
+          SbTypeName: element.SbTypeName,
+          Level: element.Level,
+          CtTypeName: element.CtTypeName,
+          OcTypeName: element.OcTypeName,
+          RevitId: element.RevitId,
+          INSPIRErec: element.ScopeboxMaterial === 'PVC' ? 'PVC40' : element.ScopeboxMaterial,
+          bomvalue: element.UpdatedMaterial === 'PVC' ? 'PVC40' : element.UpdatedMaterial,
         })
       });
-     this.dataset=this.ELEMENT_DATA;
-
+      this.slickGridConfig.dataSource = this.ELEMENT_DATA;
+      debugger
       
-    //   //this.prepareGrid();
-     })
+      this.slickGridConfig.searchConfig.dataSource = this.ELEMENT_DATA;
+      this.slickGridConfig.findReplaceConfig.dataSource = this.ELEMENT_DATA;
+
+    })
   }
 
   private randomNumber(min: number, max: number) {
@@ -218,13 +189,39 @@ export class MaterialValidationComponent implements OnInit {
     });
   }
 
+  downloadExcel() {
+    alert('my download is called')
+  }
+  customRowStyle(customRowModel: CustomRowModel) {
+    this.slickGridService.custRowRule = this.customRowStyleImpl(customRowModel);
+  }
+
+  customRowStyleImpl(customRowModel: CustomRowModel) {
+    const newCssClass = 'duration-bg'; debugger;
+
+
+    const item = customRowModel.dataView.getItem(customRowModel.rowNumber);
+    let meta = (customRowModel.metaData(customRowModel.rowNumber) || {});
+    if (meta && item) {
+      debugger;
+      // convert to number
+      if (item.Category === "Conduit Elbow") {
+        meta.cssClasses = (meta.cssClasses || '') + ' ' + newCssClass;
+      }
+      else {
+        meta.cssClasses = (meta.cssClasses || '');
+      }
+    }
+    return meta;
+
+  };
 }
 
 
 
 const myCustomCheckmarkFormatter: Formatter = (row, cell, value, columnDef, dataContext) => {
   // 
-   let cellIcon;
+  let cellIcon;
   if (dataContext.ModelMaterial && dataContext.ModelMaterial.toLowerCase().search(dataContext.ScopeboxMaterial.split(' ')[0].toLowerCase()) > -1) {
     cellIcon = '<i style="color:green" class="fa fa-check" aria-hidden="true"></i>';
   }
@@ -232,11 +229,11 @@ const myCustomCheckmarkFormatter: Formatter = (row, cell, value, columnDef, data
     cellIcon = '<i style="color:red" class="fa fa-times" aria-hidden="true"></i>'
   }
   // // you can return a string of a object (of type FormatterResultObject), the 2 types are shown below
-   return cellIcon;
+  return cellIcon;
 };
 
 const myCustomCTData: Formatter = (row, cell, value, columnDef, dataContext) => {
-  
+
   let cellIcon;
   if (dataContext.InspireRecommendation.filter(m => dataContext.ModelMaterial.toLowerCase().search(m.toLowerCase()) > -1).length > 0) {
     cellIcon = '<i style="color:green" class="fa fa-check" aria-hidden="true"></i>';
@@ -250,7 +247,7 @@ const myCustomCTData: Formatter = (row, cell, value, columnDef, dataContext) => 
 
 //----------- Inspire Data----------//
 const myCustomInsprieData: Formatter = (row, cell, value, columnDef, dataContext) => {
-  
+
   let cellIcon;
   if (dataContext.ScopeboxMaterial === 'PVC') {
     cellIcon = 'PVC40';
@@ -261,9 +258,9 @@ const myCustomInsprieData: Formatter = (row, cell, value, columnDef, dataContext
   return cellIcon;
 }
 
-//----------- Inspire Data----------//
+//----------- BOM Data----------//
 const myCustomBOMValue: Formatter = (row, cell, value, columnDef, dataContext) => {
-  
+
   let cellIcon;
   if (dataContext.UpdatedMaterial === 'PVC') {
     cellIcon = 'PVC40';

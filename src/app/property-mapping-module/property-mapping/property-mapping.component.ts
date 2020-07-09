@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Injectable, OnInit } from '@angular/core';
 import {
   AngularGridInstance,
   Aggregators,
@@ -14,65 +14,111 @@ import {
   GroupTotalFormatters,
   SortDirectionNumber,
   Sorters,
-  Editors,
   Formatter
 } from 'angular-slickgrid';
-
+import { SlickGridService } from 'src/app/slick-grid/slick-grid.service';
 import { HttpClient } from '@angular/common/http';
-export interface PeriodicElement {
-  id: number;
-  ModelMaterial: string;
-  ct: string;
-  Category: string;
-  Model: string;
-  INSPIRErec: string;
-  bomvalue: string;
-  CtDistance: number;
-  InspireRecommendation: string[];
-  ScopeboxMaterial: string;
-  UpdatedMaterial: string;
-}
+import { SlickGridConfig } from 'src/app/slick-grid/slickgrid.config';
+
 
 @Component({
   selector: 'app-property-mapping',
   templateUrl: './property-mapping.component.html',
   styleUrls: ['./property-mapping.component.scss']
 })
-export class PropertyMappingComponent implements OnInit {
 
-  title = 'SlickGridPOC';
-  columnDefinitions: Column[] = [];
-  gridOptions: GridOption = {};
-  dataset = [];
-  isSearch: boolean = true;
-  isAddNewRoq: boolean = true;
-  durationOrderByCount = false;
-  selectedGroupingFields: Array<string | GroupingGetterFunction> = ['', '', ''];
+
+export class PropertyMappingComponent implements OnInit { 
+  angularGrid: AngularGridInstance;
+  columnDefinitions: Column[];
+  dataset: any[];
+  dataviewObj: any;
   draggableGroupingPlugin: any;
-  material;
+  draggableGroupingPlugineee: any;
+  durationOrderByCount = false;
   gridObj: any;
+  gridOptions: GridOption;
+  processing = false;
   ELEMENT_DATA: any[]=[];
-  constructor(private _httpClient: HttpClient) {
+  slickGridConfig: SlickGridConfig;
+  selectedGroupingFields: Array<string | GroupingGetterFunction> = ['', '', ''];
 
+  constructor(private _httpClient: HttpClient,private slickGridService:SlickGridService) {
+    // define the grid options & columns and then create the grid itself
+  //  this.loadData(500);
+    //this.defineGrid();
   }
 
-  prepareGrid() {
+  ngOnInit(): void {
+    // populate the dataset once the grid is ready
+    this.slickGridConfig=new SlickGridConfig();
+    this.defineGrid();         
+      this.dataset = [];      
+      this.generateGridData();
+      this.slickGridService.todos.subscribe(data=>{
+        console.log(JSON.stringify(data))
+        alert(JSON.stringify(data));
+      })
+  this.setGridConfig();
+    
+  }
+  setGridConfig(){
+    this.slickGridConfig.isOnClickCellAlert=true;
+  }
+  private generateGridData() {
+    this._httpClient.get("assets/sourceData.json").subscribe((dt: any[]) => {
+      let id = 0;
+      dt.forEach(element => {
+        this.ELEMENT_DATA.push({
+          id: id++,
+          ct: '',          
+          CtDistance: 0,
+          Category: element.Category,
+          Model: element.ModelMaterial,
+          INSPIRErec: '',
+          bomvalue: '',
+          InspireRecommendation: element.InspireRecommendation,
+          ScopeboxMaterial: element.ScopeboxMaterial,
+          UpdatedMaterial: element.UpdatedMaterial,
+          ModelMaterial: element.ModelMaterial,
+          BomRecommendation: element.BomRecommendation,
+          SbTypeName: element.SbTypeName,
+          Level: element.Level,
+          CtTypeName: element.CtTypeName,
+          OcTypeName: element.OcTypeName,
+          RevitId: element.RevitId,
+        })
+      });
+      //this.dataset = this.ELEMENT_DATA;
+      
+      this.slickGridConfig.dataSource = this.ELEMENT_DATA;
+      //this.slickGridConfig.searchConfig.dataSource=this.ELEMENT_DATA;
+      //this.slickGridConfig.findReplaceConfig.dataSource=this.ELEMENT_DATA;
+      //   //this.prepareGrid();
+    })
+  }
 
+  // angularGridReady(angularGrid: AngularGridInstance) {
+  //   ;
+  //   this.angularGrid = angularGrid;
+  //   this.gridObj = angularGrid.slickGrid; // grid object
+  //   this.dataviewObj = angularGrid.dataView;
+  // }
+
+  /* Define grid Options and Columns */
+  defineGrid() {
     this.columnDefinitions = [
       {
-        id: 'LevelArea', name: 'LEVEL / AREA', field: 'LevelArea',
+        id: 'Model', name: 'LEVEL / AREA', field: 'Model',
         width: 70, minWidth: 50,
-        cssClass: 'cell-title', 
-        formatter: myCustomCheckmarkFormatter, 
-        //formatter: this.checkModelAndScopeboxMaterial('sav','als'),
+        cssClass: 'cell-title',
         filterable: true,
         sortable: true,
+        //formatter: myCustomCheckmarkFormatter, 
         grouping: {
-          getter: 'title',
-          formatter: (g) => `Title: ${g.value}  <span style="color:green">(${g.count} items)</span>`,
-          aggregators: [
-            new Aggregators.Sum('cost')
-          ],
+          getter: 'Model',
+          formatter: (g) => `Level: ${g.value}  <span style="color:green">(${g.count} items)</span>`,
+          
           aggregateCollapsed: false,
           collapsed: false
         }
@@ -81,20 +127,18 @@ export class PropertyMappingComponent implements OnInit {
         id: 'ct', name: 'CT / OT', field: 'ct',
         width: 70,
         sortable: true,
-        formatter: myCustomCTData,
         filterable: true,
         //filter: { model: Filters.slider, operator: '>=' },
-        type: FieldType.number,
+       // type: FieldType.number,
+        formatter: myCustomCTData,
         groupTotalsFormatter: GroupTotalFormatters.sumTotals,
         grouping: {
-          getter: 'duration',
-          formatter: (g) => `Duration: ${g.value}  <span style="color:green">(${g.count} items)</span>`,
-          comparer: (a, b) => {
-            return this.durationOrderByCount ? (a.count - b.count) : Sorters.numeric(a.value, b.value, SortDirectionNumber.asc);
-          },
-          aggregators: [
-            new Aggregators.Sum('cost')
-          ],
+          getter: 'ct',
+          formatter: (g) => `ct: ${g.value}  <span style="color:green">(${g.count} items)</span>`,
+          // comparer: (a, b) => {
+          //   return this.durationOrderByCount ? (a.count - b.count) : Sorters.numeric(a.value, b.value, SortDirectionNumber.asc);
+          // },
+         
           aggregateCollapsed: false,
           collapsed: false
         }
@@ -102,21 +146,18 @@ export class PropertyMappingComponent implements OnInit {
       {
         id: 'Category', name: 'Component', field: 'Category',
         minWidth: 70, width: 90,
-        //type: FieldType.string,
+        //formatter: Formatters.percentCompleteBar,
+        //type: FieldType.number,
         filterable: true,
-        sortable: true,
         filter: { model: Filters.inputText },
-        type: FieldType.string,
-        groupTotalsFormatter: GroupTotalFormatters.sumTotals,
+        sortable: true,
+        groupTotalsFormatter: GroupTotalFormatters.avgTotalsPercentage,
         grouping: {
-          
           getter: 'Category',
-          formatter: (g) => `COMPONENT:  ${g.value}  <span style="color:green">(${g.count} items)</span>`,
-          aggregators: [
-            new Aggregators.Sum('cost')
-          ],
-          aggregateCollapsed: false,
-          collapsed: false
+          formatter: (g) => `Component:  ${g.value}  <span style="color:green">(${g.count} items)</span>`,
+          
+          aggregateCollapsed: true,
+          collapsed: true
         },
         params: { groupFormatterPrefix: '<i>Avg</i>: ' }
       },
@@ -124,17 +165,17 @@ export class PropertyMappingComponent implements OnInit {
         id: 'ModelMaterial', name: 'MODEL VALUE', field: 'ModelMaterial', minWidth: 60,
         sortable: true,
         filterable: true,
-        type: FieldType.dateUtc,
-        outputType: FieldType.dateIso,
+        //filter: { model: Filters.compoundDate },
+        //formatter: Formatters.dateIso,
+        //type: FieldType.dateUtc,
+        //outputType: FieldType.dateIso,
         exportWithFormatter: true,
-        grouping: {
-          getter: 'start',
-          formatter: (g) => `Start: ${g.value}  <span style="color:green">(${g.count} items)</span>`,
-          aggregators: [
-            new Aggregators.Sum('cost')
-          ],
-          aggregateCollapsed: false,
-          collapsed: false
+              grouping: {
+          getter: 'ModelMaterial',
+          formatter: (g) => `ModelMaterial: ${g.value}  <span style="color:green">(${g.count} items)</span>`,
+         
+          aggregateCollapsed: true,
+          collapsed: true
         }
       },
       {
@@ -143,15 +184,15 @@ export class PropertyMappingComponent implements OnInit {
         sortable: true,
         filterable: true,
         formatter: myCustomInsprieData,
-        type: FieldType.dateUtc,
-        outputType: FieldType.dateIso,
+        //filter: { model: Filters.compoundDate },
+       // formatter: Formatters.dateIso,
+        //type: FieldType.dateUtc,
+       // outputType: FieldType.dateIso,
         exportWithFormatter: true,
         grouping: {
-          getter: 'finish',
-          formatter: (g) => `Finish: ${g.value} <span style="color:green">(${g.count} items)</span>`,
-          aggregators: [
-            new Aggregators.Sum('cost')
-          ],
+          getter: 'INSPIRErec',
+          formatter: (g) => `INSPIRE RECOMMENDATION: ${g.value} <span style="color:green">(${g.count} items)</span>`,
+          
           aggregateCollapsed: false,
           collapsed: false
         }
@@ -162,22 +203,19 @@ export class PropertyMappingComponent implements OnInit {
         sortable: true,
         filterable: true,
         formatter:  myCustomBOMValue,
-        filter: { model: Filters.inputText },
-        groupTotalsFormatter: GroupTotalFormatters.sumTotalsDollar,
-        type: FieldType.number,
+        //filter: { model: Filters.compoundInput },
+        //formatter: Formatters.dollar,
+        //groupTotalsFormatter: GroupTotalFormatters.sumTotalsDollar,
+        //type: FieldType.number,
         grouping: {
-          getter: 'cost',
-          formatter: (g) => `Cost: ${g.value} <span style="color:green">(${g.count} items)</span>`,
-          aggregators: [
-            new Aggregators.Sum('cost')
-          ],
+          getter: 'bomvalue',
+          formatter: (g) => `bomvalue: ${g.value} <span style="color:green">(${g.count} items)</span>`,
+         
           aggregateCollapsed: true,
           collapsed: true
         }
-      }
-  
+      },      
     ];
-
 
     this.gridOptions = {
       autoResize: {
@@ -191,11 +229,6 @@ export class PropertyMappingComponent implements OnInit {
       enableFiltering: true,
       enableSorting: true,
       enableColumnReorder: true,
-      enablePagination: true,
-      pagination: {
-        pageSizes: [10,20,50,100],
-        pageSize: 10
-      },
       exportOptions: {
         sanitizeDataExport: true
       },
@@ -216,31 +249,40 @@ export class PropertyMappingComponent implements OnInit {
       }
     };
 
+    //this.loadData(500);
   }
 
-  deleteData(event) {
-    alert(JSON.stringify(event))
-  }
-  SelectCellEditor() {
+  loadData(rowCount: number) {
+    // mock a dataset
+    this.dataset = [];
+    for (let i = 0; i < rowCount; i++) {
+      const randomYear = 2000 + Math.floor(Math.random() * 10);
+      const randomMonth = Math.floor(Math.random() * 11);
+      const randomDay = Math.floor((Math.random() * 29));
+      const randomPercent = Math.round(Math.random() * 100);
 
-  }
-
-  onGroupChanged(change: { caller?: string; groupColumns: Grouping[] }) {
-    
-    // the "caller" property might not be in the SlickGrid core lib yet, reference PR https://github.com/6pac/SlickGrid/pull/303
-     const caller = change && change.caller || [];
-    const groups = change && change.groupColumns || [];
-
-     if (Array.isArray(this.selectedGroupingFields) && Array.isArray(groups) && groups.length > 0) {
-      // update all Group By select dropdown
-      this.selectedGroupingFields.forEach((g, i) => this.selectedGroupingFields[i] = groups[i] && groups[i].getter || '');
-    } else if (groups.length === 0 && caller === 'remove-group') {
-      this.clearGroupingSelects();
+      this.dataset[i] = {
+        id: 'id_' + i,
+        num: i,
+        title: 'Task ' + i,
+        duration: Math.round(Math.random() * 100) + '',
+        percentComplete: randomPercent,
+        percentCompleteNumber: randomPercent,
+        start: new Date(randomYear, randomMonth, randomDay),
+        finish: new Date(randomYear, (randomMonth + 1), randomDay),
+        cost: (i % 33 === 0) ? null : Math.round(Math.random() * 10000) / 100,
+        effortDriven: (i % 5 === 0)
+      };
     }
   }
 
+  clearGroupsAndSelects() {
+    this.clearGroupingSelects();
+    this.clearGrouping();
+  }
+
   clearGrouping() {
-    
+    ;
     if (this.draggableGroupingPlugin && this.draggableGroupingPlugin.setDroppedGroups) {
       this.draggableGroupingPlugin.clearDroppedGroups();
     }
@@ -248,37 +290,121 @@ export class PropertyMappingComponent implements OnInit {
   }
 
   clearGroupingSelects() {
-    
+    ;
     this.selectedGroupingFields.forEach((g, i) => this.selectedGroupingFields[i] = '');
   }
 
-  ngOnInit(): void {
-    
-    this.prepareGrid();
-    this._httpClient.get("assets/sourceData.json").subscribe((dt: any[]) => {
-      
-      dt.forEach(element => {
-        this.ELEMENT_DATA.push({
-          id: element.ObjectId,
-          ct: '',
-          CtDistance: 0,
-          Category: element.Category,
-          Model: element.ModelMaterial,
-          INSPIRErec: '',
-          bomvalue: '',
-          InspireRecommendation: element.InspireRecommendation,
-          ScopeboxMaterial: element.ScopeboxMaterial,
-           UpdatedMaterial: element.UpdatedMaterial,
-           ModelMaterial:element.ModelMaterial
-        })
-      });
-     this.dataset=this.ELEMENT_DATA;
-
-      
-      //this.prepareGrid();
-    })
+  collapseAllGroups() {
+    this.dataviewObj.collapseAllGroups();
   }
 
+  expandAllGroups() {
+    this.dataviewObj.expandAllGroups();
+  }
+
+  exportToExcel() {
+    this.angularGrid.excelExportService.exportToExcel({
+      filename: 'Export',
+      format: FileType.xlsx
+    });
+  }
+
+  exportToCsv(type = 'csv') {
+    this.angularGrid.exportService.exportToFile({
+      delimiter: (type === 'csv') ? DelimiterType.comma : DelimiterType.tab,
+      filename: 'myExport',
+      format: (type === 'csv') ? FileType.csv : FileType.txt
+    });
+  }
+
+  groupByDuration() {
+    ;
+    this.clearGrouping();
+    if (this.draggableGroupingPlugin && this.draggableGroupingPlugin.setDroppedGroups) {
+      this.showPreHeader();
+      this.draggableGroupingPlugin.setDroppedGroups('duration');
+      this.gridObj.invalidate(); // invalidate all rows and re-render
+    }
+  }
+
+  groupByDurationOrderByCount(sortedByCount = false) {
+    ;
+    this.durationOrderByCount = sortedByCount;
+    this.clearGrouping();
+    this.groupByDuration();
+
+    // you need to manually add the sort icon(s) in UI
+    const sortColumns = sortedByCount ? [] : [{ columnId: 'duration', sortAsc: true }];
+    this.angularGrid.filterService.setSortColumnIcons(sortColumns);
+  }
+
+  groupByDurationEffortDriven() {
+    ;
+    this.clearGrouping();
+    if (this.draggableGroupingPlugin && this.draggableGroupingPlugin.setDroppedGroups) {
+      this.showPreHeader();
+      this.draggableGroupingPlugin.setDroppedGroups(['duration', 'effortDriven']);
+      this.gridObj.invalidate(); // invalidate all rows and re-render
+    }
+  }
+
+  groupByFieldName(fieldName, index) {
+    debugger;
+    //this.clearGrouping();
+    if (this.draggableGroupingPlugin && this.draggableGroupingPlugin.setDroppedGroups) {
+      // get the field names from Group By select(s) dropdown, but filter out any empty fields
+     const groupedFields = this.selectedGroupingFields.filter((g) => g !== '');
+
+      //this.showPreHeader();
+      this.draggableGroupingPlugin.setDroppedGroups(groupedFields);
+     // this.gridObj.invalidate(); // invalidate all rows and re-render
+    }
+  }
+
+  onGroupChanged(change: { caller?: string; groupColumns: Grouping[] }) {
+    ;
+    // the "caller" property might not be in the SlickGrid core lib yet, reference PR https://github.com/6pac/SlickGrid/pull/303
+    const caller = change && change.caller || [];
+    const groups = change && change.groupColumns || [];
+
+    if (Array.isArray(this.selectedGroupingFields) && Array.isArray(groups) && groups.length > 0) {
+      // update all Group By select dropdown
+      this.selectedGroupingFields.forEach((g, i) => this.selectedGroupingFields[i] = groups[i] && groups[i].getter || '');
+    } else if (groups.length === 0 && caller === 'remove-group') {
+      this.clearGroupingSelects();
+    }
+  }
+
+  showPreHeader() {
+    ;
+    this.gridObj.setPreHeaderPanelVisibility(true);
+  }
+
+  selectTrackByFn(index, item) {
+
+    return index;
+  }
+
+  setFiltersDynamically() {
+    // we can Set Filters Dynamically (or different filters) afterward through the FilterService
+    this.angularGrid.filterService.updateFilters([
+      { columnId: 'percentComplete', operator: '>=', searchTerms: ['55'] },
+      { columnId: 'cost', operator: '<', searchTerms: ['80'] },
+    ]);
+  }
+
+  setSortingDynamically() {
+    this.angularGrid.sortService.updateSorting([
+      // orders matter, whichever is first in array will be the first sorted column
+      { columnId: 'percentComplete', direction: 'ASC' },
+    ]);
+  }
+
+  toggleDraggableGroupingRow() {
+    ;
+    this.clearGrouping();
+    this.gridObj.setPreHeaderPanelVisibility(!this.gridObj.getOptions().showPreHeaderPanel);
+  }
 }
 
 const myCustomCheckmarkFormatter: Formatter = (row, cell, value, columnDef, dataContext) => {
@@ -297,7 +423,7 @@ const myCustomCheckmarkFormatter: Formatter = (row, cell, value, columnDef, data
 const myCustomCTData: Formatter = (row, cell, value, columnDef, dataContext) => {
   
   let cellIcon;
-  if (dataContext.InspireRecommendation.filter(m => dataContext.ModelMaterial.toLowerCase().search(m.toLowerCase()) > -1).length > 0) {
+  if (dataContext.InspireRecommendation && dataContext.InspireRecommendation.filter(m => dataContext.ModelMaterial.toLowerCase().search(m.toLowerCase()) > -1).length > 0) {
     cellIcon = '<i style="color:green" class="fa fa-check" aria-hidden="true"></i>';
   }
   else {

@@ -1,3 +1,5 @@
+
+
 .header {
     padding: 0 10px;
     background-color: #212121;
@@ -29,6 +31,14 @@
 // -----------Slick Grid Custom Elements-------------
 
 ::ng-deep {
+    .duration-bg .r4{
+        background-color: red !important;
+    }
+  
+   .slick-gridmenu-item:nth-child(4){
+        display: none !important;
+    }
+
     .page-count {
         margin-left: 5px !important;
     }

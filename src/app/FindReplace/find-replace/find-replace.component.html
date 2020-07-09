@@ -12,32 +12,26 @@
       </mat-icon>
     </div>
     <div class="replace-container">
-      <mat-form-field color="accent">
-        <mat-label>MODEL VALUE</mat-label>
-        <!-- <mat-select (selectionChange)="bulkUpdateModelMaterial('current', $event)">
-          <mat-option *ngFor="let material of updateMaterialList.modelList" [value]="material">
-            {{material}}
-          </mat-option>
-        </mat-select> -->
-      </mat-form-field>
 
-      <mat-form-field color="accent">
-        <mat-label>BOM VALUE</mat-label>
-        <!-- <mat-select (selectionChange)="bulkUpdateBOMMaterial('updated', $event)"
-          [disabled]="bulkData.current === ''">
-          <mat-option *ngFor="let material of materialsList" [value]="material">
-            {{material}}
-          </mat-option>
-        </mat-select> -->
-      </mat-form-field>
+        <label>Select column</label>
+        <select  [(ngModel)]="selectedOption" [disabled]="findReplaceConfig.isDisabled">
+          <option *ngFor="let material of findReplaceConfig.columnDef" [value]="material.field">
+            {{material.name}}
+          </option>
+        </select>
+       
+     
+        <label>BOM VALUE</label> 
+        <input  placeholder="find..." type="search" [(ngModel)]="find" >       
+   
+      <input  placeholder="Replace..." type="search" [(ngModel)]="replace" >
     </div>
-    <div class="footer">
-      <mat-toolbar>
-        <button mat-raised-button color="accent" (click)="updateBulkData()">
+    <div class="footer"> 
+    
+        <button mat-raised-button color="accent" (click)="updateTable()">
           REPLACE
-        </button>
-      </mat-toolbar>
-
+        </button> 
+  
+    </div>
     </div>
   </div>
-</div>
