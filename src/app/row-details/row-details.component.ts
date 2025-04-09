@@ -9,6 +9,7 @@ export class RowDetailsComponent implements OnInit {
   model: {
     Category: string;
     ModelMaterial: string;
+    //---------------///
     InspireRecommendation:any[];
     BomRecommendation:any[];
     ScopeboxMaterial:string;
