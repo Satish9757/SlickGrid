@@ -27,6 +27,7 @@ export class SearchComponent implements OnInit {
   }
 
 //   search(data){
+  //
 //     debugger
 //     const filterData= this.searchConfig.dataSource.filter(ele =>
 //       { 
